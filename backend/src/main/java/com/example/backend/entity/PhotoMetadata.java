@@ -51,4 +51,16 @@ public class PhotoMetadata {
 
     @Column(name = "gps_longitude", precision = 10, scale = 7)
     private BigDecimal gpsLongitude;
+
+    @Column(name = "address", columnDefinition = "TEXT")
+    private String address;
+
+    @Column(name = "province", length = 100)
+    private String province;
+
+    @Column(name = "district", length = 100)
+    private String district;
+
+    @Column(name = "ward", length = 100)
+    private String ward;
 }

@@ -27,9 +27,7 @@ public class AsyncConfig {
         // Đặt tên luồng để dễ debug (xem log)
         executor.setThreadNamePrefix("PhotoWorker-");
 
-        // 4. CHÍNH SÁCH BẢO VỆ SERVER (Cực kỳ quan trọng)
-        // Nếu hàng đợi 500 cũng đầy nốt, hệ thống sẽ ép cái luồng chính (của Tomcat) tự đi mà làm,
-        // giúp hãm phanh tốc độ nhận request lại, tránh sập RAM.
+        // 4. CHÍNH SÁCH BẢO VỆ SERVER
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
 
         executor.initialize();

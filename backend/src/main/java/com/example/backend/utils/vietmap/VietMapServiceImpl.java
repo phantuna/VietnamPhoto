@@ -3,6 +3,7 @@ package com.example.backend.utils.vietmap;
 import com.example.backend.config.VietMapConfig;
 import com.example.backend.dto.response.vietmap.VietMapReverseResponse;
 import com.example.backend.dto.response.vietmap.VietMapSearchResponse;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -25,21 +26,28 @@ public class VietMapServiceImpl implements VietMapService{
 
     @Override
     public VietMapReverseResponse reverse(BigDecimal lat, BigDecimal lng) {
-        List<VietMapReverseResponse> response = restClient().get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/reverse/v4")
-                        .queryParam("apikey", vietMapConfig.getApiKey())
-                        .queryParam("lat", lat)
-                        .queryParam("lng", lng)
-                        .queryParam("display_type", vietMapConfig.getReverseDisplayType())
-                        .build())
-                .retrieve()
-                .body(new ParameterizedTypeReference<List<VietMapReverseResponse>>() {});
+        System.out.println("Calling VietMap reverse with lat=" + lat + ", lng=" + lng);
 
-        if (response == null || response.isEmpty()) {
-            return null;
+        try {
+            List<VietMapReverseResponse> response = restClient().get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/reverse/v4")
+                            .queryParam("apikey", vietMapConfig.getApiKey())
+                            .queryParam("lat", lat)
+                            .queryParam("lng", lng)
+                            .build())
+                    .retrieve()
+                    .body(new ParameterizedTypeReference<List<VietMapReverseResponse>>() {});
+
+            if (response == null || response.isEmpty()) {
+                return null;
+            }
+            return response.get(0);
+        } catch (org.springframework.web.client.HttpClientErrorException.Unauthorized e) {
+            throw new RuntimeException("VietMap API key không hợp lệ hoặc chưa được cấp quyền Reverse API", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Gọi VietMap Reverse thất bại", e);
         }
-        return response.get(0);
     }
 
     @Override
@@ -53,7 +61,6 @@ public class VietMapServiceImpl implements VietMapService{
                         .queryParam("circle_center", lat + "," + lng)
                         .queryParam("circle_radius", radiusMeters)
                         .queryParam("layers", "POI")
-                        .queryParam("display_type", vietMapConfig.getSearchDisplayType())
                         .build())
                 .retrieve()
                 .body(new ParameterizedTypeReference<List<VietMapSearchResponse>>() {});

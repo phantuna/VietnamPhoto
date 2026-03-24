@@ -15,8 +15,10 @@ import java.util.UUID;
 public class LocationsResponse {
     private UUID id;
     private String name;
+    private String address;
     private String province;
     private String district;
+    private String ward;
     private BigDecimal latitude;
     private BigDecimal longitude;
     private String description;

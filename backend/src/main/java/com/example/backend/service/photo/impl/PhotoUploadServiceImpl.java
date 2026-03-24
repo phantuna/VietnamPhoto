@@ -1,5 +1,6 @@
 package com.example.backend.service.photo.impl;
 
+import com.example.backend.dto.response.location.VietMapLocationResponse;
 import com.example.backend.dto.response.photo.*;
 import com.example.backend.entity.Locations;
 import com.example.backend.entity.PhotoMetadata;
@@ -8,6 +9,7 @@ import com.example.backend.entity.Users;
 import com.example.backend.repository.LocationsRepository;
 import com.example.backend.repository.PhotosRepository;
 import com.example.backend.repository.UserRepository;
+import com.example.backend.service.location.VietMapLocationService;
 import com.example.backend.service.photo.*;
 import com.example.backend.utils.cloudinary.CloudinaryService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
     private final LocationsRepository locationsRepository;
     private final PhotosRepository photosRepository;
 
+    private final VietMapLocationService vietMapLocationService;
     private final ImageModerationService imageModerationService;
     private final ExifExtractorService exifExtractorService;
     private final ImageProcessingService imageProcessingService;
@@ -96,7 +99,13 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
         }
 
         ExifDataDto exifData = exifExtractorService.extract(file);
-
+        VietMapLocationResponse resolvedAddress = null;
+        if (exifData.getGpsLatitude() != null && exifData.getGpsLongitude() != null) {
+            resolvedAddress = vietMapLocationService.reverse(
+                    exifData.getGpsLatitude(),
+                    exifData.getGpsLongitude()
+            );
+        }
         PhotoMetadata metadata = new PhotoMetadata();
         metadata.setCameraMake(exifData.getCameraMake());
         metadata.setCameraModel(exifData.getCameraModel());
@@ -113,7 +122,12 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
             double distanceMeters = photoVerificationService.calculateDistanceMeters(metadata, location);
             verified = distanceMeters >= 0 && distanceMeters <= 300;
         }
-
+        if (resolvedAddress != null) {
+            metadata.setAddress(resolvedAddress.getDisplay());
+            metadata.setProvince(resolvedAddress.getProvince());
+            metadata.setDistrict(resolvedAddress.getDistrict());
+            metadata.setWard(resolvedAddress.getWard());
+        }
         String originalFilename = file.getOriginalFilename();
         boolean isHeic = originalFilename != null && originalFilename.toLowerCase().matches(".*\\.(heic|heif)$");
         String publicId = "user_" + user.getId() + "/photo_" + UUID.randomUUID().toString();

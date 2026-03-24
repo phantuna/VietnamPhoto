@@ -14,4 +14,5 @@ public class VietMapConfig {
     private String baseUrl;
     private Integer reverseDisplayType = 6;
     private Integer searchDisplayType = 5;
+
 }
