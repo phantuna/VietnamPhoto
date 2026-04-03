@@ -3,6 +3,7 @@ package com.example.backend.dto.response.photo;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 public class ExifDataDto {
@@ -17,4 +18,5 @@ public class ExifDataDto {
 
     private BigDecimal gpsLatitude;
     private BigDecimal gpsLongitude;
+    private LocalDateTime dateTaken;
 }

@@ -1,34 +1,67 @@
 package com.example.backend.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Locations extends Base {
+
+    @Column(nullable = false)
     private String name;
-    @Column(name = "address", columnDefinition = "TEXT")
-    private String address;
 
-    @Column(name = "province", length = 100)
-    private String province;
+    // 🔑 CÁC TRƯỜNG MỚI ĐỂ KHỚP VỚI DỮ LIỆU TỪ JSON
+    @Column(unique = true, nullable = false)
+    private String code; // Ví dụ: "11" (Hà Nội), "267" (Minh Châu)
 
-    @Column(name = "district", length = 100)
-    private String district;
+    private String type; // Ví dụ: "thanh-pho", "tinh", "xa", "phuong"
 
-    @Column(name = "ward", length = 100)
-    private String ward;
-    @Column(name = "latitude", precision = 10, scale = 7)
+    private String slug; // Ví dụ: "ha-noi", "minh-chau"
+
+    @Column(name = "name_with_type")
+    private String nameWithType; // Ví dụ: "Thành phố Hà Nội"
+
+    // 🌳 Nhóm Phân cấp (Hierarchy)
+    @Column(nullable = false)
+    private Integer level; // 0: Tỉnh/Thành phố, 1: Xã/Địa điểm cụ thể
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Locations parent;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    private List<Locations> children = new ArrayList<>();
+
+    // 📍 Nhóm Tọa độ địa lý
+    @Column(precision = 10, scale = 7)
     private BigDecimal latitude;
-    @Column(name = "longitude", precision = 10, scale = 7)
-    private BigDecimal longitude;
-    private String description;
 
+    @Column(precision = 10, scale = 7)
+    private BigDecimal longitude;
+
+    // 📸 Nhóm Thông tin Mini Social Hub
+    @Column(name = "cover_photo")
+    private String coverPhoto;
+
+    private String category;
+
+    @Column(name = "golden_hour")
+    private String goldenHour;
+
+    @Column(name = "post_count")
+    private Long postCount = 0L;
+
+    @Column(name = "check_in_count")
+    private Long checkInCount = 0L;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
 }

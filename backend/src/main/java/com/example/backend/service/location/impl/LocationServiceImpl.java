@@ -3,7 +3,7 @@ package com.example.backend.service.location.impl;
 import com.example.backend.dto.response.location.LocationsResponse;
 import com.example.backend.dto.response.location.VietMapLocationResponse;
 import com.example.backend.entity.Locations;
-import com.example.backend.repository.LocationsRepository;
+import com.example.backend.repository.location.LocationsRepository;
 import com.example.backend.service.location.LocationService;
 import com.example.backend.mapper.LocationMapper;
 import com.example.backend.service.location.VietMapLocationService;
@@ -45,15 +45,6 @@ public class LocationServiceImpl implements LocationService {
         location.setLongitude(longitude);
         location.setDescription(description);
 
-        if (resolved != null) {
-            location.setAddress(resolved.getDisplay() != null ? resolved.getDisplay() : resolved.getAddress());
-            location.setProvince(resolved.getProvince() != null ? resolved.getProvince() : province);
-            location.setDistrict(resolved.getDistrict() != null ? resolved.getDistrict() : district);
-            location.setWard(resolved.getWard());
-        } else {
-            location.setProvince(province);
-            location.setDistrict(district);
-        }
 
         Locations saved = locationsRepository.save(location);
 
@@ -102,16 +93,6 @@ public class LocationServiceImpl implements LocationService {
         location.setLatitude(latitude);
         location.setLongitude(longitude);
         location.setDescription(description);
-
-        if (resolved != null) {
-            location.setAddress(resolved.getDisplay() != null ? resolved.getDisplay() : resolved.getAddress());
-            location.setProvince(resolved.getProvince() != null ? resolved.getProvince() : province);
-            location.setDistrict(resolved.getDistrict() != null ? resolved.getDistrict() : district);
-            location.setWard(resolved.getWard());
-        } else {
-            location.setProvince(province);
-            location.setDistrict(district);
-        }
 
         return locationMapper.toResponse(location);
     }

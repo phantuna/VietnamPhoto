@@ -29,7 +29,7 @@ public class ImageProcessingServiceImpl implements ImageProcessingService {
                     (long) cleanBytes.length
             );
         } catch (Exception e) {
-        throw new RuntimeException("Lỗi khi xử lý/convert ảnh: " + e.getMessage());
+        throw new RuntimeException("Lỗi khi xử lý/convert ảnh: " + e);
         }
     }
 }

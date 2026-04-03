@@ -2,27 +2,48 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.request.UserRequest;
 import com.example.backend.dto.response.UserResponse;
-import com.example.backend.service.UserService;
+import com.example.backend.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
-
     private final UserService userService;
 
-    @PostMapping("/created")
-    public UserResponse createdUser(@RequestBody UserRequest dto){
-
+    @PostMapping("/register")
+    public UserResponse createUser(@RequestBody UserRequest dto){
         return userService.createUser(dto);
     }
-
     @GetMapping("/getall")
-    public List<UserResponse> getAllUser(){
+    public List<UserResponse> getAllUsers() {
         return userService.getAll();
+    }
+
+    @GetMapping("/{userId}")
+    public UserResponse getUserById(@PathVariable UUID userId) {
+        return userService.getById(userId);
+    }
+
+    @GetMapping("/me")
+    public UserResponse getMe() {
+        return userService.getMe();
+    }
+
+    @PutMapping("/{userId}")
+    public UserResponse updateUser(
+            @PathVariable UUID userId,
+            @RequestBody UserRequest request
+    ) {
+        return userService.updateUser(userId, request);
+    }
+
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@PathVariable UUID userId) {
+        userService.deleteUser(userId);
     }
 }

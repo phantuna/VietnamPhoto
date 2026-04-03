@@ -1,10 +1,11 @@
-package com.example.backend.utils.vietmap;
+package com.example.backend.utils.vietmap.impl;
 
 import com.example.backend.config.VietMapConfig;
 import com.example.backend.dto.response.vietmap.VietMapReverseResponse;
 import com.example.backend.dto.response.vietmap.VietMapSearchResponse;
-import jakarta.annotation.PostConstruct;
+import com.example.backend.utils.vietmap.VietMapService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -12,9 +13,10 @@ import org.springframework.web.client.RestClient;
 import java.math.BigDecimal;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-public class VietMapServiceImpl implements VietMapService{
+public class VietMapServiceImpl implements VietMapService {
 
     private final VietMapConfig vietMapConfig;
 
@@ -26,8 +28,7 @@ public class VietMapServiceImpl implements VietMapService{
 
     @Override
     public VietMapReverseResponse reverse(BigDecimal lat, BigDecimal lng) {
-        System.out.println("Calling VietMap reverse with lat=" + lat + ", lng=" + lng);
-
+        log.debug("Calling VietMap reverse with lat={}, lng={}", lat, lng);
         try {
             List<VietMapReverseResponse> response = restClient().get()
                     .uri(uriBuilder -> uriBuilder

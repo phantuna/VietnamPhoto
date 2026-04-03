@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -52,15 +53,18 @@ public class PhotoMetadata {
     @Column(name = "gps_longitude", precision = 10, scale = 7)
     private BigDecimal gpsLongitude;
 
-    @Column(name = "address", columnDefinition = "TEXT")
-    private String address;
+    @Column (name = "date_taken")
+    private LocalDateTime dateTaken;
 
-    @Column(name = "province", length = 100)
-    private String province;
-
-    @Column(name = "district", length = 100)
-    private String district;
-
-    @Column(name = "ward", length = 100)
-    private String ward;
+//    @Column(name = "address", columnDefinition = "TEXT")
+//    private String address;
+//
+//    @Column(name = "province", length = 100)
+//    private String province;
+//
+//    @Column(name = "district", length = 100)
+//    private String district;
+//
+//    @Column(name = "ward", length = 100)
+//    private String ward;
 }

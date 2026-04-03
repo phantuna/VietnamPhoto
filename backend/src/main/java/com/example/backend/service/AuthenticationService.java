@@ -5,12 +5,10 @@ import com.example.backend.dto.response.AuthenticationResponse;
 import com.example.backend.entity.Users;
 import com.example.backend.exception.AppException;
 import com.example.backend.exception.ErrorCode;
-import com.example.backend.repository.UserRepository;
+import com.example.backend.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

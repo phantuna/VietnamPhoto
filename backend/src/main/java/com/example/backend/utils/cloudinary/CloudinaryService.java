@@ -71,12 +71,18 @@ public class CloudinaryService {
         }
     }
 
-    public void deleteImage(String imageUrl) {
+    public void deleteImageByPublicId(String publicId) {
         try {
-            String publicId = extractPublicId(imageUrl);
-            cloudinary.uploader().destroy(publicId, ObjectUtils.asMap("resource_type", "image"));
+            cloudinary.uploader().destroy(
+                    publicId,
+                    ObjectUtils.asMap("resource_type", "image")
+            );
         } catch (IOException e) {
             throw new RuntimeException("Delete from Cloudinary failed", e);
         }
+    }
+    public void deleteImageByUrl(String imageUrl) {
+        String publicId = extractPublicId(imageUrl);
+        deleteImageByPublicId(publicId);
     }
 }

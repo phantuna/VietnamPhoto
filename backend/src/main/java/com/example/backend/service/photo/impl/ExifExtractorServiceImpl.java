@@ -9,13 +9,18 @@ import com.drew.metadata.exif.GpsDirectory;
 
 import com.example.backend.dto.response.photo.ExifDataDto;
 import com.example.backend.service.photo.ExifExtractorService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
+@Slf4j
 @Service
 public class ExifExtractorServiceImpl implements ExifExtractorService {
 
@@ -48,6 +53,13 @@ public class ExifExtractorServiceImpl implements ExifExtractorService {
 
                 dto.setLensModel(subIFD.getString(ExifSubIFDDirectory.TAG_LENS_MODEL));
                 dto.setShutterSpeed(subIFD.getDescription(ExifSubIFDDirectory.TAG_EXPOSURE_TIME));
+
+                Date dateOriginal = subIFD.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
+                if (dateOriginal != null) {
+                    // Convert java.util.Date sang java.time.LocalDateTime
+                    LocalDateTime dateTaken = LocalDateTime.ofInstant(dateOriginal.toInstant(), ZoneId.systemDefault());
+                    dto.setDateTaken(dateTaken);
+                }
             }
 
             GpsDirectory gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory.class);
@@ -60,8 +72,11 @@ public class ExifExtractorServiceImpl implements ExifExtractorService {
             }
 
             return dto;
-        } catch (Exception e) {
-            return dto;
+        }  catch (Exception e) {
+            String fileName = file != null ? file.getOriginalFilename() : "unknown";
+            log.warn("Không thể extract EXIF cho file {}: {}", fileName, e.getMessage(), e);
         }
+
+        return dto;
     }
 }
