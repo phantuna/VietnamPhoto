@@ -19,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class PostResponse {
 
-    private UUID id;
+    private String id;
     private String caption;
     private String shootingTip;
     private Long likeCount;

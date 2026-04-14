@@ -31,24 +31,20 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
     private final Executor photoUploadExecutor;
 
     @Override
-    public PhotoUploadResponse uploadPhoto(MultipartFile file, UUID userId, UUID locationId, String caption) {
-        return singlePhotoUploadService.uploadSingle(file, userId, locationId, caption);
+    public PhotoUploadResponse uploadPhoto(MultipartFile file, String userId) {
+        return singlePhotoUploadService.uploadSingle(file, userId);
     }
 
     @Override
-    public List<PhotoUploadResponse> uploadMultiplePhotos(
-            List<MultipartFile> files, UUID userId, UUID locationId, String caption) {
-
+    public List<PhotoUploadResponse> uploadMultiplePhotos(List<MultipartFile> files, String userId) {
         if (files == null || files.isEmpty()) throw new RuntimeException("No files");
         if (files.size() > 10) throw new RuntimeException("Tối đa 10 ảnh");
 
         List<CompletableFuture<PhotoUploadResponse>> futures = files.stream()
                 .map(file -> CompletableFuture.supplyAsync(() -> {
-                    log.info("Start upload file={} on thread={}",
-                            file.getOriginalFilename(),
-                            Thread.currentThread().getName());
                     try {
-                        return singlePhotoUploadService.uploadSingle(file, userId, locationId, caption);
+                        // CHỈ truyền file và userId
+                        return singlePhotoUploadService.uploadSingle(file, userId);
                     } catch (Exception e) {
                         log.error("Lỗi ảnh {}: {}", file.getOriginalFilename(), e.getMessage(), e);
                         throw new RuntimeException("Lỗi: " + file.getOriginalFilename(), e);
@@ -57,17 +53,16 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
                 .toList();
 
         try {
-            return futures.stream()
-                    .map(CompletableFuture::join)
-                    .toList();
+            return futures.stream().map(CompletableFuture::join).toList();
         } catch (Exception e) {
             throw new RuntimeException("Lỗi khi tải lên hàng loạt", e);
         }
+
     }
 
     @Override
     @Transactional
-    public void deletePhoto(UUID photoId, UUID userId) {
+    public void deletePhoto(String photoId, String userId) {
         Photos photo = photosRepository.findById(photoId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy ảnh với ID này"));
 

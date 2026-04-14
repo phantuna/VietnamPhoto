@@ -23,7 +23,7 @@ public class Base {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private String id;
 
     @CreatedDate
     @Column(updatable = false)

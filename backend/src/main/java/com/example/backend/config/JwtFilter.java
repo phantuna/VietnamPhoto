@@ -37,7 +37,6 @@ public class JwtFilter extends OncePerRequestFilter {
         String authHeader = req.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-
             String token = authHeader.substring(7);
 
             try {
@@ -45,17 +44,18 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 String username = jwt.getJWTClaimsSet().getSubject();
 
-                List<String> permissions =
-                        jwt.getJWTClaimsSet().getStringListClaim("permissions");
+                // 🌟 1. LẤY USER_ID TỪ TOKEN RA
+                String userId = jwt.getJWTClaimsSet().getStringClaim("userId");
 
-                var authorities = permissions.stream()
+                List<String> permissions = jwt.getJWTClaimsSet().getStringListClaim("permissions");
+                var authorities = (permissions != null) ? permissions.stream()
                         .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
+                        .collect(Collectors.toList()) : null;
 
-
+                // 🌟 2. ĐỔI PRINCIPAL THÀNH USER_ID (Thay vì username)
                 UsernamePasswordAuthenticationToken auth =
                         new UsernamePasswordAuthenticationToken(
-                                username,
+                                userId, // Truyền thẳng userId vào đây!
                                 null,
                                 authorities
                         );
@@ -66,7 +66,6 @@ public class JwtFilter extends OncePerRequestFilter {
                 chain.doFilter(req, res);
                 return;
             }
-
         }
 
         chain.doFilter(req, res);

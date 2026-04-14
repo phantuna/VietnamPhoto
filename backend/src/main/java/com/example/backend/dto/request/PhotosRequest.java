@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class PhotosRequest {
-    private UUID id;
+    private String id;
     private String imageUrl;
     private Integer width;
     private Integer height;

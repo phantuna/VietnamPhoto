@@ -6,5 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
 
 public interface SinglePhotoUploadService {
-    PhotoUploadResponse uploadSingle(MultipartFile file, UUID userId, UUID locationId, String caption);
+    PhotoUploadResponse uploadSingle(
+            MultipartFile file,
+            String userId
+    );
 }

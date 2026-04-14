@@ -46,35 +46,39 @@ public class SinglePhotoUploadServiceImpl implements SinglePhotoUploadService {
     @Transactional
     public PhotoUploadResponse uploadSingle(
             MultipartFile file,
-            UUID userId,
-            UUID locationId,
-            String caption
+            String userId
     ) {
-        Users user = getUser(userId);
-        Locations location = getLocation(locationId);
+        Users user = usersRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        ModerationResult moderation = moderateImage(file);
-        ExifDataDto exifData = extractExif(file);
-        VietMapLocationResponse resolvedAddress = resolveAddress(exifData);
+        ModerationResult moderation = imageModerationService.moderate(file);
+        if (moderation.isBlocked()) {
+            throw new RuntimeException(moderation.getReason() != null ? moderation.getReason() : "Nội dung vi phạm");
+        }
+
+        ExifDataDto exifData = exifExtractorService.extract(file);
+
+        VietMapLocationResponse resolvedAddress = null;
+        if (exifData.getGpsLatitude() != null && exifData.getGpsLongitude() != null) {
+            resolvedAddress = vietMapLocationService.reverse(exifData.getGpsLatitude(), exifData.getGpsLongitude());
+        }
 
         PhotoMetadata metadata = buildMetadata(exifData, resolvedAddress);
-        boolean verified = verifyLocation(metadata, location);
-
         UploadedImageInfo uploadedImage = uploadImage(file, user);
 
-        Photos savedPhoto = savePhoto(user, location, caption, metadata, uploadedImage, verified);
+        Photos savedPhoto = savePhoto(metadata, uploadedImage, false);
         log.info("uploadSingle file={} thread={}",
                 file.getOriginalFilename(),
                 Thread.currentThread().getName());
-        return buildResponse(savedPhoto, moderation);
+        return buildResponse(savedPhoto, moderation,exifData);
     }
 
-    private Users getUser(UUID userId) {
+    private Users getUser(String userId) {
         return usersRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    private Locations getLocation(UUID locationId) {
+    private Locations getLocation(String locationId) {
         return locationsRepository.findById(locationId)
                 .orElseThrow(() -> new RuntimeException("Location not found"));
     }
@@ -128,14 +132,6 @@ public class SinglePhotoUploadServiceImpl implements SinglePhotoUploadService {
         return metadata;
     }
 
-    private boolean verifyLocation(PhotoMetadata metadata, Locations location) {
-        if (metadata.getGpsLatitude() == null || metadata.getGpsLongitude() == null) {
-            return false;
-        }
-
-        double distanceMeters = photoVerificationService.calculateDistanceMeters(metadata, location);
-        return distanceMeters >= 0 && distanceMeters <= 300;
-    }
 
     private UploadedImageInfo uploadImage(MultipartFile file, Users user) {
         String originalFilename = file.getOriginalFilename();
@@ -143,43 +139,25 @@ public class SinglePhotoUploadServiceImpl implements SinglePhotoUploadService {
         String publicId = "user_" + user.getId() + "/photo_" + UUID.randomUUID();
 
         if (isHeic) {
-            return uploadHeicImage(file, publicId);
+            try {
+                Map<?, ?> uploadResult = cloudinaryService.uploadHeicAndConvert(file.getBytes(), publicId);
+                return new UploadedImageInfo(
+                        uploadResult.get("secure_url").toString(),
+                        Integer.parseInt(uploadResult.get("width").toString()),
+                        Integer.parseInt(uploadResult.get("height").toString()),
+                        Long.parseLong(uploadResult.get("bytes").toString())
+                );
+            } catch (Exception e) {
+                throw new RuntimeException("Lỗi file HEIC: " + e.getMessage(), e);
+            }
         }
 
-        return uploadNormalImage(file, publicId);
-    }
-
-    private UploadedImageInfo uploadHeicImage(MultipartFile file, String publicId) {
-        try {
-            Map<?, ?> uploadResult = cloudinaryService.uploadHeicAndConvert(file.getBytes(), publicId);
-
-            return new UploadedImageInfo(
-                    uploadResult.get("secure_url").toString(),
-                    Integer.parseInt(uploadResult.get("width").toString()),
-                    Integer.parseInt(uploadResult.get("height").toString()),
-                    Long.parseLong(uploadResult.get("bytes").toString())
-            );
-        } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi xử lý file HEIC: " + e.getMessage(), e);
-        }
-    }
-
-    private UploadedImageInfo uploadNormalImage(MultipartFile file, String publicId) {
         ProcessedImageResult processed = imageProcessingService.process(file, 1600, 0.82f);
         String imageUrl = cloudinaryService.uploadImage(processed.getBytes(), publicId);
-
-        return new UploadedImageInfo(
-                imageUrl,
-                processed.getWidth(),
-                processed.getHeight(),
-                processed.getFileSize()
-        );
+        return new UploadedImageInfo(imageUrl, processed.getWidth(), processed.getHeight(), processed.getFileSize());
     }
 
     private Photos savePhoto(
-            Users user,
-            Locations location,
-            String caption,
             PhotoMetadata metadata,
             UploadedImageInfo uploadedImage,
             boolean verified
@@ -198,12 +176,13 @@ public class SinglePhotoUploadServiceImpl implements SinglePhotoUploadService {
         return photosRepository.save(photo);
     }
 
-    private PhotoUploadResponse buildResponse(Photos savedPhoto, ModerationResult moderation) {
+    private PhotoUploadResponse buildResponse(Photos savedPhoto, ModerationResult moderation , ExifDataDto exifData) {
         return PhotoUploadResponse.builder()
                 .photoId(savedPhoto.getId().toString())
                 .imageUrl(savedPhoto.getImageUrl())
                 .locationVerified(savedPhoto.getIsLocationVerified())
                 .moderationMessage(moderation.isWarning() ? moderation.getReason() : null)
+                .exifData(exifData)
                 .build();
     }
 }

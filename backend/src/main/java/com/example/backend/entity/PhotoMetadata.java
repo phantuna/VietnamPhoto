@@ -19,7 +19,7 @@ public class PhotoMetadata {
 
     @Id
     @Column(name = "photo_id")
-    private UUID photoId;
+    private String photoId;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @MapsId

@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import com.example.backend.dto.response.photo.PhotoUploadResponse;
 import com.example.backend.service.photo.PhotoUploadService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,18 +18,13 @@ public class PhotoController {
 
     private final PhotoUploadService photoUploadService;
 
-    @PostMapping("/upload")
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<List<PhotoUploadResponse>> uploadMultiple(
-            // CHÚ Ý CHỖ NÀY: Phải là List<MultipartFile> thay vì MultipartFile
             @RequestParam("file") List<MultipartFile> files,
-            @RequestParam("userId") UUID userId,
-            @RequestParam("locationId") UUID locationId,
-            @RequestParam(value = "caption", required = false) String caption
+            @RequestParam("userId") String userId
     ) {
-
-        // GỌI ĐÚNG HÀM uploadMultiplePhotos TRONG SERVICE
-        List<PhotoUploadResponse> result = photoUploadService.uploadMultiplePhotos(files, userId, locationId, caption);
-
+        // Chỉ truyền files và userId
+        List<PhotoUploadResponse> result = photoUploadService.uploadMultiplePhotos(files, userId);
         return ResponseEntity.ok(result);
     }
 }

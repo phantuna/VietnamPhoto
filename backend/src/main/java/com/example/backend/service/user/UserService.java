@@ -12,11 +12,11 @@ public interface UserService {
 
     List<UserResponse> getAll();
 
-    UserResponse getById(UUID userId);
+    UserResponse getById(String userId);
 
     UserResponse getMe();
 
-    UserResponse updateUser(UUID userId, UserRequest request);
+    UserResponse updateUser(String userId, UserRequest request);
 
-    void deleteUser(UUID userId);
+    void deleteUser(String userId);
 }

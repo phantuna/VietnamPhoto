@@ -31,7 +31,7 @@ public class JwtService {
     public  String SIGNER_KEY ;
 
     // Tạo JWT
-    public String generateToken(String username) {
+    public String generateToken(String username,String userId) {
         try {
             JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
 
@@ -41,6 +41,7 @@ public class JwtService {
                     .issueTime(new Date())
                     .expirationTime(Date.from(Instant.now().plus(2, ChronoUnit.HOURS)))
 //                    .claim("permissions", permissions)
+                    .claim("userId",userId)
                     .build();
 
             SignedJWT signedJWT = new SignedJWT(header, claims);

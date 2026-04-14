@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PhotoUploadService {
-    PhotoUploadResponse uploadPhoto(MultipartFile file, UUID userId, UUID locationId, String caption);
+    PhotoUploadResponse uploadPhoto(MultipartFile file, String userId);
 
-    List<PhotoUploadResponse> uploadMultiplePhotos(List<MultipartFile> files, UUID userId, UUID locationId, String caption);
-    void deletePhoto(UUID photoId, UUID userId);
+    List<PhotoUploadResponse> uploadMultiplePhotos(List<MultipartFile> files, String userId);
+    void deletePhoto(String photoId, String userId);
 
 }

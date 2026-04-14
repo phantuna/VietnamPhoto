@@ -13,13 +13,12 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class LocationsResponse {
-    private UUID id;
+    private String id;
     private String name;
-    private String address;
-    private String province;
-    private String district;
-    private String ward;
     private BigDecimal latitude;
     private BigDecimal longitude;
+    private Integer level;
+    private String code;
     private String description;
+    private LocationsResponse parent;
 }

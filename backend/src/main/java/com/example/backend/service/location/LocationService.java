@@ -1,5 +1,6 @@
 package com.example.backend.service.location;
 
+import com.example.backend.dto.request.LocationsRequest;
 import com.example.backend.dto.response.location.LocationsResponse;
 
 import java.math.BigDecimal;
@@ -9,21 +10,14 @@ import java.util.UUID;
 
 public interface LocationService {
 
-    LocationsResponse createLocation(
-            String name,
-            String province,
-            String district,
-            BigDecimal latitude,
-            BigDecimal longitude,
-            String description
-    );
+    LocationsResponse createLocation(LocationsRequest request);
 
-    LocationsResponse getLocationById(UUID id);
+    LocationsResponse getLocationById(String id);
 
     List<LocationsResponse> getAllLocations();
 
     LocationsResponse updateLocation(
-            UUID id,
+            String id,
             String name,
             String province,
             String district,
@@ -32,5 +26,5 @@ public interface LocationService {
             String description
     );
 
-    void deleteLocation(UUID id);
+    void deleteLocation(String id);
 }

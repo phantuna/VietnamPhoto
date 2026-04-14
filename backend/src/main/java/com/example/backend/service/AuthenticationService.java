@@ -34,7 +34,7 @@ public class AuthenticationService {
 //                .toList();
 
 
-        String token = jwtService.generateToken(driver.getUsername());
+        String token = jwtService.generateToken(driver.getUsername(),driver.getId());
 
         return AuthenticationResponse.builder()
                 .authenticated(true)

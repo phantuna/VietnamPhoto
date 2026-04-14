@@ -1,5 +1,6 @@
 package com.example.backend.dto.request;
 
+import com.example.backend.dto.response.photo.ExifDataDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +17,7 @@ import java.util.UUID;
 public class PostCreateRequest {
 
     @NotNull(message = "Địa điểm không được để trống")
-    private UUID locationId;
+    private String locationId;
 
     private String caption;
 
@@ -24,4 +25,5 @@ public class PostCreateRequest {
 
     // Client sẽ gửi mảng các string tag, ví dụ: ["hoanghon", "bienhalong"]
     private List<String> tags;
+    private List<String> photoIds;
 }

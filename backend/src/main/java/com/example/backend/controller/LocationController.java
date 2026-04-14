@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.request.LocationsRequest;
 import com.example.backend.dto.response.location.LocationsResponse;
 import com.example.backend.service.location.LocationService;
 import lombok.RequiredArgsConstructor;
@@ -17,26 +18,12 @@ public class LocationController {
     private final LocationService locationService;
 
     @PostMapping
-    public LocationsResponse createLocation(
-            @RequestParam String name,
-            @RequestParam String province,
-            @RequestParam String district,
-            @RequestParam BigDecimal latitude,
-            @RequestParam BigDecimal longitude,
-            @RequestParam(required = false) String description
-    ) {
-        return locationService.createLocation(
-                name,
-                province,
-                district,
-                latitude,
-                longitude,
-                description
-        );
+    public LocationsResponse createLocation(@RequestBody LocationsRequest request) {
+        return locationService.createLocation(request);
     }
 
     @GetMapping("/{id}")
-    public LocationsResponse getLocation(@PathVariable UUID id) {
+    public LocationsResponse getLocation(@PathVariable String id) {
         return locationService.getLocationById(id);
     }
 
@@ -46,7 +33,7 @@ public class LocationController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable UUID id) {
+    public void delete(@PathVariable String id) {
         locationService.deleteLocation(id);
     }
 }
