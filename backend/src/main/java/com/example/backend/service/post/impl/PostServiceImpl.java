@@ -1,7 +1,10 @@
 package com.example.backend.service.post.impl;
 
-import com.example.backend.dto.request.PostCreateRequest;
+import com.example.backend.dto.request.post.PostCreateRequest;
+import com.example.backend.dto.request.post.PostUpdateRequest;
+import com.example.backend.dto.response.PostResponse;
 import com.example.backend.entity.*;
+import com.example.backend.mapper.PostMapper;
 import com.example.backend.repository.post.PostsRepository;
 import com.example.backend.repository.location.LocationsRepository;
 import com.example.backend.repository.photo.PhotosRepository;
@@ -16,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -26,12 +28,14 @@ public class PostServiceImpl implements PostService {
     private final UserRepository usersRepository;
     private final LocationsRepository locationsRepository;
     private final PostsRepository postsRepository;
-    private final PhotosRepository photosRepository; // Inject thêm PhotosRepository
+    private final PhotosRepository photosRepository;
     private final TagServiceImpl tagService;
+    private final PostMapper postMapper;
     private final PhotoVerificationService photoVerificationService;
 
+    @Override
     @Transactional
-    public Posts createPost(String userId, PostCreateRequest request) {
+    public PostResponse createPost(String userId, PostCreateRequest request) {
 
         Users user = usersRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -62,13 +66,12 @@ public class PostServiceImpl implements PostService {
 
         // 3. Xử lý từng ảnh: Check khoảng cách (Verify Location) & Cập nhật post_id
         for (Photos photo : uploadedPhotos) {
-            photo.setPost(post); // Trỏ bức ảnh này về bài post vừa tạo
+            photo.setPost(post);
 
             PhotoMetadata metadata = photo.getMetadata();
-            // Tính toán khoảng cách nếu ảnh có lưu tọa độ GPS
             if (metadata != null && metadata.getGpsLatitude() != null && metadata.getGpsLongitude() != null) {
                 double distanceMeters = photoVerificationService.calculateDistanceMeters(metadata, location);
-                boolean isVerified = (distanceMeters >= 0 && distanceMeters <= 300); // Check trong bán kính 300m
+                boolean isVerified = (distanceMeters >= 0 && distanceMeters <= 300);
                 photo.setIsLocationVerified(isVerified);
             }
         }
@@ -76,7 +79,72 @@ public class PostServiceImpl implements PostService {
         // 4. Gắn danh sách ảnh vào bài viết
         post.setPhotos(new ArrayList<>(uploadedPhotos));
 
-        // 5. Lưu bài viết (Cascade sẽ tự động cập nhật bảng Photos)
-        return postsRepository.save(post);
+        // 5. Lưu bài viết và dùng Mapper chuyển sang DTO
+        Posts savedPost = postsRepository.save(post);
+        return postMapper.toResponse(savedPost); // SỬA Ở ĐÂY
+    }
+
+    // 🌟 THÊM HÀM NÀY: Dùng nội bộ để lấy Entity gốc thao tác với Database
+    private Posts getPostEntityById(String postId) {
+        return postsRepository.findByIdWithDetails(postId)
+                .orElseThrow(() -> new RuntimeException("Bài viết không tồn tại"));
+    }
+
+    @Override
+    public PostResponse getPostById(String postId) {
+        // Gọi hàm nội bộ lấy Entity, sau đó map sang DTO trả về cho Controller
+        Posts post = getPostEntityById(postId);
+        return postMapper.toResponse(post); // SỬA Ở ĐÂY
+    }
+
+    @Override
+    public List<PostResponse> getAllPosts() {
+        List<Posts> allPosts = postsRepository.findAll();
+
+        return allPosts.stream()
+                .map(postMapper::toResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public PostResponse updatePost(String postId, String userId, PostUpdateRequest request) {
+        // Phải dùng getPostEntityById thay vì getPostById
+        Posts post = getPostEntityById(postId); // SỬA Ở ĐÂY
+
+        // Bảo mật: Check quyền sở hữu
+        if (!post.getUser().getId().toString().equals(userId)) {
+            throw new RuntimeException("Bạn không có quyền chỉnh sửa bài viết này");
+        }
+
+        // Cập nhật các trường cơ bản
+        if (request.getCaption() != null) post.setCaption(request.getCaption());
+        if (request.getShootingTip() != null) post.setShootingTip(request.getShootingTip());
+
+        // Cập nhật Tags
+        if (request.getTags() != null) {
+            List<Tags> newTags = request.getTags().stream()
+                    .map(tagService::getOrCreateTag)
+                    .toList();
+            post.setTags(new ArrayList<>(newTags));
+        }
+
+        // Lưu bài viết và dùng Mapper chuyển sang DTO
+        Posts updatedPost = postsRepository.save(post);
+        return postMapper.toResponse(updatedPost); // SỬA Ở ĐÂY
+    }
+
+    @Override
+    @Transactional
+    public void deletePost(String postId, String userId) {
+        // Phải dùng getPostEntityById thay vì getPostById
+        Posts post = getPostEntityById(postId); // SỬA Ở ĐÂY
+
+        // Bảo mật: Check quyền sở hữu
+        if (!post.getUser().getId().toString().equals(userId)) {
+            throw new RuntimeException("Bạn không có quyền xóa bài viết này");
+        }
+
+        postsRepository.delete(post);
     }
 }

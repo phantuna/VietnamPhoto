@@ -1,6 +1,5 @@
-package com.example.backend.dto.request;
+package com.example.backend.dto.request.post;
 
-import com.example.backend.dto.response.photo.ExifDataDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @Builder

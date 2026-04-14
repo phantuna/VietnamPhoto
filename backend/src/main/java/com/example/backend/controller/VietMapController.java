@@ -15,13 +15,12 @@ import java.math.BigDecimal;
 @RequestMapping("/vietmap")
 public class VietMapController {
 
+    private final VietMapLocationService vietMapLocationService;
 
-        private final VietMapLocationService vietMapLocationService;
-
-        @GetMapping("/reverse")
-        public VietMapLocationResponse reverse(@RequestParam BigDecimal lat,
-                                               @RequestParam BigDecimal lng) {
-            return vietMapLocationService.reverse(lat, lng);
-        }
+    @GetMapping("/reverse")
+    public VietMapLocationResponse reverse(@RequestParam BigDecimal lat,
+                                           @RequestParam BigDecimal lng) {
+        return vietMapLocationService.reverse(lat, lng);
+    }
 
 }

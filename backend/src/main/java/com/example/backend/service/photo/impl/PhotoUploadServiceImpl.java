@@ -2,6 +2,7 @@ package com.example.backend.service.photo.impl;
 
 import com.example.backend.dto.response.photo.PhotoUploadResponse;
 import com.example.backend.entity.Photos;
+import com.example.backend.mapper.PhotoMapper;
 import com.example.backend.repository.photo.PhotosRepository;
 import com.example.backend.service.photo.PhotoUploadService;
 import com.example.backend.service.photo.SinglePhotoUploadService;
@@ -26,6 +27,7 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
     private final PhotosRepository photosRepository;
     private final CloudinaryService cloudinaryService;
     private final SinglePhotoUploadService singlePhotoUploadService;
+    private final PhotoMapper photoMapper;
 
     @Qualifier("photoUploadExecutor")
     private final Executor photoUploadExecutor;
@@ -61,6 +63,13 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
     }
 
     @Override
+    public PhotoUploadResponse getPhotoById(String photoId) {
+        Photos photo = photosRepository.findById(photoId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy ảnh"));
+
+        return photoMapper.toResponse(photo);
+    }
+    @Override
     @Transactional
     public void deletePhoto(String photoId, String userId) {
         Photos photo = photosRepository.findById(photoId)
@@ -78,24 +87,4 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
         photosRepository.delete(photo);
     }
 
-    private String extractPublicIdFromUrl(String imageUrl) {
-        if (imageUrl == null || !imageUrl.contains("/upload/")) {
-            return null;
-        }
-        try {
-            String afterUpload = imageUrl.substring(imageUrl.indexOf("/upload/") + 8);
-            if (afterUpload.matches("v\\d+/.*")) {
-                afterUpload = afterUpload.replaceFirst("v\\d+/", "");
-            }
-
-            int lastDotIndex = afterUpload.lastIndexOf(".");
-            if (lastDotIndex != -1) {
-                return afterUpload.substring(0, lastDotIndex);
-            }
-            return afterUpload;
-        } catch (Exception e) {
-            log.error("Không thể bóc tách publicId từ URL: {}", imageUrl, e);
-            return null;
-        }
-    }
 }

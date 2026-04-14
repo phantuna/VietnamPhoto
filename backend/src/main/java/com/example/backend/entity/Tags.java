@@ -14,6 +14,6 @@ import java.util.UUID;
 @Table(name = "tags")
 public class Tags extends Base {
 
-    @Column(unique = true)
+    @Column(name = "name", nullable = false, unique = true, length = 100)
     private String name;
 }
