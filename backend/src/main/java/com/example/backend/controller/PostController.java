@@ -2,7 +2,9 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.request.post.PostCreateRequest;
 import com.example.backend.dto.request.post.PostUpdateRequest;
+import com.example.backend.dto.response.LikeToggleResponse;
 import com.example.backend.dto.response.PostResponse;
+import com.example.backend.service.post.PostLikeService;
 import com.example.backend.service.post.PostService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -19,6 +21,8 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final PostLikeService postLikeService;
+
 
     @PostMapping("/created")
     @PreAuthorize("isAuthenticated()")
@@ -37,17 +41,19 @@ public class PostController {
         return postService.updatePost(id, userId, request);
     }
 
-    // 🌟 ĐÃ SỬA LẠI THÀNH TRẢ VỀ LIST CƠ BẢN
-    @GetMapping("/getAll")
-    @PreAuthorize("isAuthenticated()")
-    public List<PostResponse> getAllPosts() {
-        return postService.getAllPosts();
+    @GetMapping("/{postId}")
+    public PostResponse getPostById(
+            @PathVariable String postId,
+            @RequestParam(required = false) String viewerId
+    ) {
+        return postService.getPostById(postId, viewerId);
     }
 
-    @GetMapping("/getById/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public PostResponse getPostById(@NotBlank @PathVariable String id) {
-        return postService.getPostById(id);
+    @GetMapping("/getAll")
+    public List<PostResponse> getAllPosts(
+            @RequestParam(required = false) String viewerId
+    ) {
+        return postService.getAllPosts(viewerId);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -56,5 +62,27 @@ public class PostController {
             @NotBlank @PathVariable String id,
             @AuthenticationPrincipal String userId) {
         postService.deletePost(id, userId);
+    }
+
+
+    @PostMapping("/{postId}/like")
+    public LikeToggleResponse toggleLike(
+            @PathVariable String postId,
+            @RequestParam String userId
+    ) {
+        return postLikeService.toggleLike(userId, postId);
+    }
+
+    @GetMapping("/{postId}/likes/count")
+    public long countLikes(@PathVariable String postId) {
+        return postLikeService.countLikes(postId);
+    }
+
+    @GetMapping("/{postId}/liked")
+    public boolean isLiked(
+            @PathVariable String postId,
+            @RequestParam String userId
+    ) {
+        return postLikeService.isLiked(userId, postId);
     }
 }

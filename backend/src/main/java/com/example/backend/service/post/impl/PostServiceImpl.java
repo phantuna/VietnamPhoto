@@ -10,8 +10,10 @@ import com.example.backend.repository.location.LocationsRepository;
 import com.example.backend.repository.photo.PhotosRepository;
 import com.example.backend.repository.user.UserRepository;
 import com.example.backend.service.photo.PhotoVerificationService;
+import com.example.backend.service.post.PostLikeService;
 import com.example.backend.service.post.PostService;
 import com.example.backend.service.tag.impl.TagServiceImpl;
+import com.example.backend.utils.HashtagUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -32,6 +35,7 @@ public class PostServiceImpl implements PostService {
     private final TagServiceImpl tagService;
     private final PostMapper postMapper;
     private final PhotoVerificationService photoVerificationService;
+    private final PostLikeService postLikeService;
 
     @Override
     @Transactional
@@ -51,12 +55,11 @@ public class PostServiceImpl implements PostService {
         post.setLikeCount(0L);
 
         // 1. Xử lý Tags
-        if (request.getTags() != null) {
-            List<Tags> postTags = request.getTags().stream()
-                    .map(tagService::getOrCreateTag)
-                    .toList();
-            post.setTags(new ArrayList<>(postTags));
-        }
+        Set<String> extractedTags = HashtagUtils.extractHashtags(request.getCaption());
+        List<Tags> postTags = extractedTags.stream()
+                .map(tagService::getOrCreateTag) // Sẽ gọi validateTag check DB Word Ban
+                .toList();
+        post.setTags(new ArrayList<>(postTags));
 
         // 2. Lấy danh sách ảnh từ DB dựa vào mảng ID Frontend gửi lên
         List<Photos> uploadedPhotos = photosRepository.findAllById(request.getPhotoIds());
@@ -81,7 +84,7 @@ public class PostServiceImpl implements PostService {
 
         // 5. Lưu bài viết và dùng Mapper chuyển sang DTO
         Posts savedPost = postsRepository.save(post);
-        return postMapper.toResponse(savedPost); // SỬA Ở ĐÂY
+        return postMapper.toResponse(savedPost,false); // SỬA Ở ĐÂY
     }
 
     // 🌟 THÊM HÀM NÀY: Dùng nội bộ để lấy Entity gốc thao tác với Database
@@ -91,37 +94,38 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getPostById(String postId) {
-        // Gọi hàm nội bộ lấy Entity, sau đó map sang DTO trả về cho Controller
+    @Transactional(readOnly = true)
+    public PostResponse getPostById(String postId, String userId) {
         Posts post = getPostEntityById(postId);
-        return postMapper.toResponse(post); // SỬA Ở ĐÂY
+        boolean liked = userId != null && postLikeService.isLiked(userId, postId);
+        return postMapper.toResponse(post, liked);
     }
 
     @Override
-    public List<PostResponse> getAllPosts() {
+    @Transactional(readOnly = true)
+    public List<PostResponse> getAllPosts(String userId) {
         List<Posts> allPosts = postsRepository.findAll();
 
         return allPosts.stream()
-                .map(postMapper::toResponse)
+                .map(post -> {
+                    boolean liked = userId != null && postLikeService.isLiked(userId, post.getId());
+                    return postMapper.toResponse(post, liked);
+                })
                 .toList();
     }
 
     @Override
     @Transactional
     public PostResponse updatePost(String postId, String userId, PostUpdateRequest request) {
-        // Phải dùng getPostEntityById thay vì getPostById
-        Posts post = getPostEntityById(postId); // SỬA Ở ĐÂY
+        Posts post = getPostEntityById(postId);
 
-        // Bảo mật: Check quyền sở hữu
         if (!post.getUser().getId().toString().equals(userId)) {
             throw new RuntimeException("Bạn không có quyền chỉnh sửa bài viết này");
         }
 
-        // Cập nhật các trường cơ bản
         if (request.getCaption() != null) post.setCaption(request.getCaption());
         if (request.getShootingTip() != null) post.setShootingTip(request.getShootingTip());
 
-        // Cập nhật Tags
         if (request.getTags() != null) {
             List<Tags> newTags = request.getTags().stream()
                     .map(tagService::getOrCreateTag)
@@ -129,18 +133,18 @@ public class PostServiceImpl implements PostService {
             post.setTags(new ArrayList<>(newTags));
         }
 
-        // Lưu bài viết và dùng Mapper chuyển sang DTO
         Posts updatedPost = postsRepository.save(post);
-        return postMapper.toResponse(updatedPost); // SỬA Ở ĐÂY
+
+        // user owner đang update, liked có thể true/false tùy user đó từng like hay chưa
+        boolean liked = postLikeService.isLiked(userId, postId);
+        return postMapper.toResponse(updatedPost, liked);
     }
 
     @Override
     @Transactional
     public void deletePost(String postId, String userId) {
-        // Phải dùng getPostEntityById thay vì getPostById
-        Posts post = getPostEntityById(postId); // SỬA Ở ĐÂY
+        Posts post = getPostEntityById(postId);
 
-        // Bảo mật: Check quyền sở hữu
         if (!post.getUser().getId().toString().equals(userId)) {
             throw new RuntimeException("Bạn không có quyền xóa bài viết này");
         }

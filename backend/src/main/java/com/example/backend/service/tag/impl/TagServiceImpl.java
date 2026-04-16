@@ -22,21 +22,33 @@ public class TagServiceImpl implements TagService {
     private final TagMapper tagMapper;
     private final BannedWordCacheService bannedWordCacheService;
 
-    // alias cơ bản để bắt mấy kiểu viết lách luật phổ biến
-    private static final Set<String> HARD_BLOCK_ALIASES = Set.of(
-            "ditme", "ditmee", "ditmemay", "dm", "dmm", "dcm", "dtm", "d3tm", "djtm",
-            "fuck", "fck", "shit", "loz", "lol", "vl", "vcl"
-    );
-
     @Override
     @Transactional
     public Tags getOrCreateTag(String tagName) {
         String cleanName = normalizeTagName(tagName);
-
         validateTag(cleanName);
 
         return tagsRepository.findByName(cleanName)
                 .orElseGet(() -> createTagSafely(cleanName));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<TagResponse> suggestTags(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) return List.of();
+
+        String cleanKeyword = keyword.trim().toLowerCase().replace("#", "");
+
+        // Tìm kiếm gợi ý
+        List<Tags> results = tagsRepository.findTop10ByNameStartingWithIgnoreCaseOrderByNameAsc(cleanKeyword);
+        if (results.size() < 5) {
+            List<Tags> containsResults = tagsRepository.findTop10ByNameContainingIgnoreCaseOrderByNameAsc(cleanKeyword);
+            containsResults.forEach(t -> {
+                if (!results.contains(t) && results.size() < 10) results.add(t);
+            });
+        }
+
+        return results.stream().map(tagMapper::toResponse).toList();
     }
 
     @Override
@@ -109,45 +121,30 @@ public class TagServiceImpl implements TagService {
         tagsRepository.delete(tag);
     }
 
+    private void validateTag(String tagName) {
+        String normalized = normalizeForModeration(tagName);
+        if (bannedWordCacheService.isBanned(normalized)) {
+            throw new RuntimeException("Tag chứa nội dung không phù hợp");
+        }
+    }
+
     private String normalizeTagName(String tagName) {
         if (tagName == null || tagName.trim().isEmpty()) {
             throw new RuntimeException("Tag không được để trống");
         }
 
         String cleanName = tagName.toLowerCase().trim();
-
         if (cleanName.startsWith("#")) {
             cleanName = cleanName.substring(1).trim();
         }
 
+        // Loại bỏ khoảng trắng giữa các từ để hashtag liền mạch
         cleanName = cleanName.replaceAll("\\s+", "");
 
         if (cleanName.isEmpty()) {
             throw new RuntimeException("Tag không hợp lệ");
         }
-
         return cleanName;
-    }
-
-    private void validateTag(String tagName) {
-        String normalized = normalizeForModeration(tagName);
-
-        // 1. check alias cứng trước
-        if (HARD_BLOCK_ALIASES.contains(normalized)) {
-            throw new RuntimeException("Tag chứa nội dung không phù hợp");
-        }
-
-        // 2. check alias kiểu chứa chuỗi
-        for (String alias : HARD_BLOCK_ALIASES) {
-            if (normalized.contains(alias)) {
-                throw new RuntimeException("Tag chứa nội dung không phù hợp");
-            }
-        }
-
-        // 3. check DB cache
-        if (bannedWordCacheService.isBanned(normalized)) {
-            throw new RuntimeException("Tag chứa nội dung không phù hợp");
-        }
     }
 
     private String normalizeForModeration(String input) {

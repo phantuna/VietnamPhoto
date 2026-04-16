@@ -11,13 +11,8 @@ import java.util.List;
 
 public interface PostService {
     PostResponse createPost(String userId, PostCreateRequest request);
-    PostResponse getPostById(String postId);
-
-    // Read (Danh sách có phân trang - Dành cho News Feed)
-    List<PostResponse> getAllPosts();
-    // Update
+    PostResponse getPostById(String postId, String userId);
+    List<PostResponse> getAllPosts(String userId) ;
     PostResponse updatePost(String postId, String userId, PostUpdateRequest request);
-
-    // Delete
     void deletePost(String postId, String userId);
 }

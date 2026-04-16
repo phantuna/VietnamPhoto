@@ -40,6 +40,12 @@ public class TagController {
 
     @DeleteMapping("/{id}")
     public void deleteTag(@PathVariable String id) {
+
         tagService.deleteTag(id);
+    }
+
+    @GetMapping("/suggest")
+    public List<TagResponse> suggestTags(@RequestParam String keyword) {
+        return tagService.suggestTags(keyword);
     }
 }

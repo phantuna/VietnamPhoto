@@ -23,6 +23,7 @@ public class PostResponse {
     private String caption;
     private String shootingTip;
     private Long likeCount;
+    private Boolean liked;
     private LocalDate createdDate;
 
     private UserRequest author;

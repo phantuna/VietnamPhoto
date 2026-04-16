@@ -11,10 +11,11 @@ public enum ErrorCode {
     VALIDATION_FAILED(9000, "validation.failed"),
     INVALID_REQUEST_DATA(9001, "validation.invalid_request"),
 
-    USER_NOT_FOUND(2301,"user.not_found"),
     USER_ROLE_NOT_FOUND(2300, "user_role.not_found"),
+    USER_NOT_FOUND(2301,"user.not_found"),
+    USER_EXISTED(2302,"user.existed"),
+    EMAIL_EXISTED(2303,"email.existed"),
     INVALID_PASSWORD(1101, "auth.invalid_password"),
-
 
     ;
 

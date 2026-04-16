@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface TagService {
     Tags getOrCreateTag(String tagName);
+    List<TagResponse> suggestTags(String keyword);
     Tags createTagStrict(String tagName);
     List<TagResponse> getAllTags();
     List<TagResponse> searchTags(String keyword);

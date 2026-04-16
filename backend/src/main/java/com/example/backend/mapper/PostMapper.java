@@ -4,86 +4,73 @@ import com.example.backend.dto.request.LocationsRequest;
 import com.example.backend.dto.request.PhotosRequest;
 import com.example.backend.dto.request.UserRequest;
 import com.example.backend.dto.response.PostResponse;
-import com.example.backend.entity.PhotoMetadata;
 import com.example.backend.entity.Photos;
 import com.example.backend.entity.Posts;
-import com.example.backend.entity.Tags;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Component
 public class PostMapper {
 
-    public PostResponse toResponse(Posts post) {
+    public PostResponse toResponse(Posts post, boolean liked) {
         if (post == null) return null;
 
-        PostResponse response = new PostResponse();
-        response.setId(post.getId());
-        response.setCaption(post.getCaption());
-        response.setShootingTip(post.getShootingTip());
-        response.setLikeCount(post.getLikeCount());
-
-        // Cần đảm bảo post.getCreatedDate() trả về LocalDate để khớp với PostResponse
-        response.setCreatedDate(post.getCreatedDate());
-
-        if (post.getUser() != null) {
-            // Map sang UserRequest (Lưu ý: Không có ID và Avatar)
-            response.setAuthor(UserRequest.builder()
-                    .username(post.getUser().getUsername())
-                    .email(post.getUser().getEmail())
-                    .birthday(post.getUser().getBirthday())
-                    // KHÔNG NÊN map password: .password(post.getUser().getPassword())
-                    .build());
-        }
-
-        if (post.getLocation() != null) {
-            // Map sang LocationsRequest (Lưu ý: Không có ID)
-            response.setLocation(LocationsRequest.builder()
-                    .name(post.getLocation().getName())
-                    .latitude(post.getLocation().getLatitude())
-                    .longitude(post.getLocation().getLongitude())
-                    .description(post.getLocation().getDescription())
-                    .build());
-        }
-
-        if (post.getTags() != null) {
-            response.setTags(post.getTags().stream()
-                    .map(Tags::getName)
-                    .collect(Collectors.toList()));
-        }
-
-        if (post.getPhotos() != null) {
-            response.setPhotos(post.getPhotos().stream()
-                    .map(this::mapPhotoToDto)
-                    .collect(Collectors.toList()));
-        }
-
-        return response;
+        return PostResponse.builder()
+                .id(post.getId())
+                .caption(post.getCaption())
+                .shootingTip(post.getShootingTip())
+                .likeCount(post.getLikeCount() != null ? post.getLikeCount() : 0L)
+                .liked(liked)
+                .createdDate(post.getCreatedDate())
+                .author(mapAuthor(post))
+                .location(mapLocation(post))
+                .tags(post.getTags() != null
+                        ? post.getTags().stream().map(tag -> tag.getName()).toList()
+                        : List.of())
+                .photos(post.getPhotos() != null
+                        ? post.getPhotos().stream().map(this::mapPhoto).toList()
+                        : List.of())
+                .build();
     }
 
-    private PhotosRequest mapPhotoToDto(Photos photo) {
-        if (photo == null) return null;
+    private UserRequest mapAuthor(Posts post) {
+        if (post.getUser() == null) return null;
 
-        PhotosRequest dto = PhotosRequest.builder()
-                .id(photo.getId()) // PhotosRequest có id
-                .imageUrl(photo.getImageUrl())
-                .width(photo.getWidth())
-                .height(photo.getHeight())
-                .isLocationVerified(photo.getIsLocationVerified())
-                .build();
+        UserRequest author = new UserRequest();
+        author.setUsername(post.getUser().getUsername());
+//        author.setAvatarUrl(post.getUser().getAvatarUrl());
+        return author;
+    }
 
-        // Sử dụng PhotoMetadata thay vì ExifDataDto như đã phân tích ở lỗi trước
-        PhotoMetadata metadata = photo.getMetadata();
-        if (metadata != null) {
-            dto.setCameraMake(metadata.getCameraMake());
-            dto.setCameraModel(metadata.getCameraModel());
-            dto.setLensModel(metadata.getLensModel());
-            dto.setIso(metadata.getIso());
-            dto.setAperture(metadata.getAperture());
-            dto.setShutterSpeed(metadata.getShutterSpeed());
-            dto.setFocalLength(metadata.getFocalLength());
+    private LocationsRequest mapLocation(Posts post) {
+        if (post.getLocation() == null) return null;
+
+        LocationsRequest location = new LocationsRequest();
+//        location.setId(post.getLocation().getId());
+        location.setName(post.getLocation().getName());
+//        location.setProvince(post.getLocation().getProvince());
+//        location.setDistrict(post.getLocation().getDistrict());
+        return location;
+    }
+
+    private PhotosRequest mapPhoto(Photos photo) {
+        PhotosRequest dto = new PhotosRequest();
+        dto.setId(photo.getId());
+        dto.setImageUrl(photo.getImageUrl());
+        dto.setWidth(photo.getWidth());
+        dto.setHeight(photo.getHeight());
+
+        dto.setIsLocationVerified(photo.getIsLocationVerified());
+
+        if (photo.getMetadata() != null) {
+            dto.setCameraMake(photo.getMetadata().getCameraMake());
+            dto.setCameraModel(photo.getMetadata().getCameraModel());
+            dto.setLensModel(photo.getMetadata().getLensModel());
+            dto.setIso(photo.getMetadata().getIso());
+            dto.setAperture(photo.getMetadata().getAperture());
+            dto.setShutterSpeed(photo.getMetadata().getShutterSpeed());
+            dto.setFocalLength(photo.getMetadata().getFocalLength());
         }
 
         return dto;
