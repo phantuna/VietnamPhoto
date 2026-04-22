@@ -13,6 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class LocationsRequest {
+    private String id;
     private String name;
     private String parentId; // ID của Phường/Xã (Level 1)
     private BigDecimal latitude;

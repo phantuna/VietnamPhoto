@@ -47,10 +47,8 @@ public class PostMapper {
         if (post.getLocation() == null) return null;
 
         LocationsRequest location = new LocationsRequest();
-//        location.setId(post.getLocation().getId());
+        location.setId(post.getLocation().getId());
         location.setName(post.getLocation().getName());
-//        location.setProvince(post.getLocation().getProvince());
-//        location.setDistrict(post.getLocation().getDistrict());
         return location;
     }
 
@@ -71,6 +69,8 @@ public class PostMapper {
             dto.setAperture(photo.getMetadata().getAperture());
             dto.setShutterSpeed(photo.getMetadata().getShutterSpeed());
             dto.setFocalLength(photo.getMetadata().getFocalLength());
+            dto.setLatitude(photo.getMetadata().getGpsLatitude());
+            dto.setLongitude(photo.getMetadata().getGpsLongitude());
         }
 
         return dto;

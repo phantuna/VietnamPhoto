@@ -24,14 +24,15 @@ public class UserController {
         return userService.getAll();
     }
 
-    @GetMapping("/{userId}")
-    public UserResponse getUserById(@PathVariable String userId) {
-        return userService.getById(userId);
-    }
-
     @GetMapping("/me")
     public UserResponse getMe() {
         return userService.getMe();
+    }
+
+
+    @GetMapping("/{userId}")
+    public UserResponse getUserById(@PathVariable String userId) {
+        return userService.getById(userId);
     }
 
     @PutMapping("/{userId}")

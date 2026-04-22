@@ -15,17 +15,29 @@ public class LocationMapper {
         LocationsResponse response = LocationsResponse.builder()
                 .id(location.getId())
                 .name(location.getName())
+                .nameWithType(location.getNameWithType())
                 .latitude(location.getLatitude())
                 .longitude(location.getLongitude())
                 .description(location.getDescription())
                 .level(location.getLevel())
                 .code(location.getCode())
+                .slug(location.getSlug())
+                .category(location.getCategory())
+                .coverPhoto(location.getCoverPhoto())
+                .postCount(location.getPostCount())
+                .checkInCount(location.getCheckInCount())
+                .goldenHour(location.getGoldenHour())
                 .build();
 
         // 🌟 MAP THÔNG TIN THẰNG CHA BẰNG ĐỆ QUY
         if (location.getParent() != null) {
-            // Tự động gọi lại chính hàm này để map thằng Phường/Xã (và Tỉnh/Thành)
             response.setParent(this.toResponse(location.getParent()));
+            // Lấy tên tỉnh/thành từ cấp cao nhất (level 0)
+            Locations root = location.getParent();
+            while (root.getParent() != null) {
+                root = root.getParent();
+            }
+            response.setProvince(root.getName());
         }
 
         return response;

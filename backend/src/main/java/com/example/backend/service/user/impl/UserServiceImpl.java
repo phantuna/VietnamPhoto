@@ -70,13 +70,15 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Unauthenticated");
         }
 
-        String username = authentication.getName();
+        String userId = authentication.getName();
 
-        Users user = userRepository.findByUsername(username)
+        Users user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         return userMapper.toResponse(user);
     }
+
+
 
     @Override
     @Transactional

@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @NoArgsConstructor
 public class VietMapConfig {
     private String apiKey;
+    private String mapApiKey; // Key chuyên dùng để hiển thị bản đồ (Tiles/Styles)
     private String baseUrl;
     private Integer reverseDisplayType = 6;
     private Integer searchDisplayType = 5;
