@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
                     );
 
                     return new ErrorItemResponse(
-                            ErrorCode.VALIDATION_FAILED.getCode(), // hoặc null nếu muốn
+                            ErrorCode.VALIDATION_FAILED.getCode(),
                             localizedMessage
                     );
                 })
@@ -71,19 +71,22 @@ public class GlobalExceptionHandler {
     ResponseEntity<ApiResponse> handlingAppLangException(AppException exception) {
         ErrorCode errorCode = exception.getErrorCode();
 
-        // Lấy Locale hiện tại từ Context (Spring tự động bắt từ Accept-Language header)
         Locale locale = LocaleContextHolder.getLocale();
-
-        // Dịch tin nhắn
-        String localizedMessage = messageSource.getMessage(
-                errorCode.getMessage(),
-                null,
-                locale
-        );
+        String localizedMessage;
+        try {
+            localizedMessage = messageSource.getMessage(
+                    errorCode.getMessage(),
+                    null,
+                    locale
+            );
+        } catch (Exception e) {
+            localizedMessage = errorCode.getMessage(); // fallback
+        }
 
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setCode(errorCode.getCode());
         apiResponse.setMessage(localizedMessage);
+        apiResponse.setResult(exception.getData());
 
         return ResponseEntity.badRequest().body(apiResponse);
     }

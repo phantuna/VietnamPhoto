@@ -22,7 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
+import com.example.backend.exception.AppException;
+import com.example.backend.exception.ErrorCode;
+import java.util.HashMap;
+import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -37,12 +40,14 @@ public class PostServiceImpl implements PostService {
     private final PhotoVerificationService photoVerificationService;
     private final PostLikeService postLikeService;
 
+    private static final double MAX_ALLOWED_DISTANCE_METERS = 5000.0;
+
     @Override
     @Transactional
     public PostResponse createPost(String userId, PostCreateRequest request) {
 
         Users user = usersRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         Locations location = locationsRepository.findById(request.getLocationId())
                 .orElseThrow(() -> new RuntimeException("Location not found"));
@@ -54,37 +59,53 @@ public class PostServiceImpl implements PostService {
         post.setLocation(location);
         post.setLikeCount(0L);
 
-        // 1. Xử lý Tags
         Set<String> extractedTags = HashtagUtils.extractHashtags(request.getCaption());
         List<Tags> postTags = extractedTags.stream()
-                .map(tagService::getOrCreateTag) // Sẽ gọi validateTag check DB Word Ban
+                .map(tagService::getOrCreateTag)
                 .toList();
         post.setTags(new ArrayList<>(postTags));
 
-        // 2. Lấy danh sách ảnh từ DB dựa vào mảng ID Frontend gửi lên
         List<Photos> uploadedPhotos = photosRepository.findAllById(request.getPhotoIds());
         if (uploadedPhotos.isEmpty()) {
             throw new RuntimeException("Không tìm thấy ảnh hợp lệ");
         }
 
-        // 3. Xử lý từng ảnh: Check khoảng cách (Verify Location) & Cập nhật post_id
+        boolean forceCreate = Boolean.TRUE.equals(request.getForceCreate());
+
         for (Photos photo : uploadedPhotos) {
             photo.setPost(post);
 
             PhotoMetadata metadata = photo.getMetadata();
-            if (metadata != null && metadata.getGpsLatitude() != null && metadata.getGpsLongitude() != null) {
+
+            if (metadata != null
+                    && metadata.getGpsLatitude() != null
+                    && metadata.getGpsLongitude() != null) {
+
                 double distanceMeters = photoVerificationService.calculateDistanceMeters(metadata, location);
-                boolean isVerified = (distanceMeters >= 0 && distanceMeters <= 300);
+
+                boolean isVerified = distanceMeters >= 0
+                        && distanceMeters <= MAX_ALLOWED_DISTANCE_METERS;
+
                 photo.setIsLocationVerified(isVerified);
+
+                if (!isVerified && !forceCreate) {
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("distanceMeters", distanceMeters);
+                    data.put("allowedDistanceMeters", MAX_ALLOWED_DISTANCE_METERS);
+                    data.put("allowContinue", true);
+
+                    throw new AppException(ErrorCode.PHOTO_LOCATION_MISMATCH, data);
+                }
+
+            } else {
+                photo.setIsLocationVerified(false);
             }
         }
 
-        // 4. Gắn danh sách ảnh vào bài viết
         post.setPhotos(new ArrayList<>(uploadedPhotos));
 
-        // 5. Lưu bài viết và dùng Mapper chuyển sang DTO
         Posts savedPost = postsRepository.save(post);
-        return postMapper.toResponse(savedPost,false); // SỬA Ở ĐÂY
+        return postMapper.toResponse(savedPost, false);
     }
 
     // 🌟 THÊM HÀM NÀY: Dùng nội bộ để lấy Entity gốc thao tác với Database

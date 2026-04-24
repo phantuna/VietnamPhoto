@@ -17,6 +17,7 @@ public enum ErrorCode {
     EMAIL_EXISTED(2303,"email.existed"),
     INVALID_PASSWORD(1101, "auth.invalid_password"),
 
+    PHOTO_LOCATION_MISMATCH(3000, "photo.location.mismatch"),
     ;
 
 

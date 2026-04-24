@@ -21,6 +21,7 @@ public class PostCreateRequest {
 
     private String shootingTip;
 
+    private Boolean forceCreate;
     // Client sẽ gửi mảng các string tag, ví dụ: ["hoanghon", "bienhalong"]
     private List<String> tags;
     private List<String> photoIds;

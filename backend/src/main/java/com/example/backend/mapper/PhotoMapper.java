@@ -36,8 +36,7 @@ public class PhotoMapper {
                 .photoId(photo.getId() != null ? photo.getId().toString() : null)
                 .imageUrl(photo.getImageUrl())
                 .locationVerified(photo.getIsLocationVerified())
-                // Moderation Message thường chỉ cần thiết lúc vừa upload xong (báo cảnh báo)
-                // Khi lấy ra từ DB để xem thì ta có thể để null hoặc lấy từ DB (nếu bạn có lưu)
+
                 .moderationMessage(null)
                 .exifData(exifDto)
                 .build();
