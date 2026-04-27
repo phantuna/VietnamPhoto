@@ -181,12 +181,12 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
         metadata.setDateTaken(exifData.getDateTaken());
 
         // Nếu sau này cần lưu địa chỉ từ reverse geocode thì mở lại đoạn này
-//        if (resolvedAddress != null) {
-//            metadata.setAddress(resolvedAddress.getDisplay());
-//            metadata.setProvince(resolvedAddress.getProvince());
-//            metadata.setDistrict(resolvedAddress.getDistrict());
-//            metadata.setWard(resolvedAddress.getWard());
-//        }
+        if (resolvedAddress != null) {
+            metadata.setAddress(resolvedAddress.getDisplay());
+            metadata.setProvince(resolvedAddress.getProvince());
+            metadata.setDistrict(resolvedAddress.getDistrict());
+            metadata.setWard(resolvedAddress.getWard());
+        }
 
         return metadata;
     }
@@ -251,7 +251,12 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
             ModerationResult moderation,
             ExifDataDto exifData
     ) {
-        return PhotoUploadResponse.builder()
+            exifData.setAddress(savedPhoto.getMetadata().getAddress());
+            exifData.setProvince(savedPhoto.getMetadata().getProvince());
+            exifData.setDistrict(savedPhoto.getMetadata().getDistrict());
+            exifData.setWard(savedPhoto.getMetadata().getWard());
+
+            return PhotoUploadResponse.builder()
                 .photoId(savedPhoto.getId())
                 .imageUrl(savedPhoto.getImageUrl())
                 .locationVerified(savedPhoto.getIsLocationVerified())

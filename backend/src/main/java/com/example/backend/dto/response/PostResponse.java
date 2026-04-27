@@ -1,6 +1,6 @@
 package com.example.backend.dto.response;
 
-import com.example.backend.dto.request.LocationsRequest;
+import com.example.backend.dto.response.location.LocationsResponse;
 import com.example.backend.dto.request.PhotosRequest;
 import com.example.backend.dto.request.UserRequest;
 import lombok.AllArgsConstructor;
@@ -27,7 +27,7 @@ public class PostResponse {
     private LocalDate createdDate;
 
     private UserRequest author;
-    private LocationsRequest location;
+    private LocationsResponse location;
     private List<String> tags;
     private List<PhotosRequest> photos;
 

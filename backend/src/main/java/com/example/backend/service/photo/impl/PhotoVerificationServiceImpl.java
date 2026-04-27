@@ -33,4 +33,31 @@ public class PhotoVerificationServiceImpl implements PhotoVerificationService {
         double distance = calculateDistanceMeters(metadata, location);
         return distance >= 0 && distance <= allowedDistanceMeters;
     }
+
+    @Override
+    public boolean isProvinceMatch(PhotoMetadata metadata, Locations location) {
+        if (metadata == null || metadata.getProvince() == null || location == null) {
+            return false;
+        }
+
+        String locationProvince = extractProvinceName(location);
+        if (locationProvince == null) return false;
+
+        // So sánh tương đối (ví dụ: "Thành phố Hà Nội" vs "Hà Nội")
+        String photoProvince = metadata.getProvince().toLowerCase();
+        String locProvince = locationProvince.toLowerCase();
+
+        return photoProvince.contains(locProvince) || locProvince.contains(photoProvince);
+    }
+
+    private String extractProvinceName(Locations location) {
+        Locations current = location;
+        while (current != null) {
+            if (current.getLevel() != null && current.getLevel() == 0) {
+                return current.getName();
+            }
+            current = current.getParent();
+        }
+        return null;
+    }
 }

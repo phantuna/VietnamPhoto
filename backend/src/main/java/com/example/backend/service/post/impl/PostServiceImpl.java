@@ -82,9 +82,17 @@ public class PostServiceImpl implements PostService {
                     && metadata.getGpsLongitude() != null) {
 
                 double distanceMeters = photoVerificationService.calculateDistanceMeters(metadata, location);
+                boolean isVerified;
 
-                boolean isVerified = distanceMeters >= 0
-                        && distanceMeters <= MAX_ALLOWED_DISTANCE_METERS;
+                // Nếu người dùng chọn Tỉnh/Thành phố (Level 0), chỉ cần khớp Tỉnh
+                if (location.getLevel() != null && location.getLevel() == 0) {
+                    isVerified = photoVerificationService.isProvinceMatch(metadata, location);
+                } else {
+                    // Nếu chọn địa điểm cụ thể, cần cả khoảng cách (<5km) và khớp Tỉnh
+                    boolean distanceOk = distanceMeters >= 0 && distanceMeters <= MAX_ALLOWED_DISTANCE_METERS;
+                    boolean provinceOk = photoVerificationService.isProvinceMatch(metadata, location);
+                    isVerified = distanceOk && provinceOk;
+                }
 
                 photo.setIsLocationVerified(isVerified);
 
@@ -92,6 +100,7 @@ public class PostServiceImpl implements PostService {
                     Map<String, Object> data = new HashMap<>();
                     data.put("distanceMeters", distanceMeters);
                     data.put("allowedDistanceMeters", MAX_ALLOWED_DISTANCE_METERS);
+                    data.put("photoProvince", metadata.getProvince());
                     data.put("allowContinue", true);
 
                     throw new AppException(ErrorCode.PHOTO_LOCATION_MISMATCH, data);

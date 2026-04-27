@@ -25,6 +25,7 @@ public class PhotosRequest {
     private BigDecimal aperture;
     private String shutterSpeed;
     private BigDecimal focalLength;
-    private BigDecimal Latitude;
-    private BigDecimal Longitude;
+    private BigDecimal gpsLatitude;
+    private BigDecimal gpsLongitude;
+    private String dateTaken;
 }

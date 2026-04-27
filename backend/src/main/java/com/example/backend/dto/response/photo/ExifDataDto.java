@@ -25,4 +25,9 @@ public class ExifDataDto {
     private BigDecimal gpsLatitude;
     private BigDecimal gpsLongitude;
     private LocalDateTime dateTaken;
+
+    private String address;
+    private String province;
+    private String district;
+    private String ward;
 }

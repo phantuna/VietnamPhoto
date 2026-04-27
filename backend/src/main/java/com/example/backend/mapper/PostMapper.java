@@ -1,6 +1,6 @@
 package com.example.backend.mapper;
 
-import com.example.backend.dto.request.LocationsRequest;
+import com.example.backend.dto.response.location.LocationsResponse;
 import com.example.backend.dto.request.PhotosRequest;
 import com.example.backend.dto.request.UserRequest;
 import com.example.backend.dto.response.PostResponse;
@@ -43,13 +43,34 @@ public class PostMapper {
         return author;
     }
 
-    private LocationsRequest mapLocation(Posts post) {
+    private LocationsResponse mapLocation(com.example.backend.entity.Posts post) {
         if (post.getLocation() == null) return null;
 
-        LocationsRequest location = new LocationsRequest();
-        location.setId(post.getLocation().getId());
-        location.setName(post.getLocation().getName());
-        return location;
+        com.example.backend.entity.Locations loc = post.getLocation();
+        return LocationsResponse.builder()
+                .id(loc.getId())
+                .name(loc.getName())
+                .nameWithType(loc.getNameWithType())
+                .latitude(loc.getLatitude())
+                .longitude(loc.getLongitude())
+                .level(loc.getLevel())
+                .province(extractProvinceName(loc))
+                .category(loc.getCategory())
+                .code(loc.getCode())
+                .slug(loc.getSlug())
+                .build();
+    }
+
+    private String extractProvinceName(com.example.backend.entity.Locations location) {
+        if (location == null) return null;
+        com.example.backend.entity.Locations current = location;
+        while (current != null) {
+            if (current.getLevel() != null && current.getLevel() == 0) {
+                return current.getName();
+            }
+            current = current.getParent();
+        }
+        return null;
     }
 
     private PhotosRequest mapPhoto(Photos photo) {
@@ -69,8 +90,11 @@ public class PostMapper {
             dto.setAperture(photo.getMetadata().getAperture());
             dto.setShutterSpeed(photo.getMetadata().getShutterSpeed());
             dto.setFocalLength(photo.getMetadata().getFocalLength());
-            dto.setLatitude(photo.getMetadata().getGpsLatitude());
-            dto.setLongitude(photo.getMetadata().getGpsLongitude());
+            dto.setGpsLatitude(photo.getMetadata().getGpsLatitude());
+            dto.setGpsLongitude(photo.getMetadata().getGpsLongitude());
+            if (photo.getMetadata().getDateTaken() != null) {
+                dto.setDateTaken(photo.getMetadata().getDateTaken().toString());
+            }
         }
 
         return dto;
