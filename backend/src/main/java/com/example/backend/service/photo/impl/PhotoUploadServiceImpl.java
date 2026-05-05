@@ -101,24 +101,27 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
         try {
             validateSingleFile(file);
 
-            ModerationResult moderation = moderateImage(file);
+            ModerationResult moderation = moderateImage(file);   // UNSAFE → throws here
             ExifDataDto exifData = exifExtractorService.extract(file);
             VietMapLocationResponse resolvedAddress = resolveAddress(exifData);
 
             PhotoMetadata metadata = buildMetadata(exifData, resolvedAddress);
             UploadedImageInfo uploadedImage = uploadImage(file, user);
-            Photos savedPhoto = savePhoto(metadata, uploadedImage);
+            Photos savedPhoto = savePhoto(metadata, uploadedImage, moderation); // ← truyền moderation
 
-            log.info("Uploaded photo file={} thread={}",
+            log.info("Uploaded photo file={} thread={} moderation={}",
                     file.getOriginalFilename(),
-                    Thread.currentThread().getName());
+                    Thread.currentThread().getName(),
+                    moderation.isWarning() ? "WARNING" : "SAFE");
 
-            return buildResponse(savedPhoto, moderation, exifData);
+            String moderationMsg = moderation.isWarning() ? moderation.getReason() : null;
+            return photoMapper.toResponse(savedPhoto, moderationMsg);
         } catch (Exception e) {
             log.error("Lỗi khi upload ảnh {}: {}", file.getOriginalFilename(), e.getMessage(), e);
             throw new RuntimeException("Lỗi upload ảnh: " + file.getOriginalFilename(), e);
         }
     }
+
 
     private void validateFiles(List<MultipartFile> files) {
         if (files == null || files.isEmpty()) {
@@ -233,6 +236,11 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
     }
 
     private Photos savePhoto(PhotoMetadata metadata, UploadedImageInfo uploadedImage) {
+        return savePhoto(metadata, uploadedImage, null);
+    }
+
+    private Photos savePhoto(PhotoMetadata metadata, UploadedImageInfo uploadedImage,
+                             ModerationResult moderation) {
         Photos photo = new Photos();
         photo.setImageUrl(uploadedImage.getImageUrl());
         photo.setWidth(uploadedImage.getWidth());
@@ -240,30 +248,24 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
         photo.setFileSize(uploadedImage.getFileSize());
         photo.setIsLocationVerified(false);
 
+        // Lưu kết quả kiểm duyệt Gemini vào DB
+        if (moderation != null) {
+            if (moderation.isWarning()) {
+                photo.setModerationStatus("WARNING");
+            } else {
+                photo.setModerationStatus("SAFE");
+            }
+            photo.setModerationReason(moderation.getReason());
+            photo.setModerationScore(moderation.getScore());
+        }
+
         metadata.setPhoto(photo);
         photo.setMetadata(metadata);
 
         return photosRepository.save(photo);
     }
 
-    private PhotoUploadResponse buildResponse(
-            Photos savedPhoto,
-            ModerationResult moderation,
-            ExifDataDto exifData
-    ) {
-            exifData.setAddress(savedPhoto.getMetadata().getAddress());
-            exifData.setProvince(savedPhoto.getMetadata().getProvince());
-            exifData.setDistrict(savedPhoto.getMetadata().getDistrict());
-            exifData.setWard(savedPhoto.getMetadata().getWard());
 
-            return PhotoUploadResponse.builder()
-                .photoId(savedPhoto.getId())
-                .imageUrl(savedPhoto.getImageUrl())
-                .locationVerified(savedPhoto.getIsLocationVerified())
-                .moderationMessage(moderation.isWarning() ? moderation.getReason() : null)
-                .exifData(exifData)
-                .build();
-    }
 
     private void deleteFromCloudinaryQuietly(String imageUrl) {
         try {

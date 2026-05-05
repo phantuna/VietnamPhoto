@@ -10,6 +10,10 @@ import org.springframework.stereotype.Component;
 public class PhotoMapper {
 
     public PhotoUploadResponse toResponse(Photos photo) {
+        return toResponse(photo, null);
+    }
+
+    public PhotoUploadResponse toResponse(Photos photo, String moderationMessage) {
         if (photo == null) {
             return null;
         }
@@ -29,6 +33,10 @@ public class PhotoMapper {
             exifDto.setGpsLatitude(meta.getGpsLatitude());
             exifDto.setGpsLongitude(meta.getGpsLongitude());
             exifDto.setDateTaken(meta.getDateTaken());
+            exifDto.setAddress(meta.getAddress());
+            exifDto.setProvince(meta.getProvince());
+            exifDto.setDistrict(meta.getDistrict());
+            exifDto.setWard(meta.getWard());
         }
 
         // 2. Build Response
@@ -36,8 +44,9 @@ public class PhotoMapper {
                 .photoId(photo.getId() != null ? photo.getId().toString() : null)
                 .imageUrl(photo.getImageUrl())
                 .locationVerified(photo.getIsLocationVerified())
-
-                .moderationMessage(null)
+                .moderationStatus(photo.getModerationStatus())
+                .moderationMessage(moderationMessage)
+                .moderationScore(photo.getModerationScore())
                 .exifData(exifDto)
                 .build();
     }

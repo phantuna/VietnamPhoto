@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+    <!-- ======================================================
+         1. Console Appender (ghi log ra console - terminal có màu)
+         ====================================================== -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- %green(Ngày giờ) | %gray(Thread) | %highlight(Level) | %yellow(Class) | Nội dung -->
+            <pattern>
+                %green(%d{yyyy-MM-dd HH:mm:ss}) %gray([%thread]) %highlight(%-5level) %yellow(%logger{36}) - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- ======================================================
+         2. File Appender (ghi log ra file, xoay vòng hằng ngày, KHÔNG MÀU)
+         ====================================================== -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/app.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/app.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <!-- File log cần giữ nguyên gốc để không bị dính các ký tự ANSI mã màu rác -->
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- ======================================================
+         3. Root Logger (mức log mặc định cho toàn bộ app)
+         ====================================================== -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+    <!-- ======================================================
+         4. Logger riêng cho package cụ thể (nếu muốn chi tiết)
+         ====================================================== -->
+    <logger name="com.example.backend" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+
+</configuration>

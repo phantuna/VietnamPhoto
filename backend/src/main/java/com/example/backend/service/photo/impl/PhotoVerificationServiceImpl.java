@@ -43,7 +43,6 @@ public class PhotoVerificationServiceImpl implements PhotoVerificationService {
         String locationProvince = extractProvinceName(location);
         if (locationProvince == null) return false;
 
-        // So sánh tương đối (ví dụ: "Thành phố Hà Nội" vs "Hà Nội")
         String photoProvince = metadata.getProvince().toLowerCase();
         String locProvince = locationProvince.toLowerCase();
 
