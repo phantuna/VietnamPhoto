@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/backend/static/V1_create_tables.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/backend/migration/V1__VNScout.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/backend/migration/V2__alter_column_user_permission.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/backend/migration/V3__create_comments.sql" dialect="MySQL" />
   </component>
 </project>

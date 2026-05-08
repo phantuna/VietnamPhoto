@@ -28,10 +28,10 @@ public class Base {
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDate createdDate;
+    private java.time.LocalDate createdDate;
 
     @LastModifiedDate
-    private LocalDate modifiedDate;
+    private java.time.LocalDate modifiedDate;
 
     @LastModifiedBy
     private String modifiedBy;

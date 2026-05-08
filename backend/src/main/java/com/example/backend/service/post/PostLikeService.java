@@ -18,6 +18,8 @@ public class PostLikeService {
     private final LikeRepository likeRepository;
     private final PostsRepository postsRepository;
     private final UserRepository userRepository;
+    private final com.example.backend.service.notification.NotificationService notificationService;
+    private final com.example.backend.service.notification.NotificationSseService notificationSseService;
 
     @Transactional
     public LikeToggleResponse toggleLike(String userId, String postId) {
@@ -48,6 +50,11 @@ public class PostLikeService {
                     long newTotal = currentLikes + 1;
                     post.setLikeCount(newTotal);
                     postsRepository.save(post);
+
+                    com.example.backend.dto.response.NotificationResponse notification = notificationService.createPostLikedNotification(user, post);
+                    if (notification != null) {
+                        notificationSseService.sendToUser(post.getUser().getId(), notification);
+                    }
 
                     return new LikeToggleResponse(true, newTotal);
                 });

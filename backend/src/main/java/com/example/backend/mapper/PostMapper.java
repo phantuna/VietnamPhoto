@@ -1,5 +1,6 @@
 package com.example.backend.mapper;
 
+import com.example.backend.dto.response.UserResponse;
 import com.example.backend.dto.response.location.LocationsResponse;
 import com.example.backend.dto.request.PhotosRequest;
 import com.example.backend.dto.request.UserRequest;
@@ -34,13 +35,14 @@ public class PostMapper {
                 .build();
     }
 
-    private UserRequest mapAuthor(Posts post) {
+    private UserResponse mapAuthor(Posts post) {
         if (post.getUser() == null) return null;
 
-        UserRequest author = new UserRequest();
-        author.setUsername(post.getUser().getUsername());
-//        author.setAvatarUrl(post.getUser().getAvatarUrl());
-        return author;
+        return UserResponse.builder()
+                .id(post.getUser().getId().toString())
+                .username(post.getUser().getUsername())
+                .avatarUrl(post.getUser().getAvatarUrl())
+                .build();
     }
 
     private LocationsResponse mapLocation(com.example.backend.entity.Posts post) {
@@ -56,6 +58,9 @@ public class PostMapper {
                 .level(loc.getLevel())
                 .province(extractProvinceName(loc))
                 .category(loc.getCategory())
+                .goldenHour(loc.getGoldenHour())
+                .checkInCount(loc.getCheckInCount())
+                .postCount(loc.getPostCount())
                 .code(loc.getCode())
                 .slug(loc.getSlug())
                 .build();

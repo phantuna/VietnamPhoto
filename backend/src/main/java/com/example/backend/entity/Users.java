@@ -28,6 +28,8 @@ public class Users extends Base {
     private String password;
     private LocalDate birthday;
     private String description;
+    @Column(name = "unread_notification_count", nullable = false)
+    private Long unreadNotificationCount = 0L;
     @ManyToMany(cascade = {
             CascadeType.MERGE
     })

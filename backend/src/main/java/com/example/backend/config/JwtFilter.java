@@ -35,10 +35,15 @@ public class JwtFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String authHeader = req.getHeader("Authorization");
+        String token = null;
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
+            token = authHeader.substring(7);
+        } else {
+            token = req.getParameter("token");
+        }
 
+        if (token != null) {
             try {
                 SignedJWT jwt = jwtService.parseToken(token);
 

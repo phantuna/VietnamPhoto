@@ -26,7 +26,7 @@ public class PostResponse {
     private Boolean liked;
     private LocalDate createdDate;
 
-    private UserRequest author;
+    private UserResponse author;
     private LocationsResponse location;
     private List<String> tags;
     private List<PhotosRequest> photos;
