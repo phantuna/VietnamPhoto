@@ -8,7 +8,14 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, String> {
-    Page<Comment> findByPostIdAndParentCommentIsNull(String postId, Pageable pageable);
-    
-    Page<Comment> findByParentCommentId(String parentId, Pageable pageable);
+
+    Page<Comment> findByPostIdAndParentCommentIsNull(
+            String postId,
+            Pageable pageable
+    );
+
+    Page<Comment> findByParentCommentId(
+            String parentId,
+            Pageable pageable
+    );
 }

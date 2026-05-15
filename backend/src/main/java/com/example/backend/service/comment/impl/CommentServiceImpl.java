@@ -10,10 +10,9 @@ import com.example.backend.repository.comment.CommentRepository;
 import com.example.backend.repository.post.PostsRepository;
 import com.example.backend.repository.user.UserRepository;
 import com.example.backend.service.comment.CommentService;
-import com.example.backend.service.notification.NotificationService;
-import com.example.backend.service.notification.NotificationSseService;
-import com.example.backend.dto.response.NotificationResponse;
+import com.example.backend.event.PostCommentedEvent;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,8 +26,7 @@ public class CommentServiceImpl implements CommentService {
     private final PostsRepository postsRepository;
     private final UserRepository userRepository;
     private final CommentMapper commentMapper;
-    private final NotificationService notificationService;
-    private final NotificationSseService notificationSseService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     @Transactional
@@ -60,17 +58,15 @@ public class CommentServiceImpl implements CommentService {
 
         comment = commentRepository.save(comment);
 
-        NotificationResponse notification = notificationService.createPostCommentedNotification(user, post, request.getContent());
-        if (notification != null) {
-            notificationSseService.sendToUser(post.getUser().getId(), notification);
-        }
+        eventPublisher.publishEvent(new PostCommentedEvent(user, post, request.getContent()));
 
         return commentMapper.toResponse(comment);
     }
 
     @Override
     public Page<CommentResponse> getCommentsByPostId(String postId, Pageable pageable) {
-        return commentRepository.findByPostIdAndParentCommentIsNull(postId, pageable)
+        return commentRepository
+                .findByPostIdAndParentCommentIsNull(postId, pageable)
                 .map(commentMapper::toResponse);
     }
 

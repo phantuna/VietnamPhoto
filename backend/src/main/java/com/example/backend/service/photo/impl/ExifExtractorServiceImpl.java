@@ -56,8 +56,9 @@ public class ExifExtractorServiceImpl implements ExifExtractorService {
 
                 Date dateOriginal = subIFD.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
                 if (dateOriginal != null) {
-                    // Convert java.util.Date sang java.time.LocalDateTime
-                    LocalDateTime dateTaken = LocalDateTime.ofInstant(dateOriginal.toInstant(), ZoneId.systemDefault());
+                    // EXIF date is already local wall-clock time. 
+                    // Using UTC avoids adding system timezone offset (e.g., +7h in VN).
+                    LocalDateTime dateTaken = LocalDateTime.ofInstant(dateOriginal.toInstant(), ZoneId.of("UTC"));
                     dto.setDateTaken(dateTaken);
                 }
             }

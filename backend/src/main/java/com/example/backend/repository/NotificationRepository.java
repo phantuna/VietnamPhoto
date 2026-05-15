@@ -1,6 +1,7 @@
 package com.example.backend.repository;
 
 import com.example.backend.entity.Notification;
+import com.example.backend.enums.NotificationType;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,12 +10,21 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface NotificationRepository extends JpaRepository<@NonNull Notification, String> {
 
     Page<Notification> findByReceiverIdAndDeletedOrderByCreatedAtTimeDesc(
             String receiverId,
             Integer deleted,
             Pageable pageable
+    );
+
+    List<Notification> findByActorIdAndPostIdAndTypeAndDeleted(
+            String actorId,
+            String postId,
+            NotificationType type,
+            Integer deleted
     );
 
     @Modifying

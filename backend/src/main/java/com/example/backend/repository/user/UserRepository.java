@@ -44,4 +44,7 @@ public interface UserRepository extends JpaRepository<Users, String>,UserReposit
         WHERE u.id = :userId
     """)
      void resetUnreadNotificationCount(@Param("userId") String userId);
+
+     @Query("SELECT COALESCE(u.unreadNotificationCount, 0) FROM Users u WHERE u.id = :userId")
+     Long findUnreadNotificationCountById(@Param("userId") String userId);
 }

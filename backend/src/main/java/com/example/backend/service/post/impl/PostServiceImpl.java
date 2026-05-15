@@ -16,6 +16,7 @@ import com.example.backend.service.tag.impl.TagServiceImpl;
 import com.example.backend.utils.HashtagUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,7 @@ public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
     private final PhotoVerificationService photoVerificationService;
     private final PostLikeService postLikeService;
+    private final ApplicationEventPublisher eventPublisher;
 
     private static final double MAX_ALLOWED_DISTANCE_METERS = 5000.0;
 
@@ -114,6 +116,10 @@ public class PostServiceImpl implements PostService {
         post.setPhotos(new ArrayList<>(uploadedPhotos));
 
         Posts savedPost = postsRepository.save(post);
+
+        // Fire event to notify followers
+        eventPublisher.publishEvent(new com.example.backend.event.PostCreatedEvent(this, user, savedPost));
+
         return postMapper.toResponse(savedPost, false);
     }
 

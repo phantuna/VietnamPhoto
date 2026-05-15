@@ -8,6 +8,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -26,6 +27,15 @@ public final class NotificationSseService {
         emitter.onCompletion(() -> remove(userId, emitter));
         emitter.onTimeout(() -> remove(userId, emitter));
         emitter.onError(error -> remove(userId, emitter));
+
+        CompletableFuture.runAsync(() -> {
+            try {
+                Thread.sleep(500);
+                emitter.send(SseEmitter.event().name("connected").data("SSE Connected successfully"));
+            } catch (Exception e) {
+                remove(userId, emitter);
+            }
+        });
 
         return emitter;
     }

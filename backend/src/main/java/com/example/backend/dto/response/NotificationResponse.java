@@ -5,8 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 
 @Data
 @Builder
@@ -27,6 +26,5 @@ public class NotificationResponse {
 
     private Long unreadCount;
 
-    private LocalDateTime createdAt;
-    private LocalDate createdDate;
+    private String createdAt;
 }

@@ -8,4 +8,7 @@ import java.util.UUID;
 
 public interface LocationsRepository extends JpaRepository<Locations, String>,LocationsRepositoryCustom {
     Optional<Locations> findByCode(String code);
+
+    // Tìm kiếm phường/xã/tỉnh dựa trên tên đầy đủ (ví dụ: "Xã Minh Châu")
+    Optional<Locations> findFirstByNameWithTypeContainingAndLevel(String nameWithType, Integer level);
 }

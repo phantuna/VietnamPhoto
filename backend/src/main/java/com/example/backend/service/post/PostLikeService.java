@@ -35,6 +35,8 @@ public class PostLikeService {
                     long newTotal = Math.max(0, currentLikes - 1);
                     post.setLikeCount(newTotal);
                     postsRepository.save(post);
+                    
+                    notificationService.removePostLikedNotification(existingLike.getUser(), post);
 
                     return new LikeToggleResponse(false, newTotal);
                 })

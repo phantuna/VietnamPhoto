@@ -21,8 +21,7 @@ public class NotificationMapper {
                 .actorAvatar(actor.getAvatarUrl())
                 .postId(n.getPost() != null ? n.getPost().getId() : null)
                 .unreadCount(unreadCount)
-                .createdAt(n.getCreatedAtTime())
-                .createdDate(n.getCreatedDate())
+                .createdAt(n.getCreatedAtTime() != null ? n.getCreatedAtTime().toString() : null)
                 .build();
     }
 }

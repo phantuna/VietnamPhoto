@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 import java.util.List;
+import java.util.Comparator;
 
 @Component
 public class CommentMapper {
@@ -19,6 +20,7 @@ public class CommentMapper {
         List<CommentResponse> replies = null;
         if (comment.getReplies() != null && !comment.getReplies().isEmpty()) {
             replies = comment.getReplies().stream()
+                    .sorted(Comparator.comparing(Comment::getCreatedDate).thenComparing(Comment::getId))
                     .map(this::toResponseWithoutReplies)
                     .collect(Collectors.toList());
         }

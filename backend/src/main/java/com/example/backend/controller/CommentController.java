@@ -16,20 +16,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/comments")
 @RequiredArgsConstructor
 public class CommentController {
-    private final CommentService commentService;
 
-    @ExceptionHandler(Exception.class)
-    public org.springframework.http.ResponseEntity<String> handleException(Exception e) {
-        java.io.StringWriter sw = new java.io.StringWriter();
-        e.printStackTrace(new java.io.PrintWriter(sw));
-        return org.springframework.http.ResponseEntity.status(500).body(sw.toString());
-    }
+    private final CommentService commentService;
 
     @PostMapping
     @PreAuthorize("isAuthenticated()")
     public CommentResponse createComment(
             @AuthenticationPrincipal String userId,
-            @RequestBody CommentRequest request) {
+            @RequestBody CommentRequest request
+    ) {
         return commentService.createComment(request, userId);
     }
 
@@ -37,8 +32,15 @@ public class CommentController {
     public Page<CommentResponse> getCommentsByPostId(
             @PathVariable String postId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by(Sort.Direction.ASC, "createdDate")
+                        .and(Sort.by(Sort.Direction.ASC, "id"))
+        );
+
         return commentService.getCommentsByPostId(postId, pageable);
     }
 
@@ -47,7 +49,8 @@ public class CommentController {
     public CommentResponse updateComment(
             @PathVariable String id,
             @AuthenticationPrincipal String userId,
-            @RequestBody CommentRequest request) {
+            @RequestBody CommentRequest request
+    ) {
         return commentService.updateComment(id, request.getContent(), userId);
     }
 
@@ -55,7 +58,8 @@ public class CommentController {
     @PreAuthorize("isAuthenticated()")
     public void deleteComment(
             @PathVariable String id,
-            @AuthenticationPrincipal String userId) {
+            @AuthenticationPrincipal String userId
+    ) {
         commentService.deleteComment(id, userId);
     }
 }
