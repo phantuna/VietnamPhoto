@@ -1,12 +1,13 @@
 package com.example.backend.service.user.impl;
 
-import com.example.backend.dto.request.UserRequest;
-import com.example.backend.dto.response.UserResponse;
+import com.example.backend.dto.request.user.UserRequest;
+import com.example.backend.dto.response.user.UserResponse;
 import com.example.backend.entity.Users;
 import com.example.backend.exception.AppException;
 import com.example.backend.exception.ErrorCode;
 import com.example.backend.mapper.UserMapper;
 import com.example.backend.repository.user.UserRepository;
+import com.example.backend.service.user.FollowService;
 import com.example.backend.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import com.example.backend.repository.user.RoleRepository;
+import com.example.backend.entity.Role;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -24,6 +29,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
+    private final FollowService followService;
 
     @Override
     @Transactional
@@ -42,6 +49,12 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setBirthday(request.getBirthday());
 
+        // Assign standard USER role automatically
+        Role userRole = roleRepository.findById("USER").orElse(null);
+        if (userRole != null) {
+            user.setRoles(List.of(userRole));
+        }
+
         Users saved = userRepository.save(user);
         return userMapper.toResponse(saved);
     }
@@ -50,7 +63,12 @@ public class UserServiceImpl implements UserService {
     public List<UserResponse> getAll() {
         return userRepository.findAll()
                 .stream()
-                .map(userMapper::toResponse)
+                .map(user -> {
+                    UserResponse res = userMapper.toResponse(user);
+                    res.setFollowersCount(followService.countFollowers(user.getId()));
+                    res.setFollowingCount(followService.countFollowing(user.getId()));
+                    return res;
+                })
                 .toList();
     }
 
@@ -100,6 +118,14 @@ public class UserServiceImpl implements UserService {
 
         if (request.getPassword() != null && !request.getPassword().isBlank()) {
             user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+
+        if (request.getAvatarUrl() != null) {
+            user.setAvatarUrl(request.getAvatarUrl());
+        }
+
+        if (request.getDescription() != null) {
+            user.setDescription(request.getDescription());
         }
 
         Users saved = userRepository.save(user);

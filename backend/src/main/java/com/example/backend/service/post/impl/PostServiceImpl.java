@@ -2,16 +2,18 @@ package com.example.backend.service.post.impl;
 
 import com.example.backend.dto.request.post.PostCreateRequest;
 import com.example.backend.dto.request.post.PostUpdateRequest;
-import com.example.backend.dto.response.PostResponse;
+import com.example.backend.dto.response.post.PostResponse;
 import com.example.backend.entity.*;
 import com.example.backend.mapper.PostMapper;
 import com.example.backend.repository.post.PostsRepository;
 import com.example.backend.repository.location.LocationsRepository;
 import com.example.backend.repository.photo.PhotosRepository;
+import com.example.backend.repository.post.SavedPostRepository;
 import com.example.backend.repository.user.UserRepository;
 import com.example.backend.service.photo.PhotoVerificationService;
 import com.example.backend.service.post.PostLikeService;
 import com.example.backend.service.post.PostService;
+import com.example.backend.service.user.ReputationService;
 import com.example.backend.service.tag.impl.TagServiceImpl;
 import com.example.backend.utils.HashtagUtils;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +22,11 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
 import com.example.backend.exception.AppException;
 import com.example.backend.exception.ErrorCode;
-import java.util.HashMap;
-import java.util.Map;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -40,6 +40,8 @@ public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
     private final PhotoVerificationService photoVerificationService;
     private final PostLikeService postLikeService;
+    private final SavedPostRepository savedPostRepository;
+    private final ReputationService reputationService;
     private final ApplicationEventPublisher eventPublisher;
 
     private static final double MAX_ALLOWED_DISTANCE_METERS = 5000.0;
@@ -51,6 +53,25 @@ public class PostServiceImpl implements PostService {
         Users user = usersRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
+        // --- PROGRESSIVE TRUST (Rate Limiting by Level) ---
+        int userLevel = user.getLevel() != null ? user.getLevel() : 1;
+        int maxPostsPerDay;
+        if (userLevel == 1) maxPostsPerDay = 2;
+        else if (userLevel == 2) maxPostsPerDay = 5;
+        else if (userLevel == 3) maxPostsPerDay = 10;
+        else maxPostsPerDay = 9999; // Level 4+ Không giới hạn
+
+        java.time.LocalDate today = java.time.LocalDate.now();
+        long postsToday = postsRepository.countByUserIdAndCreatedDate(userId, today);
+        
+        if (postsToday >= maxPostsPerDay) {
+            if (userLevel < 4) {
+                throw new RuntimeException("Bạn đang ở Level " + userLevel + ". Giới hạn đăng bài là " + maxPostsPerDay + " bài/ngày. Hãy tương tác thêm để thăng cấp nhé!");
+            } else {
+                throw new RuntimeException("Bạn đã đạt giới hạn an toàn hệ thống (" + maxPostsPerDay + " bài/ngày).");
+            }
+        }
+
         Locations location = locationsRepository.findById(request.getLocationId())
                 .orElseThrow(() -> new RuntimeException("Location not found"));
 
@@ -60,9 +81,18 @@ public class PostServiceImpl implements PostService {
         post.setUser(user);
         post.setLocation(location);
         post.setLikeCount(0L);
+        post.setStatus(com.example.backend.enums.PostStatus.ACTIVE);
 
-        Set<String> extractedTags = HashtagUtils.extractHashtags(request.getCaption());
-        List<Tags> postTags = extractedTags.stream()
+        Set<String> allTags = new HashSet<>();
+        // Extract tags from caption
+        allTags.addAll(HashtagUtils.extractHashtags(request.getCaption()));
+        
+        // Add explicit tags from request array
+        if (request.getTags() != null && !request.getTags().isEmpty()) {
+            allTags.addAll(request.getTags());
+        }
+
+        List<Tags> postTags = allTags.stream()
                 .map(tagService::getOrCreateTag)
                 .toList();
         post.setTags(new ArrayList<>(postTags));
@@ -115,12 +145,71 @@ public class PostServiceImpl implements PostService {
 
         post.setPhotos(new ArrayList<>(uploadedPhotos));
 
+        // --- GAMIFICATION LOGIC ---
+        boolean hasWarning = false;
+        boolean hasLocationVerified = false;
+
+        for (Photos photo : uploadedPhotos) {
+            if ("WARNING".equals(photo.getModerationStatus())) {
+                hasWarning = true;
+            }
+            if (Boolean.TRUE.equals(photo.getIsLocationVerified())) {
+                hasLocationVerified = true;
+            }
+        }
+
+        // Upload ảnh thành công
+        reputationService.addPoints(user, 2, "Upload ảnh thành công");
+
+        // Điểm kiểm duyệt ảnh (Gemini)
+        if (hasWarning) {
+            reputationService.subtractPoints(user, 10, "Đăng ảnh có nhãn WARNING");
+        } else {
+            reputationService.addPoints(user, 1, "Đăng ảnh an toàn (SAFE)");
+        }
+
+        // --- B10: GAMIFICATION ĐIỂM THEO LOẠI ĐỊA ĐIỂM (SPOT vs SERVICE) ---
+        com.example.backend.enums.LocationType locType = location.getLocationType();
+        if (locType == null) locType = com.example.backend.enums.LocationType.SPOT;
+
+        if (locType == com.example.backend.enums.LocationType.SPOT) {
+            // SPOT: Thưởng điểm nếu ảnh có tọa độ GPS nằm gần vị trí SPOT
+            if (hasLocationVerified) {
+                reputationService.addPoints(user, 2, "Check-in SPOT vị trí chính xác");
+            }
+        } else {
+            // SERVICE: Xét tư cách người đăng
+            if (userId.equals(location.getCreatorId())) {
+                // Chủ quán tự đăng bài PR -> 0đ
+            } else {
+                // Người khác đến dùng dịch vụ và chụp ảnh -> +1đ (không bắt buộc GPS khắt khe)
+                reputationService.addPoints(user, 1, "Review địa điểm SERVICE");
+            }
+        }
+
+        // Điểm tip và caption
+        if (request.getShootingTip() != null && !request.getShootingTip().isBlank() &&
+            request.getCaption() != null && !request.getCaption().isBlank()) {
+            reputationService.addPoints(user, 1, "Có caption và shooting tip");
+        }
+
         Posts savedPost = postsRepository.save(post);
+
+        // Đồng bộ tăng số lượng bài đăng và check-in cho địa điểm này và tất cả cấp cha (hệ thống phân cấp)
+        Locations currentLoc = location;
+        while (currentLoc != null) {
+            if (currentLoc.getPostCount() == null) currentLoc.setPostCount(0L);
+            if (currentLoc.getCheckInCount() == null) currentLoc.setCheckInCount(0L);
+            currentLoc.setPostCount(currentLoc.getPostCount() + 1);
+            currentLoc.setCheckInCount(currentLoc.getCheckInCount() + 1);
+            locationsRepository.save(currentLoc);
+            currentLoc = currentLoc.getParent();
+        }
 
         // Fire event to notify followers
         eventPublisher.publishEvent(new com.example.backend.event.PostCreatedEvent(this, user, savedPost));
 
-        return postMapper.toResponse(savedPost, false);
+        return postMapper.toResponse(savedPost, false, false);
     }
 
     // 🌟 THÊM HÀM NÀY: Dùng nội bộ để lấy Entity gốc thao tác với Database
@@ -134,18 +223,23 @@ public class PostServiceImpl implements PostService {
     public PostResponse getPostById(String postId, String userId) {
         Posts post = getPostEntityById(postId);
         boolean liked = userId != null && postLikeService.isLiked(userId, postId);
-        return postMapper.toResponse(post, liked);
+        boolean saved = userId != null && savedPostRepository.existsByUserIdAndPostIdAndDeleted(userId, postId, 0);
+        return postMapper.toResponse(post, liked, saved);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<PostResponse> getAllPosts(String userId) {
-        List<Posts> allPosts = postsRepository.findAll();
+        // Lấy 30 bài mới nhất chưa bị xóa và status ACTIVE (hoặc null)
+        List<Posts> allPosts = postsRepository.findAllPostsWithDetails(
+                org.springframework.data.domain.PageRequest.of(0, 30, org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "createdDate"))
+        ).getContent();
 
         return allPosts.stream()
                 .map(post -> {
                     boolean liked = userId != null && postLikeService.isLiked(userId, post.getId());
-                    return postMapper.toResponse(post, liked);
+                    boolean saved = userId != null && savedPostRepository.existsByUserIdAndPostIdAndDeleted(userId, post.getId(), 0);
+                    return postMapper.toResponse(post, liked, saved);
                 })
                 .toList();
     }
@@ -173,7 +267,8 @@ public class PostServiceImpl implements PostService {
 
         // user owner đang update, liked có thể true/false tùy user đó từng like hay chưa
         boolean liked = postLikeService.isLiked(userId, postId);
-        return postMapper.toResponse(updatedPost, liked);
+        boolean saved = savedPostRepository.existsByUserIdAndPostIdAndDeleted(userId, postId, 0);
+        return postMapper.toResponse(updatedPost, liked, saved);
     }
 
     @Override
@@ -183,6 +278,19 @@ public class PostServiceImpl implements PostService {
 
         if (!post.getUser().getId().toString().equals(userId)) {
             throw new RuntimeException("Bạn không có quyền xóa bài viết này");
+        }
+
+        Locations location = post.getLocation();
+        if (location != null) {
+            Locations currentLoc = location;
+            while (currentLoc != null) {
+                long currentPostCount = currentLoc.getPostCount() != null ? currentLoc.getPostCount() : 0L;
+                long currentCheckIn = currentLoc.getCheckInCount() != null ? currentLoc.getCheckInCount() : 0L;
+                currentLoc.setPostCount(Math.max(0L, currentPostCount - 1));
+                currentLoc.setCheckInCount(Math.max(0L, currentCheckIn - 1));
+                locationsRepository.save(currentLoc);
+                currentLoc = currentLoc.getParent();
+            }
         }
 
         postsRepository.delete(post);

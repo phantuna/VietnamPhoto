@@ -1,7 +1,7 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.request.AuthenticationRequest;
-import com.example.backend.dto.response.AuthenticationResponse;
+import com.example.backend.dto.request.user.AuthenticationRequest;
+import com.example.backend.dto.response.user.AuthenticationResponse;
 import com.example.backend.entity.Users;
 import com.example.backend.exception.AppException;
 import com.example.backend.exception.ErrorCode;
@@ -27,7 +27,17 @@ public class AuthenticationService {
             throw new AppException(ErrorCode.INVALID_PASSWORD);
         }
 
-        String token = jwtService.generateToken(user.getUsername(), user.getId());
+        java.util.List<String> permissions = new java.util.ArrayList<>();
+        if (user.getRoles() != null) {
+            user.getRoles().forEach(role -> {
+                permissions.add("ROLE_" + role.getId().toUpperCase());
+            });
+        }
+        if (permissions.isEmpty()) {
+            permissions.add("ROLE_USER");
+        }
+
+        String token = jwtService.generateToken(user.getUsername(), user.getId(), permissions);
 
         return AuthenticationResponse.builder()
                 .authenticated(true)

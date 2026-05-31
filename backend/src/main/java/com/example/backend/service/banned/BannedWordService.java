@@ -1,7 +1,7 @@
 package com.example.backend.service.banned;
 
 import com.example.backend.entity.BannedWord;
-import com.example.backend.repository.BannedWordRepository;
+import com.example.backend.repository.tag.BannedWordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

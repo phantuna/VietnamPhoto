@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.UUID;
+
 
 @Data
 @AllArgsConstructor
@@ -30,4 +30,6 @@ public class LocationsResponse {
     // Province name extracted from parent for easy filtering
     private String province;
     private LocationsResponse parent;
+    private String locationType; // "SPOT" hoặc "SERVICE"
+    private String creatorId;   // ID người tạo địa điểm
 }

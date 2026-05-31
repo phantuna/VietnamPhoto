@@ -1,100 +1,22 @@
-2026-05-14 09:58:12 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 09:58:12 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 09:58:12 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 09:58:12 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 09:58:17 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/photos/upload
-2026-05-14 09:58:17 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/photos/upload
-2026-05-14 09:58:18 [PhotoWorker-3] ERROR c.e.b.utils.GeminiModerationUtils - [Gemini Moderation] Lỗi khi kiểm duyệt ảnh 'IMG_2195.HEIC': 400 Bad Request on POST request for "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent": "{<EOL>  "error": {<EOL>    "code": 400,<EOL>    "message": "API key not valid. Please pass a valid API key.",<EOL>    "status": "INVALID_ARGUMENT",<EOL>    "details": [<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.ErrorInfo",<EOL>        "reason": "API_KEY_INVALID",<EOL>        "domain": "googleapis.com",<EOL>        "metadata": {<EOL>          "service": "generativelanguage.googleapis.com"<EOL>        }<EOL>      },<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.LocalizedMessage",<EOL>        "locale": "en-US",<EOL>        "message": "API key not valid. Please pass a valid API key."<EOL>      }<EOL>    ]<EOL>  }<EOL>}<EOL>"
-org.springframework.web.client.HttpClientErrorException$BadRequest: 400 Bad Request on POST request for "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent": "{<EOL>  "error": {<EOL>    "code": 400,<EOL>    "message": "API key not valid. Please pass a valid API key.",<EOL>    "status": "INVALID_ARGUMENT",<EOL>    "details": [<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.ErrorInfo",<EOL>        "reason": "API_KEY_INVALID",<EOL>        "domain": "googleapis.com",<EOL>        "metadata": {<EOL>          "service": "generativelanguage.googleapis.com"<EOL>        }<EOL>      },<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.LocalizedMessage",<EOL>        "locale": "en-US",<EOL>        "message": "API key not valid. Please pass a valid API key."<EOL>      }<EOL>    ]<EOL>  }<EOL>}<EOL>"
-	at org.springframework.web.client.HttpClientErrorException.create(HttpClientErrorException.java:106)
-	at org.springframework.web.client.DefaultResponseErrorHandler.handleError(DefaultResponseErrorHandler.java:145)
-	at org.springframework.web.client.DefaultResponseErrorHandler.handleError(DefaultResponseErrorHandler.java:120)
-	at org.springframework.web.client.RestTemplate.handleResponse(RestTemplate.java:807)
-	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:756)
-	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:677)
-	at org.springframework.web.client.RestTemplate.postForEntity(RestTemplate.java:430)
-	at com.example.backend.utils.GeminiModerationUtils.moderate(GeminiModerationUtils.java:96)
-	at com.example.backend.service.photo.impl.PhotoUploadServiceImpl.moderateImage(PhotoUploadServiceImpl.java:149)
-	at com.example.backend.service.photo.impl.PhotoUploadServiceImpl.uploadSingleInternal(PhotoUploadServiceImpl.java:104)
-	at com.example.backend.service.photo.impl.PhotoUploadServiceImpl.lambda$uploadPhotos$0(PhotoUploadServiceImpl.java:64)
-	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
-	at java.base/java.lang.Thread.run(Thread.java:840)
-2026-05-14 09:58:18 [PhotoWorker-3] DEBUG c.e.b.u.v.impl.VietMapServiceImpl - Calling VietMap reverse with lat=20.7523611, lng=107.0684444
-2026-05-14 09:58:24 [PhotoWorker-3] INFO  c.e.b.s.p.i.PhotoUploadServiceImpl - Uploaded photo file=IMG_2195.HEIC thread=PhotoWorker-3 moderation=WARNING
-2026-05-14 09:58:42 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/notifications/unread-count
-2026-05-14 09:58:42 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 09:58:42 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 09:59:47 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/photos/upload
-2026-05-14 09:59:47 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/photos/upload
-2026-05-14 09:59:48 [PhotoWorker-4] ERROR c.e.b.utils.GeminiModerationUtils - [Gemini Moderation] Lỗi khi kiểm duyệt ảnh 'ReLens_IMG_20260510060730(1).JPEG': 400 Bad Request on POST request for "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent": "{<EOL>  "error": {<EOL>    "code": 400,<EOL>    "message": "API key not valid. Please pass a valid API key.",<EOL>    "status": "INVALID_ARGUMENT",<EOL>    "details": [<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.ErrorInfo",<EOL>        "reason": "API_KEY_INVALID",<EOL>        "domain": "googleapis.com",<EOL>        "metadata": {<EOL>          "service": "generativelanguage.googleapis.com"<EOL>        }<EOL>      },<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.LocalizedMessage",<EOL>        "locale": "en-US",<EOL>        "message": "API key not valid. Please pass a valid API key."<EOL>      }<EOL>    ]<EOL>  }<EOL>}<EOL>"
-org.springframework.web.client.HttpClientErrorException$BadRequest: 400 Bad Request on POST request for "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent": "{<EOL>  "error": {<EOL>    "code": 400,<EOL>    "message": "API key not valid. Please pass a valid API key.",<EOL>    "status": "INVALID_ARGUMENT",<EOL>    "details": [<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.ErrorInfo",<EOL>        "reason": "API_KEY_INVALID",<EOL>        "domain": "googleapis.com",<EOL>        "metadata": {<EOL>          "service": "generativelanguage.googleapis.com"<EOL>        }<EOL>      },<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.LocalizedMessage",<EOL>        "locale": "en-US",<EOL>        "message": "API key not valid. Please pass a valid API key."<EOL>      }<EOL>    ]<EOL>  }<EOL>}<EOL>"
-	at org.springframework.web.client.HttpClientErrorException.create(HttpClientErrorException.java:106)
-	at org.springframework.web.client.DefaultResponseErrorHandler.handleError(DefaultResponseErrorHandler.java:145)
-	at org.springframework.web.client.DefaultResponseErrorHandler.handleError(DefaultResponseErrorHandler.java:120)
-	at org.springframework.web.client.RestTemplate.handleResponse(RestTemplate.java:807)
-	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:756)
-	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:677)
-	at org.springframework.web.client.RestTemplate.postForEntity(RestTemplate.java:430)
-	at com.example.backend.utils.GeminiModerationUtils.moderate(GeminiModerationUtils.java:96)
-	at com.example.backend.service.photo.impl.PhotoUploadServiceImpl.moderateImage(PhotoUploadServiceImpl.java:149)
-	at com.example.backend.service.photo.impl.PhotoUploadServiceImpl.uploadSingleInternal(PhotoUploadServiceImpl.java:104)
-	at com.example.backend.service.photo.impl.PhotoUploadServiceImpl.lambda$uploadPhotos$0(PhotoUploadServiceImpl.java:64)
-	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
-	at java.base/java.lang.Thread.run(Thread.java:840)
-2026-05-14 09:59:48 [PhotoWorker-4] DEBUG c.e.b.u.v.impl.VietMapServiceImpl - Calling VietMap reverse with lat=20.7171639, lng=107.0527111
-2026-05-14 09:59:52 [PhotoWorker-4] INFO  c.e.b.s.p.i.PhotoUploadServiceImpl - Uploaded photo file=ReLens_IMG_20260510060730(1).JPEG thread=PhotoWorker-4 moderation=WARNING
-2026-05-14 10:03:43 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:03:43 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:04:10 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/photos/upload
-2026-05-14 10:04:10 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/photos/upload
-2026-05-14 10:04:11 [PhotoWorker-5] ERROR c.e.b.utils.GeminiModerationUtils - [Gemini Moderation] Lỗi khi kiểm duyệt ảnh 'ReLens_IMG_20260510060730(1).JPEG': 400 Bad Request on POST request for "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent": "{<EOL>  "error": {<EOL>    "code": 400,<EOL>    "message": "API key not valid. Please pass a valid API key.",<EOL>    "status": "INVALID_ARGUMENT",<EOL>    "details": [<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.ErrorInfo",<EOL>        "reason": "API_KEY_INVALID",<EOL>        "domain": "googleapis.com",<EOL>        "metadata": {<EOL>          "service": "generativelanguage.googleapis.com"<EOL>        }<EOL>      },<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.LocalizedMessage",<EOL>        "locale": "en-US",<EOL>        "message": "API key not valid. Please pass a valid API key."<EOL>      }<EOL>    ]<EOL>  }<EOL>}<EOL>"
-org.springframework.web.client.HttpClientErrorException$BadRequest: 400 Bad Request on POST request for "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent": "{<EOL>  "error": {<EOL>    "code": 400,<EOL>    "message": "API key not valid. Please pass a valid API key.",<EOL>    "status": "INVALID_ARGUMENT",<EOL>    "details": [<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.ErrorInfo",<EOL>        "reason": "API_KEY_INVALID",<EOL>        "domain": "googleapis.com",<EOL>        "metadata": {<EOL>          "service": "generativelanguage.googleapis.com"<EOL>        }<EOL>      },<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.LocalizedMessage",<EOL>        "locale": "en-US",<EOL>        "message": "API key not valid. Please pass a valid API key."<EOL>      }<EOL>    ]<EOL>  }<EOL>}<EOL>"
-	at org.springframework.web.client.HttpClientErrorException.create(HttpClientErrorException.java:106)
-	at org.springframework.web.client.DefaultResponseErrorHandler.handleError(DefaultResponseErrorHandler.java:145)
-	at org.springframework.web.client.DefaultResponseErrorHandler.handleError(DefaultResponseErrorHandler.java:120)
-	at org.springframework.web.client.RestTemplate.handleResponse(RestTemplate.java:807)
-	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:756)
-	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:677)
-	at org.springframework.web.client.RestTemplate.postForEntity(RestTemplate.java:430)
-	at com.example.backend.utils.GeminiModerationUtils.moderate(GeminiModerationUtils.java:96)
-	at com.example.backend.service.photo.impl.PhotoUploadServiceImpl.moderateImage(PhotoUploadServiceImpl.java:149)
-	at com.example.backend.service.photo.impl.PhotoUploadServiceImpl.uploadSingleInternal(PhotoUploadServiceImpl.java:104)
-	at com.example.backend.service.photo.impl.PhotoUploadServiceImpl.lambda$uploadPhotos$0(PhotoUploadServiceImpl.java:64)
-	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
-	at java.base/java.lang.Thread.run(Thread.java:840)
-2026-05-14 10:04:11 [PhotoWorker-5] DEBUG c.e.b.u.v.impl.VietMapServiceImpl - Calling VietMap reverse with lat=20.7171639, lng=107.0527111
-2026-05-14 10:04:14 [PhotoWorker-5] INFO  c.e.b.s.p.i.PhotoUploadServiceImpl - Uploaded photo file=ReLens_IMG_20260510060730(1).JPEG thread=PhotoWorker-5 moderation=WARNING
-2026-05-14 10:04:22 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
-2026-05-14 10:04:52 [SpringApplicationShutdownHook] INFO  o.s.c.s.DefaultLifecycleProcessor - Shutdown phase 2147482623 ends with 1 bean still running after timeout of 30000ms: [webServerGracefulShutdown]
-2026-05-14 10:04:52 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-05-14 10:04:52 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown aborted with one or more requests still active
-2026-05-14 10:04:52 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2026-05-14 10:04:52 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2026-05-14 10:05:16 [main] INFO  c.example.backend.BackendApplication - Starting BackendApplication using Java 17.0.18 with PID 3004 (D:\DATN\VietnamPhoto\backend\target\classes started by Tuna in D:\DATN\VietnamPhoto)
-2026-05-14 10:05:16 [main] DEBUG c.example.backend.BackendApplication - Running with Spring Boot v4.0.3, Spring v7.0.5
-2026-05-14 10:05:16 [main] INFO  c.example.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
-2026-05-14 10:05:16 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
-2026-05-14 10:05:17 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-05-14 10:05:17 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 73 ms. Found 10 JPA repository interfaces.
-2026-05-14 10:05:18 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
-2026-05-14 10:05:18 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
-2026-05-14 10:05:18 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2026-05-14 10:05:18 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.18]
-2026-05-14 10:05:18 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1778 ms
-2026-05-14 10:05:18 [main] DEBUG c.example.backend.config.JwtFilter - Filter 'jwtFilter' configured for use
-2026-05-14 10:05:18 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-05-14 10:05:18 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.4.Final
-2026-05-14 10:05:19 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-05-14 10:05:19 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-05-14 10:05:19 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4b2acb12
-2026-05-14 10:05:19 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-05-14 10:05:19 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+2026-05-29 23:34:54 [main] INFO  c.example.backend.BackendApplication - Starting BackendApplication using Java 17.0.18 with PID 3556 (D:\DATN\VietnamPhoto\backend\target\classes started by Tuna in D:\DATN\VietnamPhoto)
+2026-05-29 23:34:54 [main] DEBUG c.example.backend.BackendApplication - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-05-29 23:34:54 [main] INFO  c.example.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-29 23:34:54 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-05-29 23:34:55 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-29 23:34:55 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 150 ms. Found 16 JPA repository interfaces.
+2026-05-29 23:34:57 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-05-29 23:34:57 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-05-29 23:34:57 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-29 23:34:57 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-05-29 23:34:57 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 2589 ms
+2026-05-29 23:34:57 [main] DEBUG c.example.backend.config.JwtFilter - Filter 'jwtFilter' configured for use
+2026-05-29 23:34:57 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-29 23:34:57 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.4.Final
+2026-05-29 23:34:58 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-29 23:34:58 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-29 23:34:58 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@79631db0
+2026-05-29 23:34:58 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-29 23:34:58 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
 	Database JDBC URL [jdbc:mysql://localhost:3306/VNScout]
 	Database driver: MySQL Connector/J
 	Database dialect: MySQLDialect
@@ -106,166 +28,65 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 Bad Requ
 	Pool: DataSourceConnectionProvider
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2026-05-14 10:05:21 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-05-14 10:05:21 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-05-14 10:05:21 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-05-14 10:05:23 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-05-14 10:05:23 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+2026-05-29 23:35:00 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-29 23:35:00 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-29 23:35:00 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-29 23:35:03 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-29 23:35:03 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
 
-Using generated security password: dfc7238a-7efa-4104-ab25-00745fd3e3ef
+Using generated security password: 7b3fb214-e5e1-4a0c-bacc-ecfa4c2ad424
 
 This generated password is for development use only. Your security configuration must be updated before running your application in production.
 
-2026-05-14 10:05:23 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
-2026-05-14 10:05:23 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
-2026-05-14 10:05:24 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
-2026-05-14 10:05:24 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
-2026-05-14 10:05:24 [main] INFO  c.example.backend.BackendApplication - Started BackendApplication in 8.381 seconds (process running for 9.436)
-2026-05-14 10:05:24 [main] INFO  c.e.b.c.BannedWordDataInitializer - Banned words already initialized. Skip import.
-2026-05-14 10:05:24 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-05-14 10:05:24 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2026-05-14 10:05:24 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
-2026-05-14 10:05:24 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:05:24 [http-nio-8081-exec-1] WARN  o.s.w.s.h.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/api/v1/notifications/stream' (previous null). Performing CorsConfiguration lookup. This is logged once only at WARN level, and every time at TRACE.
-2026-05-14 10:05:24 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:05:38 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/photos/upload
-2026-05-14 10:05:38 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/photos/upload
-2026-05-14 10:05:39 [PhotoWorker-1] ERROR c.e.b.utils.GeminiModerationUtils - [Gemini Moderation] Lỗi khi kiểm duyệt ảnh 'ReLens_IMG_20260510060730(1).JPEG': 400 Bad Request on POST request for "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent": "{<EOL>  "error": {<EOL>    "code": 400,<EOL>    "message": "API key not valid. Please pass a valid API key.",<EOL>    "status": "INVALID_ARGUMENT",<EOL>    "details": [<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.ErrorInfo",<EOL>        "reason": "API_KEY_INVALID",<EOL>        "domain": "googleapis.com",<EOL>        "metadata": {<EOL>          "service": "generativelanguage.googleapis.com"<EOL>        }<EOL>      },<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.LocalizedMessage",<EOL>        "locale": "en-US",<EOL>        "message": "API key not valid. Please pass a valid API key."<EOL>      }<EOL>    ]<EOL>  }<EOL>}<EOL>"
-org.springframework.web.client.HttpClientErrorException$BadRequest: 400 Bad Request on POST request for "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent": "{<EOL>  "error": {<EOL>    "code": 400,<EOL>    "message": "API key not valid. Please pass a valid API key.",<EOL>    "status": "INVALID_ARGUMENT",<EOL>    "details": [<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.ErrorInfo",<EOL>        "reason": "API_KEY_INVALID",<EOL>        "domain": "googleapis.com",<EOL>        "metadata": {<EOL>          "service": "generativelanguage.googleapis.com"<EOL>        }<EOL>      },<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.LocalizedMessage",<EOL>        "locale": "en-US",<EOL>        "message": "API key not valid. Please pass a valid API key."<EOL>      }<EOL>    ]<EOL>  }<EOL>}<EOL>"
-	at org.springframework.web.client.HttpClientErrorException.create(HttpClientErrorException.java:106)
-	at org.springframework.web.client.DefaultResponseErrorHandler.handleError(DefaultResponseErrorHandler.java:145)
-	at org.springframework.web.client.DefaultResponseErrorHandler.handleError(DefaultResponseErrorHandler.java:120)
-	at org.springframework.web.client.RestTemplate.handleResponse(RestTemplate.java:807)
-	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:756)
-	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:677)
-	at org.springframework.web.client.RestTemplate.postForEntity(RestTemplate.java:430)
-	at com.example.backend.utils.GeminiModerationUtils.moderate(GeminiModerationUtils.java:96)
-	at com.example.backend.service.photo.impl.PhotoUploadServiceImpl.moderateImage(PhotoUploadServiceImpl.java:149)
-	at com.example.backend.service.photo.impl.PhotoUploadServiceImpl.uploadSingleInternal(PhotoUploadServiceImpl.java:104)
-	at com.example.backend.service.photo.impl.PhotoUploadServiceImpl.lambda$uploadPhotos$0(PhotoUploadServiceImpl.java:64)
-	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
-	at java.base/java.lang.Thread.run(Thread.java:840)
-2026-05-14 10:05:39 [PhotoWorker-1] DEBUG c.e.b.u.v.impl.VietMapServiceImpl - Calling VietMap reverse with lat=20.7171639, lng=107.0527111
-2026-05-14 10:05:43 [PhotoWorker-1] INFO  c.e.b.s.p.i.PhotoUploadServiceImpl - Uploaded photo file=ReLens_IMG_20260510060730(1).JPEG thread=PhotoWorker-1 moderation=WARNING
-2026-05-14 10:05:57 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/notifications
-2026-05-14 10:05:57 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/notifications
-2026-05-14 10:05:57 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications
-2026-05-14 10:05:57 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications
-2026-05-14 10:05:57 [http-nio-8081-exec-5] WARN  o.s.d.w.c.SpringDataJackson3Configuration$PageModule$WarningLoggingModifier - Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
-	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
-	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+2026-05-29 23:35:03 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-05-29 23:35:03 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-05-29 23:35:04 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2026-05-29 23:35:04 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2577f595]]
+2026-05-29 23:35:04 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2026-05-29 23:35:04 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2026-05-29 23:35:04 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2026-05-29 23:35:04 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2577f595]]
+2026-05-29 23:35:04 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2026-05-29 23:35:04 [main] WARN  o.s.b.w.s.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-05-29 23:35:04 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-29 23:35:04 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-29 23:35:04 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-29 23:35:04 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
 
-2026-05-14 10:05:57 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications
-2026-05-14 10:05:57 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications
-2026-05-14 10:06:01 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/follow/counts/2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:06:01 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/posts/getAll
-2026-05-14 10:06:01 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/follow/counts/2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:06:01 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll
-2026-05-14 10:06:01 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/follow/counts/2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:06:01 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll
-2026-05-14 10:06:01 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/follow/counts/2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:06:01 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/follow/counts/2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:06:01 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/follow/counts/2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:06:01 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll
-2026-05-14 10:06:01 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll
-2026-05-14 10:06:01 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/follow/counts/2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:06:01 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/follow/counts/2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:06:01 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/follow/counts/2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:06:01 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/follow/counts/2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:06:05 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/locations
-2026-05-14 10:06:05 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/locations
-2026-05-14 10:06:05 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:06:05 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:06:05 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:06:05 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:06:06 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:06:06 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:06:06 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:06:06 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:06:09 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /users/getall
-2026-05-14 10:06:09 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:06:09 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:06:09 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/tags
-2026-05-14 10:06:09 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/getall
-2026-05-14 10:06:09 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/getall
-2026-05-14 10:06:09 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:06:09 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/tags
-2026-05-14 10:06:09 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/tags
-2026-05-14 10:06:09 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/tags
-2026-05-14 10:06:09 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/getall
-2026-05-14 10:06:09 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/getall
-2026-05-14 10:06:09 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/tags
-2026-05-14 10:06:09 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/tags
-2026-05-14 10:06:09 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:06:09 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:06:11 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:06:11 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:06:11 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:06:11 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:08:43 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:08:43 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:13:43 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:13:43 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:18:42 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:18:42 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:18:42 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:18:42 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:18:42 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:18:42 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:18:57 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:18:57 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /users/me
-2026-05-14 10:18:57 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:18:57 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
-2026-05-14 10:18:57 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
-2026-05-14 10:18:58 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:18:58 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:18:58 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:18:58 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:20:11 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/locations
-2026-05-14 10:20:11 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/locations
-2026-05-14 10:20:11 [http-nio-8081-exec-2] DEBUG c.e.b.u.v.impl.VietMapServiceImpl - Calling VietMap reverse with lat=20.757877209495632, lng=107.03808355573477
-2026-05-14 10:20:42 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/photos/upload
-2026-05-14 10:20:42 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/photos/upload
-2026-05-14 10:20:42 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/photos/upload
-2026-05-14 10:20:43 [http-nio-8081-exec-4] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.multipart.MaxUploadSizeExceededException: Maximum upload size exceeded]
-2026-05-14 10:20:43 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /error
-2026-05-14 10:20:43 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /error
-2026-05-14 10:20:43 [http-nio-8081-exec-4] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.multipart.MaxUploadSizeExceededException: Maximum upload size exceeded]
-2026-05-14 10:20:43 [http-nio-8081-exec-4] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-05-14 10:20:44 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/photos/upload
-2026-05-14 10:20:44 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/photos/upload
-2026-05-14 10:20:44 [http-nio-8081-exec-9] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.multipart.MaxUploadSizeExceededException: Maximum upload size exceeded]
-2026-05-14 10:20:44 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /error
-2026-05-14 10:20:44 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /error
-2026-05-14 10:20:44 [http-nio-8081-exec-9] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.multipart.MaxUploadSizeExceededException: Maximum upload size exceeded]
-2026-05-14 10:20:44 [http-nio-8081-exec-9] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-05-14 10:23:51 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
-2026-05-14 10:24:22 [SpringApplicationShutdownHook] INFO  o.s.c.s.DefaultLifecycleProcessor - Shutdown phase 2147482623 ends with 1 bean still running after timeout of 30000ms: [webServerGracefulShutdown]
-2026-05-14 10:24:22 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-05-14 10:24:22 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2026-05-14 10:24:22 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown aborted with one or more requests still active
-2026-05-14 10:24:22 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2026-05-14 10:24:26 [main] INFO  c.example.backend.BackendApplication - Starting BackendApplication using Java 17.0.18 with PID 23628 (D:\DATN\VietnamPhoto\backend\target\classes started by Tuna in D:\DATN\VietnamPhoto)
-2026-05-14 10:24:26 [main] DEBUG c.example.backend.BackendApplication - Running with Spring Boot v4.0.3, Spring v7.0.5
-2026-05-14 10:24:26 [main] INFO  c.example.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
-2026-05-14 10:24:26 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
-2026-05-14 10:24:27 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-05-14 10:24:27 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 74 ms. Found 10 JPA repository interfaces.
-2026-05-14 10:24:28 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
-2026-05-14 10:24:28 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
-2026-05-14 10:24:28 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2026-05-14 10:24:28 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.18]
-2026-05-14 10:24:28 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1667 ms
-2026-05-14 10:24:28 [main] DEBUG c.example.backend.config.JwtFilter - Filter 'jwtFilter' configured for use
-2026-05-14 10:24:28 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-05-14 10:24:28 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.4.Final
-2026-05-14 10:24:29 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-05-14 10:24:29 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-05-14 10:24:30 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@654db80b
-2026-05-14 10:24:30 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-05-14 10:24:30 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-05-29 23:35:04 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8081 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8081 or configure this application to listen on another port.
+
+2026-05-29 23:35:17 [main] INFO  c.example.backend.BackendApplication - Starting BackendApplication using Java 17.0.18 with PID 22668 (D:\DATN\VietnamPhoto\backend\target\classes started by Tuna in D:\DATN\VietnamPhoto)
+2026-05-29 23:35:17 [main] DEBUG c.example.backend.BackendApplication - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-05-29 23:35:17 [main] INFO  c.example.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-29 23:35:17 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-05-29 23:35:17 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-29 23:35:18 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 132 ms. Found 16 JPA repository interfaces.
+2026-05-29 23:35:18 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-05-29 23:35:18 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-05-29 23:35:18 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-29 23:35:18 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-05-29 23:35:18 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1897 ms
+2026-05-29 23:35:19 [main] DEBUG c.example.backend.config.JwtFilter - Filter 'jwtFilter' configured for use
+2026-05-29 23:35:19 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-29 23:35:19 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.4.Final
+2026-05-29 23:35:19 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-29 23:35:19 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-29 23:35:20 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@129c322f
+2026-05-29 23:35:20 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-29 23:35:20 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
 	Database JDBC URL [jdbc:mysql://localhost:3306/VNScout]
 	Database driver: MySQL Connector/J
 	Database dialect: MySQLDialect
@@ -277,752 +98,30 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 Bad Requ
 	Pool: DataSourceConnectionProvider
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2026-05-14 10:24:31 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-05-14 10:24:31 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-05-14 10:24:31 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-05-14 10:24:33 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-05-14 10:24:33 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+2026-05-29 23:35:21 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-29 23:35:21 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-29 23:35:21 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-29 23:35:23 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-29 23:35:23 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
 
-Using generated security password: ffbe4632-8374-4140-b091-393436862d0f
-
-This generated password is for development use only. Your security configuration must be updated before running your application in production.
-
-2026-05-14 10:24:33 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
-2026-05-14 10:24:33 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
-2026-05-14 10:24:34 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
-2026-05-14 10:24:34 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
-2026-05-14 10:24:34 [main] INFO  c.example.backend.BackendApplication - Started BackendApplication in 8.203 seconds (process running for 8.621)
-2026-05-14 10:24:34 [main] INFO  c.e.b.c.BannedWordDataInitializer - Banned words already initialized. Skip import.
-2026-05-14 10:24:35 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-05-14 10:24:35 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2026-05-14 10:24:35 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
-2026-05-14 10:24:35 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:24:35 [http-nio-8081-exec-1] WARN  o.s.w.s.h.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/api/v1/notifications/stream' (previous null). Performing CorsConfiguration lookup. This is logged once only at WARN level, and every time at TRACE.
-2026-05-14 10:24:36 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:25:19 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/photos/upload
-2026-05-14 10:25:19 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/photos/upload
-2026-05-14 10:25:27 [PhotoWorker-1] ERROR c.e.b.utils.GeminiModerationUtils - [Gemini Moderation] Lỗi khi kiểm duyệt ảnh 'IMG20260510065235.jpg': 400 Bad Request on POST request for "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent": "{<EOL>  "error": {<EOL>    "code": 400,<EOL>    "message": "API key not valid. Please pass a valid API key.",<EOL>    "status": "INVALID_ARGUMENT",<EOL>    "details": [<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.ErrorInfo",<EOL>        "reason": "API_KEY_INVALID",<EOL>        "domain": "googleapis.com",<EOL>        "metadata": {<EOL>          "service": "generativelanguage.googleapis.com"<EOL>        }<EOL>      },<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.LocalizedMessage",<EOL>        "locale": "en-US",<EOL>        "message": "API key not valid. Please pass a valid API key."<EOL>      }<EOL>    ]<EOL>  }<EOL>}<EOL>"
-org.springframework.web.client.HttpClientErrorException$BadRequest: 400 Bad Request on POST request for "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent": "{<EOL>  "error": {<EOL>    "code": 400,<EOL>    "message": "API key not valid. Please pass a valid API key.",<EOL>    "status": "INVALID_ARGUMENT",<EOL>    "details": [<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.ErrorInfo",<EOL>        "reason": "API_KEY_INVALID",<EOL>        "domain": "googleapis.com",<EOL>        "metadata": {<EOL>          "service": "generativelanguage.googleapis.com"<EOL>        }<EOL>      },<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.LocalizedMessage",<EOL>        "locale": "en-US",<EOL>        "message": "API key not valid. Please pass a valid API key."<EOL>      }<EOL>    ]<EOL>  }<EOL>}<EOL>"
-	at org.springframework.web.client.HttpClientErrorException.create(HttpClientErrorException.java:106)
-	at org.springframework.web.client.DefaultResponseErrorHandler.handleError(DefaultResponseErrorHandler.java:145)
-	at org.springframework.web.client.DefaultResponseErrorHandler.handleError(DefaultResponseErrorHandler.java:120)
-	at org.springframework.web.client.RestTemplate.handleResponse(RestTemplate.java:807)
-	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:756)
-	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:677)
-	at org.springframework.web.client.RestTemplate.postForEntity(RestTemplate.java:430)
-	at com.example.backend.utils.GeminiModerationUtils.moderate(GeminiModerationUtils.java:96)
-	at com.example.backend.service.photo.impl.PhotoUploadServiceImpl.moderateImage(PhotoUploadServiceImpl.java:149)
-	at com.example.backend.service.photo.impl.PhotoUploadServiceImpl.uploadSingleInternal(PhotoUploadServiceImpl.java:104)
-	at com.example.backend.service.photo.impl.PhotoUploadServiceImpl.lambda$uploadPhotos$0(PhotoUploadServiceImpl.java:64)
-	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
-	at java.base/java.lang.Thread.run(Thread.java:840)
-2026-05-14 10:25:39 [PhotoWorker-1] INFO  c.e.b.s.p.i.PhotoUploadServiceImpl - Uploaded photo file=IMG20260510065235.jpg thread=PhotoWorker-1 moderation=WARNING
-2026-05-14 10:27:02 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:27:02 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
-2026-05-14 10:27:02 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:27:02 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
-2026-05-14 10:27:02 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:27:02 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:27:02 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:27:02 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:27:03 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:27:03 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
-2026-05-14 10:27:03 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
-2026-05-14 10:27:03 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:27:03 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:27:03 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:27:03 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:27:03 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:27:05 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:27:05 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:27:05 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:27:05 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:27:14 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll
-2026-05-14 10:27:14 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/locations/83e1719b-226f-4721-8a88-e0da6ea6910c
-2026-05-14 10:27:14 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll
-2026-05-14 10:27:14 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/locations/83e1719b-226f-4721-8a88-e0da6ea6910c
-2026-05-14 10:27:14 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations/83e1719b-226f-4721-8a88-e0da6ea6910c
-2026-05-14 10:27:14 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations/83e1719b-226f-4721-8a88-e0da6ea6910c
-2026-05-14 10:27:14 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations/83e1719b-226f-4721-8a88-e0da6ea6910c
-2026-05-14 10:27:14 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations/83e1719b-226f-4721-8a88-e0da6ea6910c
-2026-05-14 10:27:15 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll
-2026-05-14 10:27:15 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll
-2026-05-14 10:27:20 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:27:20 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:27:20 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:27:20 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:27:41 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
-2026-05-14 10:27:41 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:27:41 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
-2026-05-14 10:27:41 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:27:42 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:27:42 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:27:42 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:27:42 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:27:42 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:27:42 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
-2026-05-14 10:27:42 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:27:42 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
-2026-05-14 10:27:42 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:27:42 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:27:42 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:27:42 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:32:42 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/notifications/unread-count
-2026-05-14 10:32:42 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:32:42 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:34:07 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
-2026-05-14 10:34:38 [SpringApplicationShutdownHook] INFO  o.s.c.s.DefaultLifecycleProcessor - Shutdown phase 2147482623 ends with 1 bean still running after timeout of 30000ms: [webServerGracefulShutdown]
-2026-05-14 10:34:38 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:34:38 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:34:38 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:34:38 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:34:38 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:34:38 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:34:38 [http-nio-8081-exec-9] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Ignoring exception, response committed already: org.springframework.web.context.request.async.AsyncRequestTimeoutException
-2026-05-14 10:34:38 [http-nio-8081-exec-5] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Ignoring exception, response committed already: org.springframework.web.context.request.async.AsyncRequestTimeoutException
-2026-05-14 10:34:38 [http-nio-8081-exec-7] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Ignoring exception, response committed already: org.springframework.web.context.request.async.AsyncRequestTimeoutException
-2026-05-14 10:34:38 [http-nio-8081-exec-9] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.context.request.async.AsyncRequestTimeoutException]
-2026-05-14 10:34:38 [http-nio-8081-exec-5] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.context.request.async.AsyncRequestTimeoutException]
-2026-05-14 10:34:38 [http-nio-8081-exec-7] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.context.request.async.AsyncRequestTimeoutException]
-2026-05-14 10:34:38 [http-nio-8081-exec-5] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-05-14 10:34:38 [http-nio-8081-exec-7] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-05-14 10:34:38 [http-nio-8081-exec-9] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-05-14 10:34:38 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-05-14 10:34:38 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown aborted with one or more requests still active
-2026-05-14 10:34:38 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2026-05-14 10:34:38 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2026-05-14 10:34:44 [main] INFO  c.example.backend.BackendApplication - Starting BackendApplication using Java 17.0.18 with PID 16420 (D:\DATN\VietnamPhoto\backend\target\classes started by Tuna in D:\DATN\VietnamPhoto)
-2026-05-14 10:34:44 [main] DEBUG c.example.backend.BackendApplication - Running with Spring Boot v4.0.3, Spring v7.0.5
-2026-05-14 10:34:44 [main] INFO  c.example.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
-2026-05-14 10:34:44 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
-2026-05-14 10:34:44 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-05-14 10:34:45 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 73 ms. Found 10 JPA repository interfaces.
-2026-05-14 10:34:45 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
-2026-05-14 10:34:45 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
-2026-05-14 10:34:45 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2026-05-14 10:34:45 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.18]
-2026-05-14 10:34:45 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1768 ms
-2026-05-14 10:34:46 [main] DEBUG c.example.backend.config.JwtFilter - Filter 'jwtFilter' configured for use
-2026-05-14 10:34:46 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-05-14 10:34:46 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.4.Final
-2026-05-14 10:34:47 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-05-14 10:34:47 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-05-14 10:34:47 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@516037be
-2026-05-14 10:34:47 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-05-14 10:34:48 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
-	Database JDBC URL [jdbc:mysql://localhost:3306/VNScout]
-	Database driver: MySQL Connector/J
-	Database dialect: MySQLDialect
-	Database version: 8.0.46
-	Default catalog/schema: VNScout/undefined
-	Autocommit mode: undefined/unknown
-	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
-	JDBC fetch size: none
-	Pool: DataSourceConnectionProvider
-	Minimum pool size: undefined/unknown
-	Maximum pool size: undefined/unknown
-2026-05-14 10:34:49 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-05-14 10:34:49 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-05-14 10:34:49 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-05-14 10:34:51 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-05-14 10:34:51 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
-
-Using generated security password: 87b84047-e182-4aa8-91a1-a930430e15cd
+Using generated security password: 29c597a4-7fbd-42ce-9cd8-4dce8793e296
 
 This generated password is for development use only. Your security configuration must be updated before running your application in production.
 
-2026-05-14 10:34:51 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
-2026-05-14 10:34:52 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
-2026-05-14 10:34:52 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
-2026-05-14 10:34:52 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
-2026-05-14 10:34:52 [main] INFO  c.example.backend.BackendApplication - Started BackendApplication in 9.292 seconds (process running for 9.763)
-2026-05-14 10:34:52 [main] INFO  c.e.b.c.BannedWordDataInitializer - Banned words already initialized. Skip import.
-2026-05-14 10:34:52 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-05-14 10:34:52 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2026-05-14 10:34:52 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
-2026-05-14 10:34:52 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:34:52 [http-nio-8081-exec-1] WARN  o.s.w.s.h.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/api/v1/notifications/stream' (previous null). Performing CorsConfiguration lookup. This is logged once only at WARN level, and every time at TRACE.
-2026-05-14 10:34:52 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:37:09 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:37:09 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:37:12 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:37:12 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:37:14 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/locations
-2026-05-14 10:37:14 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
-2026-05-14 10:37:14 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
-2026-05-14 10:37:14 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:37:14 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:37:14 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:37:14 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:37:14 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:37:14 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:37:43 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:37:43 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:37:52 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /users/getall
-2026-05-14 10:37:52 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:37:52 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/tags
-2026-05-14 10:37:52 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/getall
-2026-05-14 10:37:52 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:37:52 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:37:52 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/tags
-2026-05-14 10:37:52 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/tags
-2026-05-14 10:37:52 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:37:52 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/getall
-2026-05-14 10:37:52 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/getall
-2026-05-14 10:37:52 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/getall
-2026-05-14 10:37:52 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/tags
-2026-05-14 10:37:52 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/tags
-2026-05-14 10:37:53 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:37:53 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:37:58 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:37:58 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:37:59 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:37:59 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:38:01 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:38:01 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:38:01 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:38:01 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:38:02 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/getall
-2026-05-14 10:38:02 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:38:02 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/tags
-2026-05-14 10:38:02 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/getall
-2026-05-14 10:38:02 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/tags
-2026-05-14 10:38:02 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:38:02 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/getall
-2026-05-14 10:38:02 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/tags
-2026-05-14 10:38:02 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/tags
-2026-05-14 10:38:02 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/getall
-2026-05-14 10:38:02 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:38:02 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:39:15 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:39:15 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:39:16 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:39:16 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:39:18 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:39:18 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/getall
-2026-05-14 10:39:18 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/getall
-2026-05-14 10:39:18 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:39:18 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/tags
-2026-05-14 10:39:18 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/tags
-2026-05-14 10:39:18 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/getall
-2026-05-14 10:39:18 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/getall
-2026-05-14 10:39:18 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/tags
-2026-05-14 10:39:18 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/tags
-2026-05-14 10:39:18 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:39:18 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:42:15 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:42:15 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:42:32 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:42:32 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:42:32 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:42:32 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:42:33 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:42:33 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:42:33 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:42:33 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:42:42 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:42:42 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:43:08 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:43:08 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:43:08 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:43:08 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:43:18 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:43:18 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:43:18 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:43:18 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:46:31 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:46:31 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
-2026-05-14 10:46:31 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:46:31 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
-2026-05-14 10:46:32 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/posts/getAll
-2026-05-14 10:46:32 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/getall
-2026-05-14 10:46:32 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/tags
-2026-05-14 10:46:32 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/getall
-2026-05-14 10:46:32 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/tags
-2026-05-14 10:46:32 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
-2026-05-14 10:46:32 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll
-2026-05-14 10:46:32 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll
-2026-05-14 10:46:32 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
-2026-05-14 10:46:32 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:46:32 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:46:32 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:46:32 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:46:32 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:46:32 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:46:32 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:46:32 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:46:47 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:46:47 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:46:47 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:46:47 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:47:01 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:47:01 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/getall
-2026-05-14 10:47:01 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/getall
-2026-05-14 10:47:01 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:47:01 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/tags
-2026-05-14 10:47:01 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/tags
-2026-05-14 10:47:01 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/tags
-2026-05-14 10:47:01 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/getall
-2026-05-14 10:47:01 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/getall
-2026-05-14 10:47:01 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/tags
-2026-05-14 10:47:02 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:47:02 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 10:47:02 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:47:02 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:47:02 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:47:02 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:50:15 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /users/me
-2026-05-14 10:50:15 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:50:15 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:50:15 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
-2026-05-14 10:50:15 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
-2026-05-14 10:50:15 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:50:15 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:50:15 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:50:15 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:50:17 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:50:17 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:50:17 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
-2026-05-14 10:50:17 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
-2026-05-14 10:50:18 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:50:18 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:50:18 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:50:18 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:50:31 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:50:31 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:50:31 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
-2026-05-14 10:50:31 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
-2026-05-14 10:50:31 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:50:31 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:50:31 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:50:31 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:51:39 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:51:39 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:51:39 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
-2026-05-14 10:51:39 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
-2026-05-14 10:51:39 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:51:39 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:51:39 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
-2026-05-14 10:51:39 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
-2026-05-14 10:51:39 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:51:39 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:51:39 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:51:39 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:51:39 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:51:39 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:51:39 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:51:39 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:52:43 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/locations
-2026-05-14 10:52:43 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/locations
-2026-05-14 10:52:43 [http-nio-8081-exec-1] DEBUG c.e.b.u.v.impl.VietMapServiceImpl - Calling VietMap reverse with lat=20.743641124077982, lng=107.05624057862929
-2026-05-14 10:52:48 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:52:48 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:52:48 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:52:48 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:55:21 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/locations/cb19d671-5543-4bd5-8e55-906717f56323
-2026-05-14 10:55:21 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll
-2026-05-14 10:55:21 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll
-2026-05-14 10:55:21 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/locations/cb19d671-5543-4bd5-8e55-906717f56323
-2026-05-14 10:55:21 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations/cb19d671-5543-4bd5-8e55-906717f56323
-2026-05-14 10:55:21 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations/cb19d671-5543-4bd5-8e55-906717f56323
-2026-05-14 10:55:21 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations/cb19d671-5543-4bd5-8e55-906717f56323
-2026-05-14 10:55:21 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations/cb19d671-5543-4bd5-8e55-906717f56323
-2026-05-14 10:55:21 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll
-2026-05-14 10:55:21 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll
-2026-05-14 10:56:40 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:56:40 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:56:59 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations/cb19d671-5543-4bd5-8e55-906717f56323
-2026-05-14 10:56:59 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll
-2026-05-14 10:56:59 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll
-2026-05-14 10:56:59 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations/cb19d671-5543-4bd5-8e55-906717f56323
-2026-05-14 10:56:59 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
-2026-05-14 10:56:59 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
-2026-05-14 10:56:59 [http-nio-8081-exec-4] ERROR o.a.c.c.C.[.[.[.[dispatcherServlet] - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.RuntimeException: Location not found] with root cause
-java.lang.RuntimeException: Location not found
-	at com.example.backend.service.location.impl.LocationServiceImpl.lambda$getLocationById$0(LocationServiceImpl.java:81)
-	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
-	at com.example.backend.service.location.impl.LocationServiceImpl.getLocationById(LocationServiceImpl.java:81)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
-	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:715)
-	at com.example.backend.service.location.impl.LocationServiceImpl$$SpringCGLIB$$0.getLocationById(<generated>)
-	at com.example.backend.controller.LocationController.getLocation(LocationController.java:27)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:252)
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:184)
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853)
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86)
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963)
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866)
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000)
-	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:892)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:622)
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:128)
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
-	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:235)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:371)
-	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
-	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
-	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
-	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
-	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:181)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
-	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
-	at com.example.backend.config.JwtFilter.doFilterInternal(JwtFilter.java:76)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
-	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:110)
-	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:96)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
-	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
-	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
-	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
-	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
-	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
-	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
-	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
-	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:237)
-	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:195)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
-	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:317)
-	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:355)
-	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:272)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:492)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:341)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1779)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:946)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:480)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:57)
-	at java.base/java.lang.Thread.run(Thread.java:840)
-2026-05-14 10:56:59 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /error
-2026-05-14 10:56:59 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /error
-2026-05-14 10:56:59 [http-nio-8081-exec-4] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-05-14 10:56:59 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:56:59 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:56:59 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:56:59 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:57:01 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:57:01 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:57:01 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:57:01 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:57:40 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/locations
-2026-05-14 10:57:40 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/locations
-2026-05-14 10:57:40 [http-nio-8081-exec-2] DEBUG c.e.b.u.v.impl.VietMapServiceImpl - Calling VietMap reverse with lat=20.745390360572372, lng=107.05432277749037
-2026-05-14 10:57:52 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:57:52 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
-2026-05-14 10:57:52 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:57:52 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
-2026-05-14 10:57:52 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 10:57:52 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:57:52 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 10:57:52 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 10:57:56 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/locations/2aed3455-8399-4cb6-ad17-18c2d324ae67
-2026-05-14 10:57:56 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll
-2026-05-14 10:57:56 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations/2aed3455-8399-4cb6-ad17-18c2d324ae67
-2026-05-14 10:57:56 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations/2aed3455-8399-4cb6-ad17-18c2d324ae67
-2026-05-14 10:57:56 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll
-2026-05-14 10:57:56 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations/2aed3455-8399-4cb6-ad17-18c2d324ae67
-2026-05-14 10:57:56 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations/2aed3455-8399-4cb6-ad17-18c2d324ae67
-2026-05-14 10:57:56 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll
-2026-05-14 10:57:56 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll
-2026-05-14 10:58:01 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:58:01 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:58:01 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:58:01 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:58:39 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/photos/upload
-2026-05-14 10:58:39 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/photos/upload
-2026-05-14 10:58:39 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/photos/upload
-2026-05-14 10:58:40 [PhotoWorker-1] ERROR c.e.b.utils.GeminiModerationUtils - [Gemini Moderation] Lỗi khi kiểm duyệt ảnh 'ReLens_IMG_20260510063636(1).JPEG': 400 Bad Request on POST request for "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent": "{<EOL>  "error": {<EOL>    "code": 400,<EOL>    "message": "API key not valid. Please pass a valid API key.",<EOL>    "status": "INVALID_ARGUMENT",<EOL>    "details": [<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.ErrorInfo",<EOL>        "reason": "API_KEY_INVALID",<EOL>        "domain": "googleapis.com",<EOL>        "metadata": {<EOL>          "service": "generativelanguage.googleapis.com"<EOL>        }<EOL>      },<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.LocalizedMessage",<EOL>        "locale": "en-US",<EOL>        "message": "API key not valid. Please pass a valid API key."<EOL>      }<EOL>    ]<EOL>  }<EOL>}<EOL>"
-org.springframework.web.client.HttpClientErrorException$BadRequest: 400 Bad Request on POST request for "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent": "{<EOL>  "error": {<EOL>    "code": 400,<EOL>    "message": "API key not valid. Please pass a valid API key.",<EOL>    "status": "INVALID_ARGUMENT",<EOL>    "details": [<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.ErrorInfo",<EOL>        "reason": "API_KEY_INVALID",<EOL>        "domain": "googleapis.com",<EOL>        "metadata": {<EOL>          "service": "generativelanguage.googleapis.com"<EOL>        }<EOL>      },<EOL>      {<EOL>        "@type": "type.googleapis.com/google.rpc.LocalizedMessage",<EOL>        "locale": "en-US",<EOL>        "message": "API key not valid. Please pass a valid API key."<EOL>      }<EOL>    ]<EOL>  }<EOL>}<EOL>"
-	at org.springframework.web.client.HttpClientErrorException.create(HttpClientErrorException.java:106)
-	at org.springframework.web.client.DefaultResponseErrorHandler.handleError(DefaultResponseErrorHandler.java:145)
-	at org.springframework.web.client.DefaultResponseErrorHandler.handleError(DefaultResponseErrorHandler.java:120)
-	at org.springframework.web.client.RestTemplate.handleResponse(RestTemplate.java:807)
-	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:756)
-	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:677)
-	at org.springframework.web.client.RestTemplate.postForEntity(RestTemplate.java:430)
-	at com.example.backend.utils.GeminiModerationUtils.moderate(GeminiModerationUtils.java:96)
-	at com.example.backend.service.photo.impl.PhotoUploadServiceImpl.moderateImage(PhotoUploadServiceImpl.java:149)
-	at com.example.backend.service.photo.impl.PhotoUploadServiceImpl.uploadSingleInternal(PhotoUploadServiceImpl.java:104)
-	at com.example.backend.service.photo.impl.PhotoUploadServiceImpl.lambda$uploadPhotos$0(PhotoUploadServiceImpl.java:64)
-	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
-	at java.base/java.lang.Thread.run(Thread.java:840)
-2026-05-14 10:58:40 [PhotoWorker-1] DEBUG c.e.b.u.v.impl.VietMapServiceImpl - Calling VietMap reverse with lat=20.7151306, lng=107.0503917
-2026-05-14 10:58:44 [PhotoWorker-1] INFO  c.e.b.s.p.i.PhotoUploadServiceImpl - Uploaded photo file=ReLens_IMG_20260510063636(1).JPEG thread=PhotoWorker-1 moderation=WARNING
-2026-05-14 10:59:48 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/posts/created
-2026-05-14 10:59:48 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/v1/posts/created
-2026-05-14 10:59:48 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/v1/posts/created
-2026-05-14 10:59:48 [http-nio-8081-exec-3] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public com.example.backend.dto.response.PostResponse com.example.backend.controller.PostController.createPost(java.lang.String,com.example.backend.dto.request.post.PostCreateRequest); target is of class [com.example.backend.controller.PostController]
-2026-05-14 10:59:48 [http-nio-8081-exec-3] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public com.example.backend.dto.response.PostResponse com.example.backend.controller.PostController.createPost(java.lang.String,com.example.backend.dto.request.post.PostCreateRequest); target is of class [com.example.backend.controller.PostController]
-2026-05-14 10:59:50 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/v1/posts/created
-2026-05-14 10:59:50 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/v1/posts/created
-2026-05-14 10:59:50 [http-nio-8081-exec-10] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public com.example.backend.dto.response.PostResponse com.example.backend.controller.PostController.createPost(java.lang.String,com.example.backend.dto.request.post.PostCreateRequest); target is of class [com.example.backend.controller.PostController]
-2026-05-14 10:59:50 [http-nio-8081-exec-10] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public com.example.backend.dto.response.PostResponse com.example.backend.controller.PostController.createPost(java.lang.String,com.example.backend.dto.request.post.PostCreateRequest); target is of class [com.example.backend.controller.PostController]
-2026-05-14 10:59:51 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:59:51 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:59:51 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 10:59:51 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 10:59:52 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations/2aed3455-8399-4cb6-ad17-18c2d324ae67
-2026-05-14 10:59:52 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll
-2026-05-14 10:59:52 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll
-2026-05-14 10:59:52 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations/2aed3455-8399-4cb6-ad17-18c2d324ae67
-2026-05-14 10:59:52 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations/2aed3455-8399-4cb6-ad17-18c2d324ae67
-2026-05-14 10:59:52 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations/2aed3455-8399-4cb6-ad17-18c2d324ae67
-2026-05-14 10:59:52 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll
-2026-05-14 10:59:52 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll
-2026-05-14 11:00:05 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/posts/77fcfbee-0e18-4ac7-8c11-ecbe8f8a4d1c?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 11:00:05 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/posts/77fcfbee-0e18-4ac7-8c11-ecbe8f8a4d1c?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 11:00:05 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/77fcfbee-0e18-4ac7-8c11-ecbe8f8a4d1c?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 11:00:05 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/77fcfbee-0e18-4ac7-8c11-ecbe8f8a4d1c?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 11:00:05 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/77fcfbee-0e18-4ac7-8c11-ecbe8f8a4d1c?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 11:00:05 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/77fcfbee-0e18-4ac7-8c11-ecbe8f8a4d1c?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 11:00:05 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/comments/post/77fcfbee-0e18-4ac7-8c11-ecbe8f8a4d1c
-2026-05-14 11:00:05 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/comments/post/77fcfbee-0e18-4ac7-8c11-ecbe8f8a4d1c
-2026-05-14 11:00:05 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/comments/post/77fcfbee-0e18-4ac7-8c11-ecbe8f8a4d1c
-2026-05-14 11:00:05 [http-nio-8081-exec-5] WARN  o.s.d.w.c.SpringDataJackson3Configuration$PageModule$WarningLoggingModifier - Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
-	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
-	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
-
-2026-05-14 11:00:05 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/comments/post/77fcfbee-0e18-4ac7-8c11-ecbe8f8a4d1c
-2026-05-14 11:00:05 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/comments/post/77fcfbee-0e18-4ac7-8c11-ecbe8f8a4d1c
-2026-05-14 11:00:15 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/comments/post/77fcfbee-0e18-4ac7-8c11-ecbe8f8a4d1c
-2026-05-14 11:00:15 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/comments/post/77fcfbee-0e18-4ac7-8c11-ecbe8f8a4d1c
-2026-05-14 11:00:19 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations/2aed3455-8399-4cb6-ad17-18c2d324ae67
-2026-05-14 11:00:19 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll
-2026-05-14 11:00:19 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations/2aed3455-8399-4cb6-ad17-18c2d324ae67
-2026-05-14 11:00:19 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll
-2026-05-14 11:00:19 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations/2aed3455-8399-4cb6-ad17-18c2d324ae67
-2026-05-14 11:00:19 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations/2aed3455-8399-4cb6-ad17-18c2d324ae67
-2026-05-14 11:00:19 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll
-2026-05-14 11:00:19 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll
-2026-05-14 11:00:20 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:00:20 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:00:20 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:00:20 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:00:45 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/locations
-2026-05-14 11:00:45 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/locations
-2026-05-14 11:00:45 [http-nio-8081-exec-10] DEBUG c.e.b.u.v.impl.VietMapServiceImpl - Calling VietMap reverse with lat=20.746883663171587, lng=107.05497441356863
-2026-05-14 11:00:50 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:00:50 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
-2026-05-14 11:00:50 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:00:50 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
-2026-05-14 11:00:50 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 11:00:50 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 11:00:50 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:00:50 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:01:32 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:01:32 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
-2026-05-14 11:01:32 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:01:32 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
-2026-05-14 11:01:32 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 11:01:32 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 11:01:32 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:01:32 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:06:28 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:06:28 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:06:28 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:06:28 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:06:31 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:06:31 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:06:31 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:06:31 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:06:32 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/notifications/unread-count
-2026-05-14 11:06:32 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 11:06:32 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 11:06:33 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 11:06:33 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/getall
-2026-05-14 11:06:33 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/getall
-2026-05-14 11:06:33 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 11:06:33 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/tags
-2026-05-14 11:06:33 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/tags
-2026-05-14 11:06:33 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/tags
-2026-05-14 11:06:33 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/getall
-2026-05-14 11:06:33 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/getall
-2026-05-14 11:06:33 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/tags
-2026-05-14 11:06:33 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 11:06:33 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 11:06:52 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:06:52 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:06:52 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:06:52 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:11:33 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 11:11:33 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 11:13:56 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 11:13:56 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 11:14:00 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/locations
-2026-05-14 11:14:00 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:14:00 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
-2026-05-14 11:14:00 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:14:00 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
-2026-05-14 11:14:01 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 11:14:01 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 11:14:01 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:14:01 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:14:01 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:14:01 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:14:01 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
-2026-05-14 11:14:01 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
-2026-05-14 11:14:01 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 11:14:01 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 11:14:01 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:14:01 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:14:23 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:14:23 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:14:23 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:14:23 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:14:36 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 11:14:36 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /users/getall
-2026-05-14 11:14:36 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/v1/tags
-2026-05-14 11:14:36 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 11:14:36 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/getall
-2026-05-14 11:14:36 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/tags
-2026-05-14 11:14:36 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/getall
-2026-05-14 11:14:36 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 11:14:36 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/tags
-2026-05-14 11:14:36 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/getall
-2026-05-14 11:14:36 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/getall
-2026-05-14 11:14:36 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/tags
-2026-05-14 11:14:36 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/tags
-2026-05-14 11:14:36 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 11:14:36 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 11:14:43 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:14:43 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:14:43 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:14:43 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:15:16 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/getall
-2026-05-14 11:15:16 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 11:15:16 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/tags
-2026-05-14 11:15:16 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/getall
-2026-05-14 11:15:16 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 11:15:16 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/tags
-2026-05-14 11:15:16 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/tags
-2026-05-14 11:15:16 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/getall
-2026-05-14 11:15:16 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/getall
-2026-05-14 11:15:16 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/tags
-2026-05-14 11:15:17 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 11:15:17 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/posts/getAll?viewerId=2ea069b0-fdb0-46f0-81d1-a6502ebfcce5
-2026-05-14 11:15:19 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:15:19 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:15:19 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:15:19 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:15:46 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:15:46 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:15:46 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/locations
-2026-05-14 11:15:46 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/locations
-2026-05-14 11:19:01 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 11:19:01 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 11:24:01 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 11:24:01 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 11:29:01 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 11:29:01 [http-nio-8081-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 11:34:01 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/unread-count
-2026-05-14 11:34:01 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/unread-count
-2026-05-14 11:34:53 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:34:53 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:34:53 [http-nio-8081-exec-3] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Ignoring exception, response committed already: org.springframework.web.context.request.async.AsyncRequestTimeoutException
-2026-05-14 11:34:53 [http-nio-8081-exec-3] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.context.request.async.AsyncRequestTimeoutException]
-2026-05-14 11:34:53 [http-nio-8081-exec-3] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-05-14 11:37:12 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:37:12 [http-nio-8081-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:37:12 [http-nio-8081-exec-8] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Ignoring exception, response committed already: org.springframework.web.context.request.async.AsyncRequestTimeoutException
-2026-05-14 11:37:12 [http-nio-8081-exec-8] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.context.request.async.AsyncRequestTimeoutException]
-2026-05-14 11:37:12 [http-nio-8081-exec-8] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-05-14 11:37:15 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:37:15 [http-nio-8081-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:37:15 [http-nio-8081-exec-7] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Ignoring exception, response committed already: org.springframework.web.context.request.async.AsyncRequestTimeoutException
-2026-05-14 11:37:15 [http-nio-8081-exec-7] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.context.request.async.AsyncRequestTimeoutException]
-2026-05-14 11:37:15 [http-nio-8081-exec-7] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-05-14 11:46:32 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:46:32 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:46:32 [http-nio-8081-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:46:32 [http-nio-8081-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:46:32 [http-nio-8081-exec-6] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Ignoring exception, response committed already: org.springframework.web.context.request.async.AsyncRequestTimeoutException
-2026-05-14 11:46:32 [http-nio-8081-exec-10] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Ignoring exception, response committed already: org.springframework.web.context.request.async.AsyncRequestTimeoutException
-2026-05-14 11:46:32 [http-nio-8081-exec-10] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.context.request.async.AsyncRequestTimeoutException]
-2026-05-14 11:46:32 [http-nio-8081-exec-6] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.context.request.async.AsyncRequestTimeoutException]
-2026-05-14 11:46:32 [http-nio-8081-exec-6] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-05-14 11:46:32 [http-nio-8081-exec-10] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-05-14 11:46:33 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
-2026-05-14 11:47:03 [SpringApplicationShutdownHook] INFO  o.s.c.s.DefaultLifecycleProcessor - Shutdown phase 2147482623 ends with 1 bean still running after timeout of 30000ms: [webServerGracefulShutdown]
-2026-05-14 11:47:03 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:47:03 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:47:03 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:47:03 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:47:03 [http-nio-8081-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:47:03 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:47:03 [http-nio-8081-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:47:03 [http-nio-8081-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:47:03 [http-nio-8081-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:47:03 [http-nio-8081-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/v1/notifications/stream?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXZ0ZXJpYS5jb20iLCJzdWIiOiJtb29uIiwiZXhwIjoxNzc4NjYzNjkzLCJpYXQiOjE3Nzg2NTY0OTMsInVzZXJJZCI6IjJlYTA2OWIwLWZkYjAtNDZmMC04MWQxLWE2NTAyZWJmY2NlNSJ9.1wJjglUo7_RUiSd122rCgpJcDpLAoBfs15ct_LNquN0
-2026-05-14 11:47:03 [http-nio-8081-exec-3] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Ignoring exception, response committed already: org.springframework.web.context.request.async.AsyncRequestTimeoutException
-2026-05-14 11:47:03 [http-nio-8081-exec-2] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Ignoring exception, response committed already: org.springframework.web.context.request.async.AsyncRequestTimeoutException
-2026-05-14 11:47:03 [http-nio-8081-exec-1] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Ignoring exception, response committed already: org.springframework.web.context.request.async.AsyncRequestTimeoutException
-2026-05-14 11:47:03 [http-nio-8081-exec-4] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Ignoring exception, response committed already: org.springframework.web.context.request.async.AsyncRequestTimeoutException
-2026-05-14 11:47:03 [http-nio-8081-exec-9] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Ignoring exception, response committed already: org.springframework.web.context.request.async.AsyncRequestTimeoutException
-2026-05-14 11:47:03 [http-nio-8081-exec-3] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.context.request.async.AsyncRequestTimeoutException]
-2026-05-14 11:47:03 [http-nio-8081-exec-2] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.context.request.async.AsyncRequestTimeoutException]
-2026-05-14 11:47:03 [http-nio-8081-exec-1] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.context.request.async.AsyncRequestTimeoutException]
-2026-05-14 11:47:03 [http-nio-8081-exec-9] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.context.request.async.AsyncRequestTimeoutException]
-2026-05-14 11:47:03 [http-nio-8081-exec-4] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.context.request.async.AsyncRequestTimeoutException]
-2026-05-14 11:47:03 [http-nio-8081-exec-9] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-05-14 11:47:03 [http-nio-8081-exec-1] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-05-14 11:47:03 [http-nio-8081-exec-2] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-05-14 11:47:03 [http-nio-8081-exec-3] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-05-14 11:47:03 [http-nio-8081-exec-4] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-05-14 11:47:03 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-05-14 11:47:03 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown aborted with one or more requests still active
-2026-05-14 11:47:03 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2026-05-14 11:47:03 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-29 23:35:23 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-05-29 23:35:24 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-05-29 23:35:24 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2026-05-29 23:35:24 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@1dd84464]]
+2026-05-29 23:35:24 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2026-05-29 23:35:24 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2026-05-29 23:35:24 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-05-29 23:35:24 [main] INFO  c.example.backend.BackendApplication - Started BackendApplication in 8.059 seconds (process running for 8.554)
+2026-05-29 23:35:24 [main] INFO  c.e.b.c.BannedWordDataInitializer - Banned words already initialized. Skip import.
+2026-05-29 23:35:32 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-29 23:35:32 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-29 23:35:32 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2026-05-29 23:35:32 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@1dd84464]]
+2026-05-29 23:35:32 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2026-05-29 23:35:32 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-29 23:35:32 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-29 23:35:32 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

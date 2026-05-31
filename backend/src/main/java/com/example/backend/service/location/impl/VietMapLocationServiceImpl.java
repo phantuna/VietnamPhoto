@@ -1,6 +1,6 @@
 package com.example.backend.service.location.impl;
 
-import com.example.backend.dto.request.VietMapRequest;
+import com.example.backend.dto.request.vietmap.VietMapRequest;
 import com.example.backend.dto.response.location.VietMapLocationResponse;
 import com.example.backend.dto.response.vietmap.VietMapReverseResponse;
 import com.example.backend.dto.response.vietmap.VietMapSearchResponse;

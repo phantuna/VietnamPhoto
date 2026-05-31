@@ -1,10 +1,11 @@
 package com.example.backend.service.post;
 
-import com.example.backend.dto.response.LikeToggleResponse;
+import com.example.backend.dto.response.post.LikeToggleResponse;
+import com.example.backend.dto.response.notification.NotificationResponse;
 import com.example.backend.entity.Likes;
 import com.example.backend.entity.Posts;
 import com.example.backend.entity.Users;
-import com.example.backend.repository.LikeRepository;
+import com.example.backend.repository.post.LikeRepository;
 import com.example.backend.repository.post.PostsRepository;
 import com.example.backend.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +54,7 @@ public class PostLikeService {
                     post.setLikeCount(newTotal);
                     postsRepository.save(post);
 
-                    com.example.backend.dto.response.NotificationResponse notification = notificationService.createPostLikedNotification(user, post);
+                    NotificationResponse notification = notificationService.createPostLikedNotification(user, post);
                     if (notification != null) {
                         notificationSseService.sendToUser(post.getUser().getId(), notification);
                     }

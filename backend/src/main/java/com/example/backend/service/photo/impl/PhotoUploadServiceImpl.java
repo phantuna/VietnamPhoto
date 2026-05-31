@@ -275,4 +275,28 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
             log.error("Lỗi khi xóa ảnh trên Cloudinary: {}", imageUrl, e);
         }
     }
+
+    @Override
+    @Transactional
+    public String uploadAvatar(MultipartFile file, String userId) {
+        validateSingleFile(file);
+        Users user = getUserOrThrow(userId);
+
+        // 1. Kiểm duyệt hình ảnh an toàn
+        ModerationResult moderation = moderateImage(file);
+
+        // 2. Resize ảnh avatar nhỏ gọn (300px max-width, 0.85f quality)
+        ProcessedImageResult processed = imageProcessingService.process(file, 300, 0.85f);
+
+        // 3. Tải lên Cloudinary
+        String publicId = "user_" + user.getId() + "/avatar_" + UUID.randomUUID().toString().substring(0, 8);
+        String imageUrl = cloudinaryService.uploadImage(processed.getBytes(), publicId);
+
+        // 4. Cập nhật trực tiếp avatarUrl cho user trong DB
+        user.setAvatarUrl(imageUrl);
+        userRepository.save(user);
+
+        log.info("Uploaded avatar for user={} url={}", user.getUsername(), imageUrl);
+        return imageUrl;
+    }
 }

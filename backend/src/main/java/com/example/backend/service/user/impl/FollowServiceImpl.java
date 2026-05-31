@@ -1,6 +1,6 @@
 package com.example.backend.service.user.impl;
 
-import com.example.backend.dto.response.FollowStatusResponse;
+import com.example.backend.dto.response.user.FollowStatusResponse;
 import com.example.backend.entity.UserFollow;
 import com.example.backend.entity.Users;
 import com.example.backend.event.NewFollowerEvent;
@@ -123,5 +123,11 @@ public class FollowServiceImpl implements FollowService {
                 .followersCount(followersCount)
                 .followingCount(followingCount)
                 .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<String> getMutualFollowUserIds(String currentUserId) {
+        return userFollowRepository.findMutualFollowUserIds(currentUserId);
     }
 }

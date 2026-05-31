@@ -1,6 +1,6 @@
 package com.example.backend.mapper;
 
-import com.example.backend.dto.response.TagResponse;
+import com.example.backend.dto.response.tag.TagResponse;
 import com.example.backend.entity.Tags;
 import org.springframework.stereotype.Component;
 

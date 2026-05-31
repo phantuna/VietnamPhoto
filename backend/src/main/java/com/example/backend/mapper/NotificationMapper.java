@@ -1,6 +1,6 @@
 package com.example.backend.mapper;
 
-import com.example.backend.dto.response.NotificationResponse;
+import com.example.backend.dto.response.notification.NotificationResponse;
 import com.example.backend.entity.Notification;
 import com.example.backend.entity.Users;
 import org.springframework.stereotype.Component;

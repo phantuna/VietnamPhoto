@@ -30,6 +30,12 @@ public class Users extends Base {
     private String description;
     @Column(name = "unread_notification_count", nullable = false)
     private Long unreadNotificationCount = 0L;
+
+    @Column(name = "reputation_score", nullable = false)
+    private Integer reputationScore = 0;
+
+    @Column(name = "level", nullable = false)
+    private Integer level = 1;
     @ManyToMany(cascade = {
             CascadeType.MERGE
     })

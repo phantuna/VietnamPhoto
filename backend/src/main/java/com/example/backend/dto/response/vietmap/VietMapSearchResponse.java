@@ -1,6 +1,6 @@
 package com.example.backend.dto.response.vietmap;
 
-import com.example.backend.dto.request.VietMapRequest;
+import com.example.backend.dto.request.vietmap.VietMapRequest;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;

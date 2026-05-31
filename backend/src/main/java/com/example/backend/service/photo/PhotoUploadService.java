@@ -13,4 +13,6 @@ public interface PhotoUploadService {
     PhotoUploadResponse getPhotoById(String photoId);
 
     void deletePhoto(String photoId, String userId);
+
+    String uploadAvatar(MultipartFile file, String userId);
 }

@@ -1,6 +1,6 @@
 package com.example.backend.mapper;
 
-import com.example.backend.dto.response.UserResponse;
+import com.example.backend.dto.response.user.UserResponse;
 import com.example.backend.entity.Users;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +15,8 @@ public class UserMapper {
                 .avatarUrl(user.getAvatarUrl())
                 .birthday(user.getBirthday())
                 .description(user.getDescription())
+                .level(user.getLevel() != null ? user.getLevel() : 1)
+                .reputationScore(Math.max(0, user.getReputationScore() != null ? user.getReputationScore() : 0))
                 .build();
     }
 }

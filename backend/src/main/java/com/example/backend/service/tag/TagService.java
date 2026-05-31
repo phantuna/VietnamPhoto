@@ -1,6 +1,6 @@
 package com.example.backend.service.tag;
 
-import com.example.backend.dto.response.TagResponse;
+import com.example.backend.dto.response.tag.TagResponse;
 import com.example.backend.entity.Tags;
 
 import java.util.List;

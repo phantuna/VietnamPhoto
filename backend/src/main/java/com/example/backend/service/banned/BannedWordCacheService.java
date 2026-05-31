@@ -2,7 +2,7 @@ package com.example.backend.service.banned;
 
 
 import com.example.backend.entity.BannedWord;
-import com.example.backend.repository.BannedWordRepository;
+import com.example.backend.repository.tag.BannedWordRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

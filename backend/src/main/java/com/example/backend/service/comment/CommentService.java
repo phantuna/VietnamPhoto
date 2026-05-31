@@ -1,7 +1,7 @@
 package com.example.backend.service.comment;
 
-import com.example.backend.dto.request.CommentRequest;
-import com.example.backend.dto.response.CommentResponse;
+import com.example.backend.dto.request.comment.CommentRequest;
+import com.example.backend.dto.response.comment.CommentResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

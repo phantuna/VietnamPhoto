@@ -1,6 +1,7 @@
 package com.example.backend.entity;
 
 import jakarta.persistence.*;
+import com.example.backend.enums.PostStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,4 +39,14 @@ public class Posts extends Base {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Photos> photos = new ArrayList<>();
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private PostStatus status = PostStatus.ACTIVE;
+
+    @Column(name = "average_rating")
+    private Float averageRating = 0.0f;
+
+    @Column(name = "total_ratings")
+    private Integer totalRatings = 0;
 }

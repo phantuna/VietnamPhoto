@@ -1,0 +1,27 @@
+package com.example.backend.dto.response.user;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class UserResponse {
+    private String id;
+    private String avatarUrl;
+    private String username;
+    private String email;
+    private String password;
+    private LocalDate birthday;
+    private String description;
+    private Long followersCount;
+    private Long followingCount;
+    private Long postsCount;
+    private Integer level;
+    private Integer reputationScore;
+}

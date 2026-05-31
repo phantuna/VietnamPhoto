@@ -1,12 +1,12 @@
 package com.example.backend.service.notification;
 
-import com.example.backend.dto.response.NotificationResponse;
+import com.example.backend.dto.response.notification.NotificationResponse;
 import com.example.backend.entity.Notification;
 import com.example.backend.entity.Posts;
 import com.example.backend.entity.Users;
 import com.example.backend.enums.NotificationType;
 import com.example.backend.mapper.NotificationMapper;
-import com.example.backend.repository.NotificationRepository;
+import com.example.backend.repository.notification.NotificationRepository;
 import com.example.backend.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

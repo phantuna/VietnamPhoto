@@ -1,9 +1,9 @@
 package com.example.backend.service.tag.impl;
 
-import com.example.backend.dto.response.TagResponse;
+import com.example.backend.dto.response.tag.TagResponse;
 import com.example.backend.entity.Tags;
 import com.example.backend.mapper.TagMapper;
-import com.example.backend.repository.TagsRepository;
+import com.example.backend.repository.tag.TagsRepository;
 import com.example.backend.service.banned.BannedWordCacheService;
 import com.example.backend.service.tag.TagService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor

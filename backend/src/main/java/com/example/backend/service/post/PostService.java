@@ -2,10 +2,7 @@ package com.example.backend.service.post;
 
 import com.example.backend.dto.request.post.PostCreateRequest;
 import com.example.backend.dto.request.post.PostUpdateRequest;
-import com.example.backend.dto.response.PostResponse;
-import com.example.backend.entity.Posts;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.example.backend.dto.response.post.PostResponse;
 
 import java.util.List;
 

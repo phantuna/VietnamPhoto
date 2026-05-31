@@ -1,11 +1,10 @@
 package com.example.backend.service.user;
 
 
-import com.example.backend.dto.request.UserRequest;
-import com.example.backend.dto.response.UserResponse;
+import com.example.backend.dto.request.user.UserRequest;
+import com.example.backend.dto.response.user.UserResponse;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface UserService {
     UserResponse createUser(UserRequest request);

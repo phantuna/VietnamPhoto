@@ -1,6 +1,6 @@
 package com.example.backend.service.user;
 
-import com.example.backend.dto.response.FollowStatusResponse;
+import com.example.backend.dto.response.user.FollowStatusResponse;
 import com.example.backend.entity.Users;
 
 import java.util.List;
@@ -18,4 +18,7 @@ public interface FollowService {
     List<Users> getFollowers(String userId);
 
     FollowStatusResponse getFollowStatus(String followerId, String followingId);
+
+    /** Trả về danh sách userId đã follow nhau 2 chiều với currentUserId */
+    List<String> getMutualFollowUserIds(String currentUserId);
 }

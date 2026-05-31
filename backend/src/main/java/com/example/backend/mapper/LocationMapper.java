@@ -27,6 +27,8 @@ public class LocationMapper {
                 .postCount(location.getPostCount())
                 .checkInCount(location.getCheckInCount())
                 .goldenHour(location.getGoldenHour())
+                .locationType(location.getLocationType() != null ? location.getLocationType().name() : "SPOT")
+                .creatorId(location.getCreatorId())
                 .build();
 
         // 🌟 MAP THÔNG TIN THẰNG CHA BẰNG ĐỆ QUY

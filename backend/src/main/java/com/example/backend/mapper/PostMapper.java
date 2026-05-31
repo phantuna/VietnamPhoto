@@ -1,12 +1,13 @@
 package com.example.backend.mapper;
 
-import com.example.backend.dto.response.UserResponse;
+import com.example.backend.dto.response.user.UserResponse;
 import com.example.backend.dto.response.location.LocationsResponse;
-import com.example.backend.dto.request.PhotosRequest;
-import com.example.backend.dto.request.UserRequest;
-import com.example.backend.dto.response.PostResponse;
+import com.example.backend.dto.request.photo.PhotosRequest;
+import com.example.backend.dto.response.post.PostResponse;
 import com.example.backend.entity.Photos;
 import com.example.backend.entity.Posts;
+import com.example.backend.repository.comment.CommentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,7 +15,10 @@ import java.util.List;
 @Component
 public class PostMapper {
 
-    public PostResponse toResponse(Posts post, boolean liked) {
+    @Autowired
+    private CommentRepository commentRepository;
+
+    public PostResponse toResponse(Posts post, boolean liked, boolean saved) {
         if (post == null) return null;
 
         return PostResponse.builder()
@@ -22,7 +26,9 @@ public class PostMapper {
                 .caption(post.getCaption())
                 .shootingTip(post.getShootingTip())
                 .likeCount(post.getLikeCount() != null ? post.getLikeCount() : 0L)
+                .commentCount(commentRepository.countByPostId(post.getId()))
                 .liked(liked)
+                .isSaved(saved)
                 .createdDate(post.getCreatedDate())
                 .author(mapAuthor(post))
                 .location(mapLocation(post))
@@ -86,6 +92,7 @@ public class PostMapper {
         dto.setHeight(photo.getHeight());
 
         dto.setIsLocationVerified(photo.getIsLocationVerified());
+        dto.setModerationStatus(photo.getModerationStatus());
 
         if (photo.getMetadata() != null) {
             dto.setCameraMake(photo.getMetadata().getCameraMake());

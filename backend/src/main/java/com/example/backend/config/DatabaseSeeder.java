@@ -10,6 +10,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import com.example.backend.entity.Role;
+import com.example.backend.entity.Users;
+import com.example.backend.repository.user.RoleRepository;
+import com.example.backend.repository.user.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,12 +28,52 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     private final LocationsRepository locationsRepository;
     private final ObjectMapper objectMapper;
+    private final RoleRepository roleRepository;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
+        // Khởi tạo vai trò và tài khoản Admin mặc định
+        seedRolesAndAdmin();
+
         // Chỉ chạy khi bảng rỗng
         if (locationsRepository.count() == 0) {
             seedData();
+        }
+    }
+
+    private void seedRolesAndAdmin() {
+        Role adminRole = roleRepository.findById("ADMIN").orElseGet(() -> {
+            Role role = Role.builder()
+                    .id("ADMIN")
+                    .name("Admin")
+                    .description("Hệ thống quản trị tối cao")
+                    .build();
+            return roleRepository.save(role);
+        });
+
+        Role userRole = roleRepository.findById("USER").orElseGet(() -> {
+            Role role = Role.builder()
+                    .id("USER")
+                    .name("User")
+                    .description("Thành viên tiêu chuẩn")
+                    .build();
+            return roleRepository.save(role);
+        });
+
+        if (!userRepository.findByEmail("admin@photoscout.com").isPresent()) {
+            Users admin = Users.builder()
+                    .username("admin")
+                    .email("admin@photoscout.com")
+                    .password(passwordEncoder.encode("admin123"))
+                    .level(100)
+                    .reputationScore(1000)
+                    .roles(List.of(adminRole))
+                    .unreadNotificationCount(0L)
+                    .build();
+            userRepository.save(admin);
+            System.out.println("✅ Tự động khởi tạo tài khoản quản trị: admin@photoscout.com / admin123");
         }
     }
 

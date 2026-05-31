@@ -2,7 +2,7 @@ package com.example.backend.config;
 
 
 import com.example.backend.entity.BannedWord;
-import com.example.backend.repository.BannedWordRepository;
+import com.example.backend.repository.tag.BannedWordRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

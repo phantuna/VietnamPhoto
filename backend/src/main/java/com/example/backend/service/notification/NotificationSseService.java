@@ -1,6 +1,6 @@
 package com.example.backend.service.notification;
 
-import com.example.backend.dto.response.NotificationResponse;
+import com.example.backend.dto.response.notification.NotificationResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;

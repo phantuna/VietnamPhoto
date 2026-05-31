@@ -31,7 +31,11 @@ public class JwtService {
     public  String SIGNER_KEY ;
 
     // Tạo JWT
-    public String generateToken(String username,String userId) {
+    public String generateToken(String username, String userId) {
+        return generateToken(username, userId, List.of());
+    }
+
+    public String generateToken(String username, String userId, List<String> permissions) {
         try {
             JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
 
@@ -40,8 +44,8 @@ public class JwtService {
                     .issuer("devteria.com")
                     .issueTime(new Date())
                     .expirationTime(Date.from(Instant.now().plus(2, ChronoUnit.HOURS)))
-//                    .claim("permissions", permissions)
-                    .claim("userId",userId)
+                    .claim("permissions", permissions)
+                    .claim("userId", userId)
                     .build();
 
             SignedJWT signedJWT = new SignedJWT(header, claims);
@@ -52,7 +56,7 @@ public class JwtService {
             return signedJWT.serialize();
 
         } catch (Exception e) {
-            throw new RuntimeException(ErrorCode.JWT_NOT_CREATED.getMessage(),e);
+            throw new RuntimeException(ErrorCode.JWT_NOT_CREATED.getMessage(), e);
         }
     }
 

@@ -1,7 +1,7 @@
 package com.example.backend.mapper;
 
-import com.example.backend.dto.response.CommentResponse;
-import com.example.backend.dto.response.UserResponse;
+import com.example.backend.dto.response.comment.CommentResponse;
+import com.example.backend.dto.response.user.UserResponse;
 import com.example.backend.entity.Comment;
 import org.springframework.stereotype.Component;
 

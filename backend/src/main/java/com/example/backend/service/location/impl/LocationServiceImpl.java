@@ -1,9 +1,10 @@
 package com.example.backend.service.location.impl;
 
-import com.example.backend.dto.request.LocationsRequest;
+import com.example.backend.dto.request.location.LocationsRequest;
 import com.example.backend.dto.response.location.LocationsResponse;
 import com.example.backend.dto.response.location.VietMapLocationResponse;
 import com.example.backend.entity.Locations;
+import com.example.backend.enums.LocationType;
 import com.example.backend.repository.location.LocationsRepository;
 import com.example.backend.service.location.LocationService;
 import com.example.backend.mapper.LocationMapper;
@@ -25,12 +26,23 @@ public class LocationServiceImpl implements LocationService {
     private final LocationsRepository locationsRepository;
     private final LocationMapper locationMapper;
 
-    private static final double MIN_DISTANCE_METERS = 50.0; // Không cho phép tạo địa điểm trong bán kính 50m
+    // SERVICE cho phép địa điểm gần nhau hơn (nhà hàng cạnh nhau là bình thường)
+    private static final double MIN_DISTANCE_SPOT    = 50.0;  // SPOT: không cho tạo trong bán kính 50m
+    private static final double MIN_DISTANCE_SERVICE = 10.0;  // SERVICE: chỉ giới hạn 10m
 
     @Override
     @Transactional
-    public LocationsResponse createLocation(LocationsRequest request) {
-        // 0. Kiểm tra khoảng cách để tránh trùng lặp địa điểm
+    public LocationsResponse createLocation(LocationsRequest request, String creatorId) {
+        // 0. Xác định loại địa điểm (mặc định SPOT nếu FE không gửi)
+        LocationType locationType = request.getLocationType() != null
+                ? request.getLocationType()
+                : LocationType.SPOT;
+
+        double minDist = locationType == LocationType.SERVICE
+                ? MIN_DISTANCE_SERVICE
+                : MIN_DISTANCE_SPOT;
+
+        // 1. Kiểm tra khoảng cách tránh trùng lặp
         List<Locations> existingLocations = locationsRepository.findAll();
         for (Locations existing : existingLocations) {
             if (existing.getLatitude() != null && existing.getLongitude() != null) {
@@ -38,7 +50,7 @@ public class LocationServiceImpl implements LocationService {
                         request.getLatitude().doubleValue(), request.getLongitude().doubleValue(),
                         existing.getLatitude().doubleValue(), existing.getLongitude().doubleValue()
                 );
-                if (dist < MIN_DISTANCE_METERS) {
+                if (dist < minDist) {
                     throw new RuntimeException("Địa điểm này quá gần với '" + existing.getName() + "' (cách " + (int)dist + "m). Vui lòng chọn vị trí khác!");
                 }
             }
@@ -50,6 +62,8 @@ public class LocationServiceImpl implements LocationService {
         newLocation.setLongitude(request.getLongitude());
         newLocation.setDescription(request.getDescription());
         newLocation.setCategory(request.getCategory());
+        newLocation.setLocationType(locationType);
+        newLocation.setCreatorId(creatorId);  // Gán creatorId từ JWT
 
         // 1. Tự động tra cứu địa giới hành chính qua Vietmap
         if (request.getLatitude() != null && request.getLongitude() != null) {
@@ -59,19 +73,19 @@ public class LocationServiceImpl implements LocationService {
                 if (resolved != null) {
                     // Ưu tiên 1: Tìm Phường/Xã (Level 1)
                     if (resolved.getWard() != null) {
-                        locationsRepository.findFirstByNameWithTypeContainingAndLevel(resolved.getWard(), 1)
+                        locationsRepository.findFirstByNameWithTypeContainingAndLevel(resolved.getWard(), Integer.valueOf(1))
                                 .ifPresent(newLocation::setParent);
                     }
                     
                     // Ưu tiên 2: Nếu chưa tìm thấy Parent, tìm theo Quận/Huyện (Cũng thường là Level 1 hoặc cấp trung gian)
                     if (newLocation.getParent() == null && resolved.getDistrict() != null) {
-                        locationsRepository.findFirstByNameWithTypeContainingAndLevel(resolved.getDistrict(), 1)
+                        locationsRepository.findFirstByNameWithTypeContainingAndLevel(resolved.getDistrict(), Integer.valueOf(1))
                                 .ifPresent(newLocation::setParent);
                     }
 
                     // Ưu tiên 3: Nếu vẫn chưa thấy, tìm theo Tỉnh/Thành (Level 0) để đảm bảo luôn có tỉnh
-                    if (newLocation.getParent() == null && resolved.getCity() != null) {
-                        locationsRepository.findFirstByNameWithTypeContainingAndLevel(resolved.getCity(), 0)
+                    if (newLocation.getParent() == null && resolved.getProvince() != null) {
+                        locationsRepository.findFirstByNameWithTypeContainingAndLevel(resolved.getProvince(), Integer.valueOf(0))
                                 .ifPresent(newLocation::setParent);
                     }
                     
@@ -116,6 +130,7 @@ public class LocationServiceImpl implements LocationService {
     public LocationsResponse getLocationById(String id) {
 
         Locations location = locationsRepository.findById(id)
+                .filter(l -> l.getDeleted() == null || l.getDeleted() == 0)
                 .orElseThrow(() -> new RuntimeException("Location not found"));
 
         return locationMapper.toResponse(location);
@@ -126,6 +141,7 @@ public class LocationServiceImpl implements LocationService {
 
         return locationsRepository.findAll()
                 .stream()
+                .filter(l -> l.getDeleted() == null || l.getDeleted() == 0)
                 .map(locationMapper::toResponse)
                 .toList();
     }

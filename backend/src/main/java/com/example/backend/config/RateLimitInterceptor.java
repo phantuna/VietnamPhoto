@@ -1,0 +1,75 @@
+package com.example.backend.config;
+
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.Refill;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import java.time.Duration;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+@Component
+public class RateLimitInterceptor implements HandlerInterceptor {
+
+    private final Map<String, Bucket> cache = new ConcurrentHashMap<>();
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        // Skip rate limiting for OPTIONS preflight requests
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            return true;
+        }
+
+        String token = request.getHeader("Authorization");
+        String clientIp = getClientIP(request);
+
+        String key;
+        boolean isGuest = true;
+
+        if (token != null && token.startsWith("Bearer ")) {
+            // User is logged in, use token as key (or user ID if you parse it)
+            key = token;
+            isGuest = false;
+        } else {
+            // Guest user, use IP as key
+            key = clientIp;
+        }
+
+        Bucket bucket = resolveBucket(key, isGuest);
+
+        if (bucket.tryConsume(1)) {
+            return true; // Allowed
+        } else {
+            // Rate limit exceeded
+            response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().write("{\"error\": \"Bạn đang thao tác quá nhanh, vui lòng thử lại sau giây lát.\"}");
+            return false; // Blocked
+        }
+    }
+
+    private Bucket resolveBucket(String key, boolean isGuest) {
+        return cache.computeIfAbsent(key, k -> newBucket(isGuest));
+    }
+
+    private Bucket newBucket(boolean isGuest) {
+        // Logged-in user: 60 requests per minute
+        // Guest user: 10 requests per minute
+        int limit = isGuest ? 10 : 60;
+        Bandwidth limitBandwidth = Bandwidth.classic(limit, Refill.greedy(limit, Duration.ofMinutes(1)));
+        return Bucket.builder().addLimit(limitBandwidth).build();
+    }
+
+    private String getClientIP(HttpServletRequest request) {
+        String xfHeader = request.getHeader("X-Forwarded-For");
+        if (xfHeader == null) {
+            return request.getRemoteAddr();
+        }
+        return xfHeader.split(",")[0];
+    }
+}

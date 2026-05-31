@@ -1,6 +1,6 @@
 package com.example.backend.event.listener;
 
-import com.example.backend.dto.response.NotificationResponse;
+import com.example.backend.dto.response.notification.NotificationResponse;
 import com.example.backend.entity.Users;
 import com.example.backend.event.NewFollowerEvent;
 import com.example.backend.event.PostCommentedEvent;
@@ -11,7 +11,6 @@ import com.example.backend.service.user.FollowService;
 import com.example.backend.repository.post.PostsRepository;
 import com.example.backend.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
