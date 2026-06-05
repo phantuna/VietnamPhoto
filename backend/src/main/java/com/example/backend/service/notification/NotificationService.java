@@ -94,7 +94,7 @@ public class NotificationService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return notificationRepository
-                .findByReceiverIdAndDeletedOrderByCreatedAtTimeDesc(userId, 0, pageable)
+                .findNotificationsWithDetailsByReceiverId(userId, 0, pageable)
                 .map(n -> {
                     Long count = user.getUnreadNotificationCount();
                     return notificationMapper.toResponse(n, count != null ? count : 0L);

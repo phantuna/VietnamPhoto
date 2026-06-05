@@ -21,4 +21,7 @@ public interface FollowService {
 
     /** Trả về danh sách userId đã follow nhau 2 chiều với currentUserId */
     List<String> getMutualFollowUserIds(String currentUserId);
+
+    /** Trả về danh sách userId mà currentUserId đang follow */
+    List<String> getFollowingUserIds(String currentUserId);
 }

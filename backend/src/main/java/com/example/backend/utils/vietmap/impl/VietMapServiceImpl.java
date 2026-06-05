@@ -1,6 +1,6 @@
 package com.example.backend.utils.vietmap.impl;
 
-import com.example.backend.config.VietMapConfig;
+import com.example.backend.config.app.VietMapConfig;
 import com.example.backend.dto.response.vietmap.VietMapReverseResponse;
 import com.example.backend.dto.response.vietmap.VietMapSearchResponse;
 import com.example.backend.utils.vietmap.VietMapService;

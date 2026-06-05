@@ -13,10 +13,12 @@ import com.example.backend.repository.user.UserRepository;
 import com.example.backend.repository.post.LikeRepository;
 import com.example.backend.service.post.SavedPostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -61,15 +63,15 @@ public class SavedPostServiceImpl implements SavedPostService {
     }
 
     @Override
-    public List<PostResponse> getSavedPosts(String userId) {
-        List<SavedPost> savedPosts = savedPostRepository.findAllByUserId(userId);
-        return savedPosts.stream()
-                .map(s -> {
-                    Posts post = s.getPost();
+    @Transactional(readOnly = true)
+    public Page<PostResponse> getSavedPosts(String userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return savedPostRepository.findAllSavedPostsWithDetailsByUserId(userId, pageable)
+                .map(saved -> {
+                    Posts post = saved.getPost();
                     boolean liked = likeRepository.existsByUserIdAndPostId(userId, post.getId());
                     return postMapper.toResponse(post, liked, true);
-                })
-                .toList();
+                });
     }
 
     @Override

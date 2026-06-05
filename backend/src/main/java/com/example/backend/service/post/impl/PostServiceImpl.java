@@ -19,6 +19,9 @@ import com.example.backend.utils.HashtagUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +46,7 @@ public class PostServiceImpl implements PostService {
     private final SavedPostRepository savedPostRepository;
     private final ReputationService reputationService;
     private final ApplicationEventPublisher eventPublisher;
+    private final com.example.backend.service.banned.BadWordFilterService badWordFilterService;
 
     private static final double MAX_ALLOWED_DISTANCE_METERS = 5000.0;
 
@@ -75,8 +79,10 @@ public class PostServiceImpl implements PostService {
         Locations location = locationsRepository.findById(request.getLocationId())
                 .orElseThrow(() -> new RuntimeException("Location not found"));
 
+        String cleanCaption = badWordFilterService.censorText(request.getCaption());
+
         Posts post = new Posts();
-        post.setCaption(request.getCaption());
+        post.setCaption(cleanCaption);
         post.setShootingTip(request.getShootingTip());
         post.setUser(user);
         post.setLocation(location);
@@ -229,19 +235,31 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PostResponse> getAllPosts(String userId) {
-        // Lấy 30 bài mới nhất chưa bị xóa và status ACTIVE (hoặc null)
-        List<Posts> allPosts = postsRepository.findAllPostsWithDetails(
-                org.springframework.data.domain.PageRequest.of(0, 30, org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "createdDate"))
-        ).getContent();
+    public Page<PostResponse> getAllPosts(String userId, int page, int size) {
+        Page<Posts> postPage = postsRepository.findAllPostsWithDetails(
+                PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"))
+        );
 
-        return allPosts.stream()
-                .map(post -> {
-                    boolean liked = userId != null && postLikeService.isLiked(userId, post.getId());
-                    boolean saved = userId != null && savedPostRepository.existsByUserIdAndPostIdAndDeleted(userId, post.getId(), 0);
-                    return postMapper.toResponse(post, liked, saved);
-                })
-                .toList();
+        return postPage.map(post -> {
+            boolean liked = userId != null && postLikeService.isLiked(userId, post.getId());
+            boolean saved = userId != null && savedPostRepository.existsByUserIdAndPostIdAndDeleted(userId, post.getId(), 0);
+            return postMapper.toResponse(post, liked, saved);
+        });
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PostResponse> getPostsByLocation(String locationId, String userId, int page, int size) {
+        Page<Posts> postPage = postsRepository.findActivePostsByLocationIdWithDetails(
+                locationId, 
+                PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"))
+        );
+
+        return postPage.map(post -> {
+            boolean liked = userId != null && postLikeService.isLiked(userId, post.getId());
+            boolean saved = userId != null && savedPostRepository.existsByUserIdAndPostIdAndDeleted(userId, post.getId(), 0);
+            return postMapper.toResponse(post, liked, saved);
+        });
     }
 
     @Override

@@ -9,7 +9,7 @@ import com.example.backend.entity.Users;
 import com.example.backend.enums.ReportStatus;
 import com.example.backend.repository.post.PostRatingRepository;
 import com.example.backend.repository.post.PostsRepository;
-import com.example.backend.repository.post.ReportRepository;
+import com.example.backend.repository.post.report.ReportRepository;
 import com.example.backend.repository.user.UserRepository;
 import com.example.backend.service.post.PostInteractionService;
 import lombok.RequiredArgsConstructor;

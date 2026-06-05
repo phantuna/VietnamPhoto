@@ -15,14 +15,18 @@ import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<Users, String>,UserRepositoryCustom {
      Optional<Users> findByEmail(String email);
+     
+     @Query(value = "SELECT * FROM users WHERE email = :email", nativeQuery = true)
+     Optional<Users> findByEmailIncludeBanned(@Param("email") String email);
+     
      Optional<Users> findByUsername(String username);
      boolean existsByUsername(String username);
      boolean existsByEmail(String email);
      
      long countByCreatedDate(java.time.LocalDate date);
 
-     @Query(value = "SELECT u.* FROM users u JOIN (SELECT p.user_id, count(r.id) as report_count FROM posts p JOIN reports r ON r.post_id = p.id GROUP BY p.user_id) temp ON temp.user_id = u.id ORDER BY temp.report_count DESC", 
-            countQuery = "SELECT count(DISTINCT u.id) FROM users u JOIN posts p ON p.user_id = u.id JOIN reports r ON r.post_id = p.id", 
+     @Query(value = "SELECT * FROM users ORDER BY created_date DESC", 
+            countQuery = "SELECT count(*) FROM users", 
             nativeQuery = true)
      Page<Users> findAllUsersIncludeBanned(Pageable pageable);
 

@@ -60,19 +60,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponse> getAll() {
-        return userRepository.findAll()
-                .stream()
+    @Transactional(readOnly = true)
+    public org.springframework.data.domain.Page<UserResponse> getAllUsers(int page, int size) {
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+        return userRepository.findAll(pageable)
                 .map(user -> {
                     UserResponse res = userMapper.toResponse(user);
                     res.setFollowersCount(followService.countFollowers(user.getId()));
                     res.setFollowingCount(followService.countFollowing(user.getId()));
                     return res;
-                })
-                .toList();
+                });
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserResponse getById(String userId) {
         Users user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
@@ -81,6 +82,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserResponse getMe() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -105,6 +107,11 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         if (request.getUsername() != null && !request.getUsername().isBlank()) {
+            if (!request.getUsername().equals(user.getUsername())) {
+                if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+                    throw new RuntimeException("Tên người dùng (username) này đã có người sử dụng. Vui lòng chọn tên khác!");
+                }
+            }
             user.setUsername(request.getUsername());
         }
 
@@ -139,5 +146,27 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         userRepository.delete(user);
+    }
+
+    @Override
+    @Transactional
+    public void changePassword(com.example.backend.dto.request.user.ChangePasswordRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getName() == null) {
+            throw new RuntimeException("Unauthenticated");
+        }
+        String userId = authentication.getName();
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new RuntimeException("Mật khẩu cũ không chính xác");
+        }
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new RuntimeException("Xác nhận mật khẩu không khớp");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 }

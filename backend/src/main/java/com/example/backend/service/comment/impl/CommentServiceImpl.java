@@ -27,6 +27,7 @@ public class CommentServiceImpl implements CommentService {
     private final UserRepository userRepository;
     private final CommentMapper commentMapper;
     private final ApplicationEventPublisher eventPublisher;
+    private final com.example.backend.service.banned.BadWordFilterService badWordFilterService;
 
     @Override
     @Transactional
@@ -49,8 +50,10 @@ public class CommentServiceImpl implements CommentService {
             }
         }
 
+        String cleanContent = badWordFilterService.censorText(request.getContent());
+
         Comment comment = Comment.builder()
-                .content(request.getContent())
+                .content(cleanContent)
                 .post(post)
                 .user(user)
                 .parentComment(parentComment)
@@ -58,7 +61,7 @@ public class CommentServiceImpl implements CommentService {
 
         comment = commentRepository.save(comment);
 
-        eventPublisher.publishEvent(new PostCommentedEvent(user, post, request.getContent()));
+        eventPublisher.publishEvent(new PostCommentedEvent(user, post, cleanContent));
 
         return commentMapper.toResponse(comment);
     }
@@ -66,7 +69,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Page<CommentResponse> getCommentsByPostId(String postId, Pageable pageable) {
         return commentRepository
-                .findByPostIdAndParentCommentIsNull(postId, pageable)
+                .findCommentsByPostIdWithDetails(postId, pageable)
                 .map(commentMapper::toResponse);
     }
 
@@ -76,7 +79,13 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("Comment not found"));
         
-        if (!comment.getUser().getId().equals(userId)) {
+        Users currentUser = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        boolean isAdmin = currentUser.getRoles().stream()
+                .anyMatch(role -> role.getName().equalsIgnoreCase("ADMIN") || role.getId().equalsIgnoreCase("ADMIN"));
+
+        if (!comment.getUser().getId().equals(userId) && !isAdmin) {
             throw new RuntimeException("Not authorized to delete this comment");
         }
         
@@ -93,7 +102,8 @@ public class CommentServiceImpl implements CommentService {
             throw new RuntimeException("Not authorized to update this comment");
         }
 
-        comment.setContent(newContent);
+        String cleanContent = badWordFilterService.censorText(newContent);
+        comment.setContent(cleanContent);
         comment = commentRepository.save(comment);
         return commentMapper.toResponse(comment);
     }

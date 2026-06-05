@@ -8,11 +8,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface SavedPostRepository extends JpaRepository<SavedPost, String> {
+public interface SavedPostRepository extends JpaRepository<SavedPost, String>, SavedPostRepositoryCustom {
     Optional<SavedPost> findByUserIdAndPostId(String userId, String postId);
-    
-    @Query("SELECT s FROM SavedPost s WHERE s.user.id = :userId AND s.deleted = 0 ORDER BY s.createdDate DESC")
-    List<SavedPost> findAllByUserId(@Param("userId") String userId);
+
     
     boolean existsByUserIdAndPostIdAndDeleted(String userId, String postId, Integer deleted);
 }

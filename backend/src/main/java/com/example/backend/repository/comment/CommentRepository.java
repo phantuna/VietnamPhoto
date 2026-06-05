@@ -7,14 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CommentRepository extends JpaRepository<Comment, String> {
+public interface CommentRepository extends JpaRepository<Comment, String>, CommentRepositoryCustom {
 
     long countByPostId(String postId);
 
-    Page<Comment> findByPostIdAndParentCommentIsNull(
-            String postId,
-            Pageable pageable
-    );
 
     Page<Comment> findByParentCommentId(
             String parentId,

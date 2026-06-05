@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Page;
 import java.util.List;
 
 @RestController
@@ -50,10 +51,22 @@ public class PostController {
     }
 
     @GetMapping("/getAll")
-    public List<PostResponse> getAllPosts(
-            @RequestParam(required = false) String viewerId
+    public Page<PostResponse> getAllPosts(
+            @RequestParam(required = false) String viewerId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
     ) {
-        return postService.getAllPosts(viewerId);
+        return postService.getAllPosts(viewerId, page, size);
+    }
+
+    @GetMapping("/location/{locationId}")
+    public Page<PostResponse> getPostsByLocation(
+            @PathVariable String locationId,
+            @RequestParam(required = false) String viewerId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return postService.getPostsByLocation(locationId, viewerId, page, size);
     }
 
     @DeleteMapping("/delete/{id}")

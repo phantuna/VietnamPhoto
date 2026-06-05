@@ -24,4 +24,5 @@ public class UserResponse {
     private Long postsCount;
     private Integer level;
     private Integer reputationScore;
+    private java.util.List<String> roles;
 }

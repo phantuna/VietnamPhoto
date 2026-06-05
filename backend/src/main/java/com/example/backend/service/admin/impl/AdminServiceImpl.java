@@ -5,7 +5,7 @@ import com.example.backend.entity.*;
 import com.example.backend.enums.PostStatus;
 import com.example.backend.enums.ReportStatus;
 import com.example.backend.repository.post.PostsRepository;
-import com.example.backend.repository.post.ReportRepository;
+import com.example.backend.repository.post.report.ReportRepository;
 import com.example.backend.repository.user.UserRepository;
 import com.example.backend.service.admin.AdminService;
 import com.example.backend.service.user.ReputationService;
@@ -17,7 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.cache.annotation.CacheEvict;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +32,7 @@ public class AdminServiceImpl implements AdminService {
     private final ReportRepository reportRepository;
     private final ReputationService reputationService;
     private final com.example.backend.repository.location.LocationsRepository locationsRepository;
+    private final com.example.backend.repository.user.RoleRepository roleRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -75,12 +76,12 @@ public class AdminServiceImpl implements AdminService {
         if (statusStr != null && !statusStr.isEmpty() && !statusStr.equalsIgnoreCase("ALL")) {
             try {
                 ReportStatus status = ReportStatus.valueOf(statusStr.toUpperCase());
-                reports = reportRepository.findByStatus(status, pageable);
+                reports = reportRepository.findReportsByStatusWithDetails(status, pageable);
             } catch (IllegalArgumentException e) {
-                reports = reportRepository.findAll(pageable);
+                reports = reportRepository.findAllReportsWithDetails(pageable);
             }
         } else {
-            reports = reportRepository.findAll(pageable);
+            reports = reportRepository.findAllReportsWithDetails(pageable);
         }
 
         return reports.map(this::mapToResponse);
@@ -146,6 +147,28 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @Transactional
+    public void updateUserRole(String userId, boolean isAdmin) {
+        String currentUserId = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
+        if (userId.equals(currentUserId) && !isAdmin) {
+            throw new RuntimeException("Bạn không thể tự gỡ quyền ADMIN của chính mình");
+        }
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+
+        Role adminRole = roleRepository.findById("ADMIN").orElseThrow(() -> new RuntimeException("Role ADMIN không tồn tại"));
+        if (isAdmin) {
+            if (!user.getRoles().contains(adminRole)) {
+                user.getRoles().add(adminRole);
+            }
+        } else {
+            user.getRoles().remove(adminRole);
+        }
+        userRepository.save(user);
+        log.info("Cập nhật quyền admin cho user {} thành {}", userId, isAdmin);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Page<AdminUserResponse> getAllUsers(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -158,6 +181,7 @@ public class AdminServiceImpl implements AdminService {
                 .reputationScore(u.getReputationScore())
                 .level(u.getLevel())
                 .deleted(u.getDeleted())
+                .roles(u.getRoles() != null ? u.getRoles().stream().map(Role::getId).toList() : new java.util.ArrayList<>())
                 .build());
     }
 
@@ -211,6 +235,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "posts", allEntries = true)
     public void togglePostStatus(String postId, int deleted) {
         postsRepository.togglePostStatus(postId, deleted);
         log.info("Admin updated post {} status to deleted={}", postId, deleted);
@@ -219,7 +244,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional(readOnly = true)
     public List<ReportResponse> getPostReportHistory(String postId) {
-        List<Report> reports = reportRepository.findByPostId(postId);
+        List<Report> reports = reportRepository.findReportsByPostIdWithDetails(postId);
         return reports.stream().map(this::mapToResponse).toList();
     }
 
@@ -242,6 +267,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "locations", allEntries = true)
     public void toggleLocationStatus(String locationId, int deleted) {
         locationsRepository.toggleLocationStatus(locationId, deleted);
         log.info("Admin updated location {} status to deleted={}", locationId, deleted);

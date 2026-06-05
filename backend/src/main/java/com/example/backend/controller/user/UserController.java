@@ -19,8 +19,11 @@ public class UserController {
         return userService.createUser(dto);
     }
     @GetMapping("/getall")
-    public List<UserResponse> getAllUsers() {
-        return userService.getAll();
+    public org.springframework.data.domain.Page<UserResponse> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return userService.getAllUsers(page, size);
     }
 
     @GetMapping("/me")
@@ -45,5 +48,13 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable String userId) {
         userService.deleteUser(userId);
+    }
+
+    @PutMapping("/change-password")
+    public com.example.backend.dto.response.ApiResponse<String> changePassword(@RequestBody com.example.backend.dto.request.user.ChangePasswordRequest request) {
+        userService.changePassword(request);
+        com.example.backend.dto.response.ApiResponse<String> response = new com.example.backend.dto.response.ApiResponse<>();
+        response.setResult("Đổi mật khẩu thành công");
+        return response;
     }
 }

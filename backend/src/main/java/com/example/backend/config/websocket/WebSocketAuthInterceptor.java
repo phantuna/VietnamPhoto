@@ -1,4 +1,4 @@
-package com.example.backend.config;
+package com.example.backend.config.websocket;
 
 import com.example.backend.service.JwtService;
 import com.nimbusds.jwt.SignedJWT;

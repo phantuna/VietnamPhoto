@@ -108,7 +108,7 @@ public class FollowServiceImpl implements FollowService {
     @Override
     @Transactional(readOnly = true)
     public List<Users> getFollowers(String userId) {
-        return userFollowRepository.findFollowersByUserId(userId)
+        return userFollowRepository.findFollowersByUserIdWithDetails(userId)
                 .stream().map(UserFollow::getFollower).toList();
     }
 
@@ -129,5 +129,11 @@ public class FollowServiceImpl implements FollowService {
     @Transactional(readOnly = true)
     public List<String> getMutualFollowUserIds(String currentUserId) {
         return userFollowRepository.findMutualFollowUserIds(currentUserId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<String> getFollowingUserIds(String currentUserId) {
+        return userFollowRepository.findFollowingUserIds(currentUserId);
     }
 }

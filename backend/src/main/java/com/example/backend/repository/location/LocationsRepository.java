@@ -2,6 +2,10 @@ package com.example.backend.repository.location;
 
 import com.example.backend.entity.Locations;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -10,14 +14,14 @@ public interface LocationsRepository extends JpaRepository<Locations, String>,Lo
     Optional<Locations> findByCode(String code);
 
     Optional<Locations> findFirstByNameWithTypeContainingAndLevel(String nameWithType, Integer level);
+    
+    @Query(value = "SELECT l FROM Locations l LEFT JOIN FETCH l.parent p LEFT JOIN FETCH p.parent pp WHERE l.deleted = :deleted", 
+           countQuery = "SELECT count(l) FROM Locations l WHERE l.deleted = :deleted")
+    org.springframework.data.domain.Page<Locations> findByDeleted(@Param("deleted") int deleted, org.springframework.data.domain.Pageable pageable);
 
-    @org.springframework.data.jpa.repository.Query(value = "SELECT * FROM locations WHERE level = 2", 
-            countQuery = "SELECT count(*) FROM locations WHERE level = 2", 
-            nativeQuery = true)
-    org.springframework.data.domain.Page<Locations> findAllLocationsIncludeDeleted(org.springframework.data.domain.Pageable pageable);
 
-    @org.springframework.data.jpa.repository.Modifying
-    @org.springframework.transaction.annotation.Transactional
-    @org.springframework.data.jpa.repository.Query(value = "UPDATE locations SET deleted = :deleted WHERE id = :locationId", nativeQuery = true)
-    void toggleLocationStatus(@org.springframework.data.repository.query.Param("locationId") String locationId, @org.springframework.data.repository.query.Param("deleted") int deleted);
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE locations SET deleted = :deleted WHERE id = :locationId", nativeQuery = true)
+    void toggleLocationStatus(@Param("locationId") String locationId, @Param("deleted") int deleted);
 }

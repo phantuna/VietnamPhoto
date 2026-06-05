@@ -2,9 +2,9 @@ package com.example.backend.service.location;
 
 import com.example.backend.dto.request.location.LocationsRequest;
 import com.example.backend.dto.response.location.LocationsResponse;
+import org.springframework.data.domain.Page;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 
 public interface LocationService {
@@ -13,7 +13,7 @@ public interface LocationService {
 
     LocationsResponse getLocationById(String id);
 
-    List<LocationsResponse> getAllLocations();
+    Page<LocationsResponse> getAllLocations(int page, int size);
 
     LocationsResponse updateLocation(
             String id,

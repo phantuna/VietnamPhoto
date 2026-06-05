@@ -1,4 +1,4 @@
-package com.example.backend.config;
+package com.example.backend.config.websocket;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;

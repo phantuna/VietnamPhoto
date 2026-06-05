@@ -9,13 +9,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface ChatMessageRepository extends JpaRepository<ChatMessage, String> {
+import java.util.Optional;
 
-    /**
-     * Lấy tin nhắn của conversation, mới nhất trước (cho phân trang).
-     */
-    Page<ChatMessage> findByConversationIdOrderBySentAtDesc(String conversationId, Pageable pageable);
+public interface ChatMessageRepository extends JpaRepository<ChatMessage, String>, ChatMessageRepositoryCustom {
+
 
     /**
      * Đánh dấu đã đọc toàn bộ tin của người kia trong conversation này.
@@ -50,5 +47,5 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, String
             ORDER BY m.sentAt DESC
             LIMIT 1
             """)
-    java.util.Optional<ChatMessage> findLatestMessage(@Param("convId") String convId);
+    Optional<ChatMessage> findLatestMessage(@Param("convId") String convId);
 }

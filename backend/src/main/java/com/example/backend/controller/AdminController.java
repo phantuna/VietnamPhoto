@@ -1,8 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.response.ApiResponse;
-import com.example.backend.dto.response.admin.AdminStatsResponse;
-import com.example.backend.dto.response.admin.ReportResponse;
+import com.example.backend.dto.response.admin.*;
 import com.example.backend.entity.Locations;
 import com.example.backend.entity.Users;
 import com.example.backend.service.admin.AdminService;
@@ -75,22 +74,31 @@ public class AdminController {
         return response;
     }
 
+    @PutMapping("/users/{id}/role")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ApiResponse<String> updateUserRole(@PathVariable("id") String userId, @RequestParam("isAdmin") boolean isAdmin) {
+        adminService.updateUserRole(userId, isAdmin);
+        ApiResponse<String> response = new ApiResponse<>();
+        response.setResult(isAdmin ? "Đã cấp quyền Admin thành công." : "Đã hủy quyền Admin thành công.");
+        return response;
+    }
+
     @GetMapping("/users")
     @PreAuthorize("hasRole('ADMIN')")
-    public ApiResponse<Page<com.example.backend.dto.response.admin.AdminUserResponse>> getAllUsers(
+    public ApiResponse<Page<AdminUserResponse>> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        ApiResponse<Page<com.example.backend.dto.response.admin.AdminUserResponse>> response = new ApiResponse<>();
+        ApiResponse<Page<AdminUserResponse>> response = new ApiResponse<>();
         response.setResult(adminService.getAllUsers(page, size));
         return response;
     }
 
     @GetMapping("/posts")
     @PreAuthorize("hasRole('ADMIN')")
-    public ApiResponse<Page<com.example.backend.dto.response.admin.AdminPostResponse>> getAllPosts(
+    public ApiResponse<Page<AdminPostResponse>> getAllPosts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        ApiResponse<Page<com.example.backend.dto.response.admin.AdminPostResponse>> response = new ApiResponse<>();
+        ApiResponse<Page<AdminPostResponse>> response = new ApiResponse<>();
         response.setResult(adminService.getAllPosts(page, size));
         return response;
     }
@@ -114,10 +122,10 @@ public class AdminController {
 
     @GetMapping("/locations")
     @PreAuthorize("hasRole('ADMIN')")
-    public ApiResponse<Page<com.example.backend.dto.response.admin.AdminLocationResponse>> getAllLocations(
+    public ApiResponse<Page<AdminLocationResponse>> getAllLocations(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        ApiResponse<Page<com.example.backend.dto.response.admin.AdminLocationResponse>> response = new ApiResponse<>();
+        ApiResponse<Page<AdminLocationResponse>> response = new ApiResponse<>();
         response.setResult(adminService.getAllLocations(page, size));
         return response;
     }

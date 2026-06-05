@@ -8,7 +8,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserFollowRepository extends JpaRepository<UserFollow, String> {
+public interface UserFollowRepository extends JpaRepository<UserFollow, String>, UserFollowRepositoryCustom {
+
 
     /**
      * Tìm follow record còn active (deleted=0)
@@ -28,21 +29,13 @@ public interface UserFollowRepository extends JpaRepository<UserFollow, String> 
     @Query("SELECT COUNT(uf) > 0 FROM UserFollow uf WHERE uf.follower.id = :followerId AND uf.following.id = :followingId AND uf.deleted = 0")
     boolean existsByFollowerIdAndFollowingId(@Param("followerId") String followerId, @Param("followingId") String followingId);
 
-    /**
-     * Lấy danh sách followers (người theo dõi mình)
-     */
-    @Query("SELECT uf FROM UserFollow uf WHERE uf.following.id = :userId AND uf.deleted = 0")
-    List<UserFollow> findFollowersByUserId(@Param("userId") String userId);
-
-    /**
-     * Lấy danh sách following (mình đang theo dõi ai)
-     */
-    @Query("SELECT uf FROM UserFollow uf WHERE uf.follower.id = :userId AND uf.deleted = 0")
-    List<UserFollow> findFollowingByUserId(@Param("userId") String userId);
 
     long countByFollowingIdAndDeleted(String followingId, Integer deleted);
 
     long countByFollowerIdAndDeleted(String followerId, Integer deleted);
+
+    @Query("SELECT uf.following.id FROM UserFollow uf WHERE uf.follower.id = :userId AND uf.deleted = 0")
+    List<String> findFollowingUserIds(@Param("userId") String userId);
 
     /**
      * Danh sách userId đã follow nhau 2 chiều với userId của mình

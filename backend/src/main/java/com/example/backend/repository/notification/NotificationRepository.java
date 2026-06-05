@@ -12,13 +12,8 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface NotificationRepository extends JpaRepository<@NonNull Notification, String> {
+public interface NotificationRepository extends JpaRepository<@NonNull Notification, String>, NotificationRepositoryCustom {
 
-    Page<Notification> findByReceiverIdAndDeletedOrderByCreatedAtTimeDesc(
-            String receiverId,
-            Integer deleted,
-            Pageable pageable
-    );
 
     List<Notification> findByActorIdAndPostIdAndTypeAndDeleted(
             String actorId,

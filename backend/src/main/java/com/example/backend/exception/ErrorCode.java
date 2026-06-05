@@ -11,13 +11,15 @@ public enum ErrorCode {
     VALIDATION_FAILED(9000, "validation.failed"),
     INVALID_REQUEST_DATA(9001, "validation.invalid_request"),
 
-    USER_ROLE_NOT_FOUND(2300, "user_role.not_found"),
-    USER_NOT_FOUND(2301,"user.not_found"),
-    USER_EXISTED(2302,"user.existed"),
-    EMAIL_EXISTED(2303,"email.existed"),
-    INVALID_PASSWORD(1101, "auth.invalid_password"),
+    USER_ROLE_NOT_FOUND(2300, "Không tìm thấy quyền của người dùng"),
+    USER_NOT_FOUND(2301,"Tài khoản hoặc email không tồn tại"),
+    USER_EXISTED(2302,"Tài khoản đã tồn tại"),
+    EMAIL_EXISTED(2303,"Email đã tồn tại"),
+    USER_BANNED(2304, "Tài khoản của bạn đã bị khóa do vi phạm. Vui lòng liên hệ Admin."),
+    INVALID_PASSWORD(1101, "Mật khẩu không chính xác. Vui lòng thử lại."),
 
     PHOTO_LOCATION_MISMATCH(3000, "photo.location.mismatch"),
+    BANNED_WORD_EXISTED(4001, "Từ cấm này đã tồn tại trong hệ thống"),
     ;
 
 

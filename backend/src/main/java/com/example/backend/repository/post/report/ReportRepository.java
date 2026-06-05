@@ -1,4 +1,4 @@
-package com.example.backend.repository.post;
+package com.example.backend.repository.post.report;
 
 import com.example.backend.entity.Report;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,8 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 @Repository
-public interface ReportRepository extends JpaRepository<Report, String> {
+public interface ReportRepository extends JpaRepository<Report, String>, ReportRepositoryCustom {
     long countByStatus(ReportStatus status);
-    Page<Report> findByStatus(ReportStatus status, Pageable pageable);
-    java.util.List<Report> findByPostId(String postId);
 }

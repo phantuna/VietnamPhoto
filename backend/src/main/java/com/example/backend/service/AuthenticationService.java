@@ -20,8 +20,12 @@ public class AuthenticationService {
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
 
-        Users user = userRepository.findByEmail(request.getEmail())
+        Users user = userRepository.findByEmailIncludeBanned(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        if (user.getDeleted() != null && user.getDeleted() == 1) {
+            throw new AppException(ErrorCode.USER_BANNED);
+        }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new AppException(ErrorCode.INVALID_PASSWORD);

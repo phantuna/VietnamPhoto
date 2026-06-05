@@ -1,6 +1,6 @@
 package com.example.backend.controller.vietmap;
 
-import com.example.backend.config.VietMapConfig;
+import com.example.backend.config.app.VietMapConfig;
 import com.example.backend.dto.response.location.VietMapLocationResponse;
 import com.example.backend.service.location.VietMapLocationService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +22,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/vietmap")
+@RequestMapping("/api/vietmap")
 public class VietMapController {
 
     private final VietMapLocationService vietMapLocationService;
@@ -52,15 +52,20 @@ public class VietMapController {
         }
 
         // Bắt buộc chèn mapApiKey vào request để tải Tile/Style
-        builder.queryParam("apikey", vietMapConfig.getMapApiKey());
+        String apiKeyToUse = vietMapConfig.getMapApiKey() != null ? vietMapConfig.getMapApiKey() : vietMapConfig.getApiKey();
+        builder.queryParam("apikey", apiKeyToUse);
 
         try {
-            return RestClient.create().get()
+            ResponseEntity<byte[]> response = RestClient.create().get()
                     .uri(builder.build().toUri())
                     .header("Referer", "https://maps.vietmap.vn/")
                     .header("User-Agent", request.getHeader("User-Agent"))
                     .retrieve()
                     .toEntity(byte[].class);
+                    
+            return ResponseEntity.status(response.getStatusCode())
+                    .header("Content-Type", response.getHeaders().getFirst("Content-Type"))
+                    .body(response.getBody());
         } catch (HttpClientErrorException e) {
             log.error("VietMap Proxy Error: {} - Path: {}", e.getStatusCode(), path);
             return ResponseEntity.status(e.getStatusCode())

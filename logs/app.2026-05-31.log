@@ -1,0 +1,611 @@
+2026-05-31 21:54:21 [main] INFO  c.example.backend.BackendApplication - Starting BackendApplication using Java 17.0.18 with PID 26532 (D:\DATN\VietnamPhoto\backend\target\classes started by Tuna in D:\DATN\VietnamPhoto)
+2026-05-31 21:54:21 [main] DEBUG c.example.backend.BackendApplication - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-05-31 21:54:21 [main] INFO  c.example.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-31 21:54:22 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-05-31 21:54:23 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-31 21:54:23 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 121 ms. Found 16 JPA repository interfaces.
+2026-05-31 21:54:24 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-05-31 21:54:24 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-05-31 21:54:24 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-31 21:54:24 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-05-31 21:54:24 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 2207 ms
+2026-05-31 21:54:24 [main] DEBUG c.example.backend.config.JwtFilter - Filter 'jwtFilter' configured for use
+2026-05-31 21:54:24 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-31 21:54:24 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.4.Final
+2026-05-31 21:54:25 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-31 21:54:25 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-31 21:54:25 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@10b3ea72
+2026-05-31 21:54:25 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-31 21:54:25 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/VNScout]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: VNScout/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-31 21:54:27 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-31 21:54:27 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 21:54:27 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-31 21:54:30 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-31 21:54:30 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: abd2c9c1-f059-4a3f-a920-3193e4b2323a
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-05-31 21:54:30 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-05-31 21:54:30 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-05-31 21:54:30 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2026-05-31 21:54:30 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@1b1e42f0]]
+2026-05-31 21:54:30 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2026-05-31 21:54:30 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2026-05-31 21:54:30 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-05-31 21:54:30 [main] INFO  c.example.backend.BackendApplication - Started BackendApplication in 9.724 seconds (process running for 10.84)
+2026-05-31 21:54:30 [main] INFO  c.e.b.c.BannedWordDataInitializer - Banned words already initialized. Skip import.
+2026-05-31 21:55:30 [MessageBroker-1] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2026-05-31 21:56:03 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-31 21:56:03 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-31 21:56:03 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2026-05-31 21:56:03 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@1b1e42f0]]
+2026-05-31 21:56:03 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2026-05-31 21:56:03 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 21:56:03 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-31 21:56:03 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-31 22:06:38 [main] INFO  c.example.backend.BackendApplication - Starting BackendApplication using Java 17.0.18 with PID 24212 (D:\DATN\VietnamPhoto\backend\target\classes started by Tuna in D:\DATN\VietnamPhoto)
+2026-05-31 22:06:38 [main] DEBUG c.example.backend.BackendApplication - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-05-31 22:06:38 [main] INFO  c.example.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-31 22:06:38 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-05-31 22:06:39 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-31 22:06:39 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 114 ms. Found 16 JPA repository interfaces.
+2026-05-31 22:06:40 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-05-31 22:06:40 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-05-31 22:06:40 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-31 22:06:40 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-05-31 22:06:40 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 2060 ms
+2026-05-31 22:06:40 [main] DEBUG c.example.backend.config.JwtFilter - Filter 'jwtFilter' configured for use
+2026-05-31 22:06:40 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-31 22:06:40 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.4.Final
+2026-05-31 22:06:41 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-31 22:06:41 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-31 22:06:41 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@612bb755
+2026-05-31 22:06:41 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-31 22:06:41 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/VNScout]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: VNScout/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-31 22:06:43 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-31 22:06:43 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 22:06:43 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-31 22:06:45 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-31 22:06:45 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: d494e934-112f-41a7-9641-09aa0e2cd3ff
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-05-31 22:06:45 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-05-31 22:06:45 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-05-31 22:06:46 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2026-05-31 22:06:46 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2de3095c]]
+2026-05-31 22:06:46 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2026-05-31 22:06:46 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2026-05-31 22:06:46 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-05-31 22:06:46 [main] INFO  c.example.backend.BackendApplication - Started BackendApplication in 8.739 seconds (process running for 9.263)
+2026-05-31 22:06:46 [main] INFO  c.e.b.c.BannedWordDataInitializer - Banned words already initialized. Skip import.
+2026-05-31 22:06:48 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-31 22:06:48 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-31 22:06:48 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2026-05-31 22:06:48 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2de3095c]]
+2026-05-31 22:06:48 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2026-05-31 22:06:48 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 22:06:48 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-31 22:06:48 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-31 22:48:45 [main] INFO  c.example.backend.BackendApplication - Starting BackendApplication using Java 17.0.18 with PID 29708 (D:\DATN\VietnamPhoto\backend\target\classes started by Tuna in D:\DATN\VietnamPhoto)
+2026-05-31 22:48:45 [main] DEBUG c.example.backend.BackendApplication - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-05-31 22:48:45 [main] INFO  c.example.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-31 22:48:45 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-05-31 22:48:46 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-31 22:48:46 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 125 ms. Found 16 JPA repository interfaces.
+2026-05-31 22:48:47 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-05-31 22:48:47 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-05-31 22:48:47 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-31 22:48:47 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-05-31 22:48:47 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1999 ms
+2026-05-31 22:48:47 [main] DEBUG c.example.backend.config.JwtFilter - Filter 'jwtFilter' configured for use
+2026-05-31 22:48:47 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-31 22:48:47 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.4.Final
+2026-05-31 22:48:48 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-31 22:48:48 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-31 22:48:48 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2c4eae94
+2026-05-31 22:48:48 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-31 22:48:48 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/VNScout]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: VNScout/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-31 22:48:50 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-31 22:48:50 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 22:48:50 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-31 22:48:52 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-31 22:48:52 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: c71c8b59-3823-4eed-bf7b-921beeaf4c09
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-05-31 22:48:52 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-05-31 22:48:53 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-05-31 22:48:53 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2026-05-31 22:48:53 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5fc50c30]]
+2026-05-31 22:48:53 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2026-05-31 22:48:53 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2026-05-31 22:48:53 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-05-31 22:48:53 [main] INFO  c.example.backend.BackendApplication - Started BackendApplication in 8.975 seconds (process running for 9.643)
+2026-05-31 22:48:53 [main] INFO  c.e.b.c.BannedWordDataInitializer - Banned words already initialized. Skip import.
+2026-05-31 22:49:53 [MessageBroker-1] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2026-05-31 22:50:31 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-31 22:50:31 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-31 22:50:31 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2026-05-31 22:50:31 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5fc50c30]]
+2026-05-31 22:50:31 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2026-05-31 22:50:31 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 22:50:31 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-31 22:50:31 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-31 22:50:37 [main] INFO  c.example.backend.BackendApplication - Starting BackendApplication using Java 17.0.18 with PID 18948 (D:\DATN\VietnamPhoto\backend\target\classes started by Tuna in D:\DATN\VietnamPhoto)
+2026-05-31 22:50:37 [main] DEBUG c.example.backend.BackendApplication - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-05-31 22:50:37 [main] INFO  c.example.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-31 22:50:37 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-05-31 22:50:37 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-31 22:50:38 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 112 ms. Found 16 JPA repository interfaces.
+2026-05-31 22:50:38 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-05-31 22:50:38 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-05-31 22:50:38 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-31 22:50:38 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-05-31 22:50:38 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1826 ms
+2026-05-31 22:50:39 [main] DEBUG c.example.backend.config.JwtFilter - Filter 'jwtFilter' configured for use
+2026-05-31 22:50:39 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-31 22:50:39 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.4.Final
+2026-05-31 22:50:39 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-31 22:50:39 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-31 22:50:40 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@618fb1
+2026-05-31 22:50:40 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-31 22:50:40 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/VNScout]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: VNScout/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-31 22:50:42 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-31 22:50:42 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 22:50:42 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-31 22:50:44 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-31 22:50:44 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: b642ab70-cfa8-48cc-9a7d-540ce566f7ae
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-05-31 22:50:44 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-05-31 22:50:44 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-05-31 22:50:45 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2026-05-31 22:50:45 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3b4a0d96]]
+2026-05-31 22:50:45 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2026-05-31 22:50:45 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2026-05-31 22:50:45 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-05-31 22:50:45 [main] INFO  c.example.backend.BackendApplication - Started BackendApplication in 8.745 seconds (process running for 9.218)
+2026-05-31 22:50:45 [main] INFO  c.e.b.c.BannedWordDataInitializer - Banned words already initialized. Skip import.
+2026-05-31 22:51:00 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-31 22:51:00 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-31 22:51:00 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2026-05-31 22:51:00 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3b4a0d96]]
+2026-05-31 22:51:00 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2026-05-31 22:51:00 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 22:51:00 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-31 22:51:00 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-31 22:59:45 [main] INFO  c.example.backend.BackendApplication - Starting BackendApplication using Java 17.0.18 with PID 23240 (D:\DATN\VietnamPhoto\backend\target\classes started by Tuna in D:\DATN\VietnamPhoto)
+2026-05-31 22:59:45 [main] DEBUG c.example.backend.BackendApplication - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-05-31 22:59:45 [main] INFO  c.example.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-31 22:59:45 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-05-31 22:59:46 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-31 22:59:46 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 118 ms. Found 16 JPA repository interfaces.
+2026-05-31 22:59:47 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-05-31 22:59:47 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-05-31 22:59:47 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-31 22:59:47 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-05-31 22:59:47 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1987 ms
+2026-05-31 22:59:47 [main] DEBUG c.example.backend.config.JwtFilter - Filter 'jwtFilter' configured for use
+2026-05-31 22:59:47 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-31 22:59:47 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.4.Final
+2026-05-31 22:59:48 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-31 22:59:48 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-31 22:59:48 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6a54aa7a
+2026-05-31 22:59:48 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-31 22:59:48 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/VNScout]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: VNScout/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-31 22:59:50 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-31 22:59:50 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 22:59:50 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-31 22:59:52 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-31 22:59:52 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 32edf38b-37df-4cec-b3f8-d943ba37cddb
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-05-31 22:59:52 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-05-31 22:59:53 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-05-31 22:59:53 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2026-05-31 22:59:53 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7ab187ee]]
+2026-05-31 22:59:53 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2026-05-31 22:59:53 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2026-05-31 22:59:53 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-05-31 22:59:53 [main] INFO  c.example.backend.BackendApplication - Started BackendApplication in 9.229 seconds (process running for 9.698)
+2026-05-31 22:59:53 [main] INFO  c.e.b.c.BannedWordDataInitializer - Banned words already initialized. Skip import.
+2026-05-31 22:59:55 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-31 22:59:55 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-31 22:59:55 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2026-05-31 22:59:55 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7ab187ee]]
+2026-05-31 22:59:55 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2026-05-31 22:59:55 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 22:59:55 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-31 22:59:55 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-31 23:25:01 [main] INFO  c.example.backend.BackendApplication - Starting BackendApplication using Java 17.0.18 with PID 14324 (D:\DATN\VietnamPhoto\backend\target\classes started by Tuna in D:\DATN\VietnamPhoto)
+2026-05-31 23:25:01 [main] DEBUG c.example.backend.BackendApplication - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-05-31 23:25:01 [main] INFO  c.example.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-31 23:25:01 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-05-31 23:25:02 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-31 23:25:02 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 137 ms. Found 16 JPA repository interfaces.
+2026-05-31 23:25:03 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-05-31 23:25:03 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-05-31 23:25:03 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-31 23:25:03 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-05-31 23:25:03 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 2348 ms
+2026-05-31 23:25:03 [main] DEBUG c.example.backend.config.JwtFilter - Filter 'jwtFilter' configured for use
+2026-05-31 23:25:04 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-31 23:25:04 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.4.Final
+2026-05-31 23:25:05 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-31 23:25:05 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-31 23:25:05 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3f1fb139
+2026-05-31 23:25:05 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-31 23:25:05 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/VNScout]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: VNScout/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-31 23:25:07 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-31 23:25:07 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 23:25:07 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-31 23:25:10 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-31 23:25:10 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 2770fb01-d817-4974-a63b-7891f9d454e5
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-05-31 23:25:10 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-05-31 23:25:10 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-05-31 23:25:10 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2026-05-31 23:25:10 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@654b7497]]
+2026-05-31 23:25:10 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2026-05-31 23:25:10 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2026-05-31 23:25:10 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2026-05-31 23:25:10 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@654b7497]]
+2026-05-31 23:25:10 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2026-05-31 23:25:10 [main] WARN  o.s.b.w.s.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-05-31 23:25:10 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 23:25:10 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-31 23:25:10 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-31 23:25:10 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-05-31 23:25:10 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8081 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8081 or configure this application to listen on another port.
+
+2026-05-31 23:25:22 [main] INFO  c.example.backend.BackendApplication - Starting BackendApplication using Java 17.0.18 with PID 12592 (D:\DATN\VietnamPhoto\backend\target\classes started by Tuna in D:\DATN\VietnamPhoto)
+2026-05-31 23:25:22 [main] DEBUG c.example.backend.BackendApplication - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-05-31 23:25:22 [main] INFO  c.example.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-31 23:25:22 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-05-31 23:25:23 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-31 23:25:23 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 114 ms. Found 16 JPA repository interfaces.
+2026-05-31 23:25:24 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-05-31 23:25:24 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-05-31 23:25:24 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-31 23:25:24 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-05-31 23:25:24 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1954 ms
+2026-05-31 23:25:24 [main] DEBUG c.example.backend.config.JwtFilter - Filter 'jwtFilter' configured for use
+2026-05-31 23:25:24 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-31 23:25:24 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.4.Final
+2026-05-31 23:25:25 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-31 23:25:25 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-31 23:25:25 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@20db19ff
+2026-05-31 23:25:25 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-31 23:25:25 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/VNScout]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: VNScout/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-31 23:25:27 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-31 23:25:27 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 23:25:27 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-31 23:25:29 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-31 23:25:29 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: e47192b3-eff6-4c7a-9543-b60d0a190108
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-05-31 23:25:29 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-05-31 23:25:30 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-05-31 23:25:30 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2026-05-31 23:25:30 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@664f8b69]]
+2026-05-31 23:25:30 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2026-05-31 23:25:30 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2026-05-31 23:25:30 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-05-31 23:25:30 [main] INFO  c.example.backend.BackendApplication - Started BackendApplication in 9.141 seconds (process running for 9.621)
+2026-05-31 23:25:30 [main] INFO  c.e.b.c.BannedWordDataInitializer - Banned words already initialized. Skip import.
+2026-05-31 23:25:39 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-31 23:25:39 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-31 23:25:39 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2026-05-31 23:25:39 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@664f8b69]]
+2026-05-31 23:25:39 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2026-05-31 23:25:39 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 23:25:39 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-31 23:25:39 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-31 23:32:22 [main] INFO  c.example.backend.BackendApplication - Starting BackendApplication using Java 17.0.18 with PID 32556 (D:\DATN\VietnamPhoto\backend\target\classes started by Tuna in D:\DATN\VietnamPhoto)
+2026-05-31 23:32:22 [main] DEBUG c.example.backend.BackendApplication - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-05-31 23:32:22 [main] INFO  c.example.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-31 23:32:22 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-05-31 23:32:23 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-31 23:32:23 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 133 ms. Found 16 JPA repository interfaces.
+2026-05-31 23:32:24 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-05-31 23:32:24 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-05-31 23:32:24 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-31 23:32:24 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-05-31 23:32:24 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 2353 ms
+2026-05-31 23:32:24 [main] DEBUG c.example.backend.config.JwtFilter - Filter 'jwtFilter' configured for use
+2026-05-31 23:32:25 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-31 23:32:25 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.4.Final
+2026-05-31 23:32:26 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-31 23:32:26 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-31 23:32:26 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@47e725af
+2026-05-31 23:32:26 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-31 23:32:27 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/VNScout]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: VNScout/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-31 23:32:28 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-31 23:32:28 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 23:32:29 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-31 23:32:31 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-31 23:32:31 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 025e0411-fe81-4281-b225-6be91a6b708f
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-05-31 23:32:31 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-05-31 23:32:32 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-05-31 23:32:32 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2026-05-31 23:32:32 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@664f8b69]]
+2026-05-31 23:32:32 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2026-05-31 23:32:32 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2026-05-31 23:32:32 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2026-05-31 23:32:32 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@664f8b69]]
+2026-05-31 23:32:32 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2026-05-31 23:32:32 [main] WARN  o.s.b.w.s.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-05-31 23:32:32 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 23:32:32 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-31 23:32:32 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-31 23:32:32 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-05-31 23:32:32 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8081 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8081 or configure this application to listen on another port.
+
+2026-05-31 23:39:04 [main] INFO  c.example.backend.BackendApplication - Starting BackendApplication using Java 17.0.18 with PID 30704 (D:\DATN\VietnamPhoto\backend\target\classes started by Tuna in D:\DATN\VietnamPhoto)
+2026-05-31 23:39:04 [main] DEBUG c.example.backend.BackendApplication - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-05-31 23:39:04 [main] INFO  c.example.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-31 23:39:05 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-05-31 23:39:05 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-31 23:39:06 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 119 ms. Found 16 JPA repository interfaces.
+2026-05-31 23:39:06 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-05-31 23:39:06 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-05-31 23:39:06 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-31 23:39:06 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-05-31 23:39:07 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 2116 ms
+2026-05-31 23:39:07 [main] DEBUG c.example.backend.config.JwtFilter - Filter 'jwtFilter' configured for use
+2026-05-31 23:39:07 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-31 23:39:07 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.4.Final
+2026-05-31 23:39:08 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-31 23:39:08 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-31 23:39:08 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@602aeb87
+2026-05-31 23:39:08 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-31 23:39:08 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/VNScout]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: VNScout/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-31 23:39:10 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-31 23:39:10 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 23:39:10 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-31 23:39:12 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-31 23:39:12 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: ae38d1d9-098c-472d-b0b7-7da132e5247f
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-05-31 23:39:12 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-05-31 23:39:13 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-05-31 23:39:13 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2026-05-31 23:39:13 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5880bce2]]
+2026-05-31 23:39:13 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2026-05-31 23:39:13 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2026-05-31 23:39:13 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2026-05-31 23:39:13 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5880bce2]]
+2026-05-31 23:39:13 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2026-05-31 23:39:13 [main] WARN  o.s.b.w.s.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-05-31 23:39:13 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 23:39:13 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-31 23:39:13 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-31 23:39:13 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-05-31 23:39:13 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8081 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8081 or configure this application to listen on another port.
+
+2026-05-31 23:39:25 [main] INFO  c.example.backend.BackendApplication - Starting BackendApplication using Java 17.0.18 with PID 25400 (D:\DATN\VietnamPhoto\backend\target\classes started by Tuna in D:\DATN\VietnamPhoto)
+2026-05-31 23:39:25 [main] DEBUG c.example.backend.BackendApplication - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-05-31 23:39:25 [main] INFO  c.example.backend.BackendApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-31 23:39:25 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-05-31 23:39:26 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-31 23:39:26 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 110 ms. Found 16 JPA repository interfaces.
+2026-05-31 23:39:27 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-05-31 23:39:27 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-05-31 23:39:27 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-31 23:39:27 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-05-31 23:39:27 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 2093 ms
+2026-05-31 23:39:27 [main] DEBUG c.example.backend.config.JwtFilter - Filter 'jwtFilter' configured for use
+2026-05-31 23:39:28 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-31 23:39:28 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.4.Final
+2026-05-31 23:39:29 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-31 23:39:29 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-31 23:39:29 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3e73f5e7
+2026-05-31 23:39:29 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-31 23:39:29 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/VNScout]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: VNScout/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-31 23:39:31 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-31 23:39:31 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 23:39:31 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-31 23:39:33 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-31 23:39:33 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 51626b44-7f3a-4519-bf1e-edcc2f88d077
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-05-31 23:39:34 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-05-31 23:39:34 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-05-31 23:39:34 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2026-05-31 23:39:34 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3dacb1e]]
+2026-05-31 23:39:34 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2026-05-31 23:39:34 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2026-05-31 23:39:34 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-05-31 23:39:34 [main] INFO  c.example.backend.BackendApplication - Started BackendApplication in 9.754 seconds (process running for 10.212)
+2026-05-31 23:39:35 [main] INFO  c.e.b.c.BannedWordDataInitializer - Banned words already initialized. Skip import.
+2026-05-31 23:39:46 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-31 23:39:46 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-31 23:39:46 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2026-05-31 23:39:46 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3dacb1e]]
+2026-05-31 23:39:46 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2026-05-31 23:39:46 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-31 23:39:46 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-31 23:39:46 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -17,4 +19,5 @@ public class AdminUserResponse {
     private Integer reputationScore;
     private Integer level;
     private Integer deleted;
+    private List<String> roles;
 }

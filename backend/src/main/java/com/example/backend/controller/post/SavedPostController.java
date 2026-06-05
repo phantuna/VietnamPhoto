@@ -20,8 +20,12 @@ public class SavedPostController {
     }
 
     @GetMapping
-    public List<PostResponse> getSavedPosts(@RequestParam String userId) {
-        return savedPostService.getSavedPosts(userId);
+    public org.springframework.data.domain.Page<PostResponse> getSavedPosts(
+            @RequestParam String userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return savedPostService.getSavedPosts(userId, page, size);
     }
 
     @GetMapping("/status/{postId}")

@@ -59,4 +59,13 @@ public class FollowController {
     public ResponseEntity<List<String>> getMutualFollowUserIds(@RequestParam String userId) {
         return ResponseEntity.ok(followService.getMutualFollowUserIds(userId));
     }
+
+    /**
+     * Lấy danh sách userId mà userId này đang follow
+     * GET /api/v1/follow/following-ids/{userId}
+     */
+    @GetMapping("/following-ids/{userId}")
+    public ResponseEntity<List<String>> getFollowingUserIds(@PathVariable String userId) {
+        return ResponseEntity.ok(followService.getFollowingUserIds(userId));
+    }
 }

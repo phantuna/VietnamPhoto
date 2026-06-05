@@ -20,6 +20,8 @@ public interface AdminService {
 
     void unbanUser(String userId);
 
+    void updateUserRole(String userId, boolean isAdmin);
+
     Page<AdminUserResponse> getAllUsers(int page, int size);
 
     Page<AdminPostResponse> getAllPosts(int page, int size);

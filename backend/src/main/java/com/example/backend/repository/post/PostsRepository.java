@@ -18,24 +18,11 @@ public interface PostsRepository extends JpaRepository<Posts, String>,PostsRepos
     long countByUserIdAndCreatedDate(String userId, java.time.LocalDate date);
     
     long countByCreatedDate(java.time.LocalDate date);
+    
+    @Query(value = "SELECT p FROM Posts p LEFT JOIN FETCH p.user LEFT JOIN FETCH p.location WHERE p.location.id = :locationId AND p.deleted = 0 AND (p.status IS NULL OR p.status = com.example.backend.enums.PostStatus.ACTIVE)", 
+           countQuery = "SELECT count(p) FROM Posts p WHERE p.location.id = :locationId AND p.deleted = 0 AND (p.status IS NULL OR p.status = com.example.backend.enums.PostStatus.ACTIVE)")
+    Page<Posts> findActivePostsByLocationIdWithDetails(@Param("locationId") String locationId, Pageable pageable);
 
-    @Query(value = "SELECT p FROM Posts p " +
-            "JOIN FETCH p.user " +
-            "JOIN FETCH p.location " +
-            "WHERE p.deleted = 0 AND (p.status IS NULL OR p.status = 'ACTIVE')",
-            countQuery = "SELECT count(p) FROM Posts p WHERE p.deleted = 0 AND (p.status IS NULL OR p.status = 'ACTIVE')")
-    Page<Posts> findAllPostsWithDetails(Pageable pageable);
-
-    @Query("SELECT p FROM Posts p " +
-            "JOIN FETCH p.user " +
-            "JOIN FETCH p.location " +
-            "WHERE p.id = :id AND p.deleted = 0 AND (p.status IS NULL OR p.status = 'ACTIVE')")
-    Optional<Posts> findByIdWithDetails(@Param("id") String id);
-
-    @Query(value = "SELECT p.* FROM posts p JOIN (SELECT r.post_id, count(r.id) as report_count FROM reports r GROUP BY r.post_id) temp ON temp.post_id = p.id ORDER BY temp.report_count DESC", 
-           countQuery = "SELECT count(DISTINCT p.id) FROM posts p JOIN reports r ON r.post_id = p.id", 
-           nativeQuery = true)
-    org.springframework.data.domain.Page<Posts> findAllPostsIncludeDeleted(org.springframework.data.domain.Pageable pageable);
 
     @Modifying
     @Transactional

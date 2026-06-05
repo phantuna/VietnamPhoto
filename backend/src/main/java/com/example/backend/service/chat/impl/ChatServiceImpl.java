@@ -33,7 +33,7 @@ public class ChatServiceImpl implements ChatService {
     @Transactional
     public ConversationResponse getOrCreateConversation(String currentUserId, String otherUserId) {
         Conversation conv = conversationRepository
-                .findBetweenUsers(currentUserId, otherUserId)
+                .findConversationBetweenUsersWithDetails(currentUserId, otherUserId)
                 .orElseGet(() -> createNewConversation(currentUserId, otherUserId));
 
         Users other = getOtherUser(conv, currentUserId);
@@ -48,7 +48,7 @@ public class ChatServiceImpl implements ChatService {
     // ─────────────────────────────────────────────────────
     @Override
     public List<ConversationResponse> getMyConversations(String userId) {
-        return conversationRepository.findAllByUserId(userId).stream()
+        return conversationRepository.findAllConversationsWithDetailsByUserId(userId).stream()
                 .map(conv -> {
                     Users other = getOtherUser(conv, userId);
                     long unread = chatMessageRepository.countUnread(conv.getId(), userId);
@@ -64,7 +64,7 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public Page<ChatMessageResponse> getMessages(String conversationId, String currentUserId, Pageable pageable) {
         return chatMessageRepository
-                .findByConversationIdOrderBySentAtDesc(conversationId, pageable)
+                .findMessagesWithDetailsByConversationId(conversationId, pageable)
                 .map(this::toMessageResponse);
     }
 
@@ -76,7 +76,7 @@ public class ChatServiceImpl implements ChatService {
     public ChatMessageResponse saveMessage(String senderId, String receiverId, String content) {
         // Lấy hoặc tạo conversation
         Conversation conv = conversationRepository
-                .findBetweenUsers(senderId, receiverId)
+                .findConversationBetweenUsersWithDetails(senderId, receiverId)
                 .orElseGet(() -> createNewConversation(senderId, receiverId));
 
         Users sender = userRepository.findById(senderId)

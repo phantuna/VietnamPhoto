@@ -30,8 +30,11 @@ public class LocationController {
     }
 
     @GetMapping
-    public List<LocationsResponse> getAll() {
-        return locationService.getAllLocations();
+    public org.springframework.data.domain.Page<LocationsResponse> getAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return locationService.getAllLocations(page, size);
     }
 
     @DeleteMapping("/{id}")

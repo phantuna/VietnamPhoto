@@ -17,6 +17,7 @@ public class UserMapper {
                 .description(user.getDescription())
                 .level(user.getLevel() != null ? user.getLevel() : 1)
                 .reputationScore(Math.max(0, user.getReputationScore() != null ? user.getReputationScore() : 0))
+                .roles(user.getRoles() != null ? user.getRoles().stream().map(com.example.backend.entity.Role::getName).toList() : java.util.Collections.emptyList())
                 .build();
     }
 }

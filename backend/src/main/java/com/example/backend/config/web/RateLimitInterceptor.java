@@ -1,4 +1,4 @@
-package com.example.backend.config;
+package com.example.backend.config.web;
 
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
@@ -48,6 +48,14 @@ public class RateLimitInterceptor implements HandlerInterceptor {
             // Rate limit exceeded
             response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
             response.setContentType("application/json;charset=UTF-8");
+            
+            // Explicitly add CORS headers because interceptor short-circuits the chain
+            String origin = request.getHeader("Origin");
+            if (origin != null && (origin.equals("http://localhost:3000") || origin.equals("https://app.vnscout.io.vn") || origin.equals("https://vnscout.io.vn"))) {
+                response.setHeader("Access-Control-Allow-Origin", origin);
+                response.setHeader("Access-Control-Allow-Credentials", "true");
+            }
+            
             response.getWriter().write("{\"error\": \"Bạn đang thao tác quá nhanh, vui lòng thử lại sau giây lát.\"}");
             return false; // Blocked
         }
@@ -58,9 +66,9 @@ public class RateLimitInterceptor implements HandlerInterceptor {
     }
 
     private Bucket newBucket(boolean isGuest) {
-        // Logged-in user: 60 requests per minute
-        // Guest user: 10 requests per minute
-        int limit = isGuest ? 10 : 60;
+        // Logged-in user: 120 requests per minute
+        // Guest user: 60 requests per minute (increased from 10 to avoid false positives on reload)
+        int limit = isGuest ? 60 : 120;
         Bandwidth limitBandwidth = Bandwidth.classic(limit, Refill.greedy(limit, Duration.ofMinutes(1)));
         return Bucket.builder().addLimit(limitBandwidth).build();
     }

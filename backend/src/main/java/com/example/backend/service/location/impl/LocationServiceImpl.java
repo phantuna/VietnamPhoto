@@ -13,6 +13,8 @@ import com.example.backend.utils.GeoUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,12 +28,13 @@ public class LocationServiceImpl implements LocationService {
     private final LocationsRepository locationsRepository;
     private final LocationMapper locationMapper;
 
-    // SERVICE cho phép địa điểm gần nhau hơn (nhà hàng cạnh nhau là bình thường)
-    private static final double MIN_DISTANCE_SPOT    = 50.0;  // SPOT: không cho tạo trong bán kính 50m
-    private static final double MIN_DISTANCE_SERVICE = 10.0;  // SERVICE: chỉ giới hạn 10m
+    // Tăng bán kính kiểm tra để tránh rác (Spot: 3km, Service: 500m)
+    private static final double MIN_DISTANCE_SPOT    = 3000.0; // SPOT: 3km
+    private static final double MIN_DISTANCE_SERVICE = 500.0;  // SERVICE: 500m
 
     @Override
     @Transactional
+    @CacheEvict(value = "locations", allEntries = true)
     public LocationsResponse createLocation(LocationsRequest request, String creatorId) {
         // 0. Xác định loại địa điểm (mặc định SPOT nếu FE không gửi)
         LocationType locationType = request.getLocationType() != null
@@ -42,16 +45,18 @@ public class LocationServiceImpl implements LocationService {
                 ? MIN_DISTANCE_SERVICE
                 : MIN_DISTANCE_SPOT;
 
-        // 1. Kiểm tra khoảng cách tránh trùng lặp
+        // 1. Kiểm tra khoảng cách tránh trùng lặp (chỉ so sánh với các điểm check-in/dịch vụ thực tế, level >= 2)
         List<Locations> existingLocations = locationsRepository.findAll();
         for (Locations existing : existingLocations) {
-            if (existing.getLatitude() != null && existing.getLongitude() != null) {
+            boolean isCheckinPoint = existing.getLevel() != null && existing.getLevel() >= 2;
+            
+            if (isCheckinPoint && existing.getLatitude() != null && existing.getLongitude() != null) {
                 double dist = GeoUtils.distanceInMeters(
                         request.getLatitude().doubleValue(), request.getLongitude().doubleValue(),
                         existing.getLatitude().doubleValue(), existing.getLongitude().doubleValue()
                 );
                 if (dist < minDist) {
-                    throw new RuntimeException("Địa điểm này quá gần với '" + existing.getName() + "' (cách " + (int)dist + "m). Vui lòng chọn vị trí khác!");
+                    throw new RuntimeException("Địa điểm này quá gần với '" + existing.getName() + "' (cách " + (int)dist + "m). Vui lòng chọn vị trí khác hoặc sử dụng địa điểm đã có!");
                 }
             }
         }
@@ -137,17 +142,17 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public List<LocationsResponse> getAllLocations() {
-
-        return locationsRepository.findAll()
-                .stream()
-                .filter(l -> l.getDeleted() == null || l.getDeleted() == 0)
-                .map(locationMapper::toResponse)
-                .toList();
+    @Transactional(readOnly = true)
+    @Cacheable(value = "locations", key = "#page + '-' + #size")
+    public org.springframework.data.domain.Page<LocationsResponse> getAllLocations(int page, int size) {
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+        return locationsRepository.findByDeleted(0, pageable)
+                .map(locationMapper::toResponse);
     }
 
     @Override
     @Transactional
+    @CacheEvict(value = "locations", allEntries = true)
     public LocationsResponse updateLocation(
             String id,
             String name,
@@ -176,6 +181,7 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "locations", allEntries = true)
     public void deleteLocation(String id) {
 
         Locations location = locationsRepository.findById(id)
