@@ -2,6 +2,8 @@ package com.example.backend.service.tag.impl;
 
 import com.example.backend.dto.response.tag.TagResponse;
 import com.example.backend.entity.Tags;
+import com.example.backend.exception.AppException;
+import com.example.backend.exception.ErrorCode;
 import com.example.backend.mapper.TagMapper;
 import com.example.backend.repository.tag.TagsRepository;
 import com.example.backend.service.banned.BannedWordCacheService;
@@ -59,7 +61,7 @@ public class TagServiceImpl implements TagService {
 
         tagsRepository.findByName(cleanName)
                 .ifPresent(existing -> {
-                    throw new RuntimeException("Tag đã tồn tại");
+                    throw new AppException(ErrorCode.TAG_EXISTED);
                 });
 
         return createTagSafely(cleanName);
@@ -104,7 +106,7 @@ public class TagServiceImpl implements TagService {
         tagsRepository.findByName(cleanName)
                 .filter(existingTag -> !existingTag.getId().equals(tag.getId()))
                 .ifPresent(existingTag -> {
-                    throw new RuntimeException("Tên tag này đã tồn tại");
+                    throw new AppException(ErrorCode.TAG_EXISTED);
                 });
 
         tag.setName(cleanName);
@@ -123,13 +125,13 @@ public class TagServiceImpl implements TagService {
     private void validateTag(String tagName) {
         String normalized = normalizeForModeration(tagName);
         if (bannedWordCacheService.isBanned(normalized)) {
-            throw new RuntimeException("Tag chứa nội dung không phù hợp");
+            throw new AppException(ErrorCode.INVALID_TAG);
         }
     }
 
     private String normalizeTagName(String tagName) {
         if (tagName == null || tagName.trim().isEmpty()) {
-            throw new RuntimeException("Tag không được để trống");
+            throw new AppException(ErrorCode.INVALID_TAG);
         }
 
         String cleanName = tagName.toLowerCase().trim();
@@ -141,7 +143,7 @@ public class TagServiceImpl implements TagService {
         cleanName = cleanName.replaceAll("\\s+", "");
 
         if (cleanName.isEmpty()) {
-            throw new RuntimeException("Tag không hợp lệ");
+            throw new AppException(ErrorCode.INVALID_TAG);
         }
         return cleanName;
     }

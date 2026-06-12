@@ -25,6 +25,9 @@ public class PostResponse {
     private Boolean liked;
     private Boolean isSaved;
     private LocalDate createdDate;
+    
+    private Double manualLatitude;
+    private Double manualLongitude;
 
     private UserResponse author;
     private LocationsResponse location;

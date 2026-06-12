@@ -22,6 +22,10 @@ public class Posts extends Base {
     private String shootingTip;
 
     private Long likeCount;
+    
+    private Double manualLatitude;
+    
+    private Double manualLongitude;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Users user;

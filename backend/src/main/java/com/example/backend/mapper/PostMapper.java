@@ -30,6 +30,8 @@ public class PostMapper {
                 .liked(liked)
                 .isSaved(saved)
                 .createdDate(post.getCreatedDate())
+                .manualLatitude(post.getManualLatitude())
+                .manualLongitude(post.getManualLongitude())
                 .author(mapAuthor(post))
                 .location(mapLocation(post))
                 .tags(post.getTags() != null

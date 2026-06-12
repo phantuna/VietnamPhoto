@@ -1,2 +1,3 @@
 # Ignore Docker environment variables file
 .env
+logs/

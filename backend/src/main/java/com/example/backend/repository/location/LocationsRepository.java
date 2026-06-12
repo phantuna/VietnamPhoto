@@ -9,15 +9,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface LocationsRepository extends JpaRepository<Locations, String>,LocationsRepositoryCustom {
     Optional<Locations> findByCode(String code);
 
     Optional<Locations> findFirstByNameWithTypeContainingAndLevel(String nameWithType, Integer level);
     
-    @Query(value = "SELECT l FROM Locations l LEFT JOIN FETCH l.parent p LEFT JOIN FETCH p.parent pp WHERE l.deleted = :deleted", 
+    @Query(value = "SELECT l FROM Locations l WHERE l.deleted = :deleted", 
            countQuery = "SELECT count(l) FROM Locations l WHERE l.deleted = :deleted")
     org.springframework.data.domain.Page<Locations> findByDeleted(@Param("deleted") int deleted, org.springframework.data.domain.Pageable pageable);
+
+    @Query(value = "SELECT l FROM Locations l WHERE l.deleted = :deleted AND l.level = :level", 
+           countQuery = "SELECT count(l) FROM Locations l WHERE l.deleted = :deleted AND l.level = :level")
+    org.springframework.data.domain.Page<Locations> findByDeletedAndLevel(@Param("deleted") int deleted, @Param("level") Integer level, org.springframework.data.domain.Pageable pageable);
 
 
     @Modifying

@@ -69,15 +69,11 @@ public class PostServiceImpl implements PostService {
         long postsToday = postsRepository.countByUserIdAndCreatedDate(userId, today);
         
         if (postsToday >= maxPostsPerDay) {
-            if (userLevel < 4) {
-                throw new RuntimeException("Bạn đang ở Level " + userLevel + ". Giới hạn đăng bài là " + maxPostsPerDay + " bài/ngày. Hãy tương tác thêm để thăng cấp nhé!");
-            } else {
-                throw new RuntimeException("Bạn đã đạt giới hạn an toàn hệ thống (" + maxPostsPerDay + " bài/ngày).");
-            }
+            throw new AppException(ErrorCode.POST_LIMIT_EXCEEDED);
         }
 
         Locations location = locationsRepository.findById(request.getLocationId())
-                .orElseThrow(() -> new RuntimeException("Location not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.LOCATION_NOT_FOUND));
 
         String cleanCaption = badWordFilterService.censorText(request.getCaption());
 
@@ -88,6 +84,8 @@ public class PostServiceImpl implements PostService {
         post.setLocation(location);
         post.setLikeCount(0L);
         post.setStatus(com.example.backend.enums.PostStatus.ACTIVE);
+        post.setManualLatitude(request.getManualLatitude());
+        post.setManualLongitude(request.getManualLongitude());
 
         Set<String> allTags = new HashSet<>();
         // Extract tags from caption
@@ -105,7 +103,7 @@ public class PostServiceImpl implements PostService {
 
         List<Photos> uploadedPhotos = photosRepository.findAllById(request.getPhotoIds());
         if (uploadedPhotos.isEmpty()) {
-            throw new RuntimeException("Không tìm thấy ảnh hợp lệ");
+            throw new AppException(ErrorCode.PHOTO_UPLOAD_FAILED);
         }
 
         boolean forceCreate = Boolean.TRUE.equals(request.getForceCreate());
@@ -221,7 +219,7 @@ public class PostServiceImpl implements PostService {
     // 🌟 THÊM HÀM NÀY: Dùng nội bộ để lấy Entity gốc thao tác với Database
     private Posts getPostEntityById(String postId) {
         return postsRepository.findByIdWithDetails(postId)
-                .orElseThrow(() -> new RuntimeException("Bài viết không tồn tại"));
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
     }
 
     @Override
@@ -268,7 +266,7 @@ public class PostServiceImpl implements PostService {
         Posts post = getPostEntityById(postId);
 
         if (!post.getUser().getId().toString().equals(userId)) {
-            throw new RuntimeException("Bạn không có quyền chỉnh sửa bài viết này");
+            throw new AppException(ErrorCode.UNAUTHORIZED_POST_ACTION);
         }
 
         if (request.getCaption() != null) post.setCaption(request.getCaption());
@@ -295,7 +293,7 @@ public class PostServiceImpl implements PostService {
         Posts post = getPostEntityById(postId);
 
         if (!post.getUser().getId().toString().equals(userId)) {
-            throw new RuntimeException("Bạn không có quyền xóa bài viết này");
+            throw new AppException(ErrorCode.UNAUTHORIZED_POST_ACTION);
         }
 
         Locations location = post.getLocation();

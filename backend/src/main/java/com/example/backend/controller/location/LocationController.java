@@ -32,9 +32,10 @@ public class LocationController {
     @GetMapping
     public org.springframework.data.domain.Page<LocationsResponse> getAll(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) Integer level
     ) {
-        return locationService.getAllLocations(page, size);
+        return locationService.getAllLocations(page, size, level);
     }
 
     @DeleteMapping("/{id}")

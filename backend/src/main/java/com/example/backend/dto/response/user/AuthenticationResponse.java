@@ -9,5 +9,6 @@ import java.util.List;
 public class AuthenticationResponse {
     private boolean authenticated;
     private String token;
+    private String refreshToken;
     private List<String> permissions;
 }

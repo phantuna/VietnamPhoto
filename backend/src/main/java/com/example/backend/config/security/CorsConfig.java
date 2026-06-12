@@ -17,7 +17,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(rateLimitInterceptor)
-                .addPathPatterns("/api/**"); // Chỉ áp dụng giới hạn cho API, tránh làm chậm web tĩnh
+                .addPathPatterns("/api/**", "/auth/**", "/users/**"); // Áp dụng giới hạn cho API và Auth
     }
 
     @org.springframework.context.annotation.Bean

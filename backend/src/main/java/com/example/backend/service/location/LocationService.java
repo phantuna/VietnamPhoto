@@ -13,7 +13,7 @@ public interface LocationService {
 
     LocationsResponse getLocationById(String id);
 
-    Page<LocationsResponse> getAllLocations(int page, int size);
+    Page<LocationsResponse> getAllLocations(int page, int size, Integer level);
 
     LocationsResponse updateLocation(
             String id,

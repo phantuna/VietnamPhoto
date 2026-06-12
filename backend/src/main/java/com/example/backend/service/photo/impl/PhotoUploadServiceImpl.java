@@ -9,6 +9,8 @@ import com.example.backend.dto.response.photo.UploadedImageInfo;
 import com.example.backend.entity.PhotoMetadata;
 import com.example.backend.entity.Photos;
 import com.example.backend.entity.Users;
+import com.example.backend.exception.AppException;
+import com.example.backend.exception.ErrorCode;
 import com.example.backend.mapper.PhotoMapper;
 import com.example.backend.repository.photo.PhotosRepository;
 import com.example.backend.repository.user.UserRepository;
@@ -71,7 +73,7 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
                     .map(CompletableFuture::join)
                     .toList();
         } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi tải ảnh lên", e);
+            throw new AppException(ErrorCode.PHOTO_UPLOAD_FAILED);
         }
     }
 
@@ -118,30 +120,30 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
             return photoMapper.toResponse(savedPhoto, moderationMsg);
         } catch (Exception e) {
             log.error("Lỗi khi upload ảnh {}: {}", file.getOriginalFilename(), e.getMessage(), e);
-            throw new RuntimeException("Lỗi upload ảnh: " + file.getOriginalFilename(), e);
+            throw new AppException(ErrorCode.PHOTO_UPLOAD_FAILED);
         }
     }
 
 
     private void validateFiles(List<MultipartFile> files) {
         if (files == null || files.isEmpty()) {
-            throw new RuntimeException("Danh sách ảnh không được để trống");
+            throw new AppException(ErrorCode.VALIDATION_FAILED);
         }
 
         if (files.size() > MAX_FILES_PER_UPLOAD) {
-            throw new RuntimeException("Tối đa " + MAX_FILES_PER_UPLOAD + " ảnh mỗi lần tải");
+            throw new AppException(ErrorCode.VALIDATION_FAILED);
         }
     }
 
     private void validateSingleFile(MultipartFile file) {
         if (file == null || file.isEmpty()) {
-            throw new RuntimeException("File ảnh không hợp lệ");
+            throw new AppException(ErrorCode.INVALID_IMAGE);
         }
     }
 
     private Users getUserOrThrow(String userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
 
 
@@ -149,11 +151,7 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
         ModerationResult moderation = imageModerationService.moderate(file);
 
         if (moderation.isBlocked()) {
-            throw new RuntimeException(
-                    moderation.getReason() != null
-                            ? moderation.getReason()
-                            : "Nội dung ảnh vi phạm"
-            );
+            throw new AppException(ErrorCode.IMAGE_BLOCKED);
         }
 
         return moderation;
@@ -219,7 +217,7 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
                     Long.parseLong(uploadResult.get("bytes").toString())
             );
         } catch (Exception e) {
-            throw new RuntimeException("Lỗi xử lý file HEIC", e);
+            throw new AppException(ErrorCode.PHOTO_UPLOAD_FAILED);
         }
     }
 

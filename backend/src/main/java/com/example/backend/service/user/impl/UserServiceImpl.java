@@ -35,12 +35,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponse createUser(UserRequest request) {
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            throw new RuntimeException("Username đã tồn tại");
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new AppException(ErrorCode.USER_EXISTED);
         }
 
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("Email đã tồn tại");
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
 
         Users user = new Users();
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || authentication.getName() == null) {
-            throw new RuntimeException("Unauthenticated");
+            throw new AppException(ErrorCode.MISSING_TOKEN);
         }
 
         String userId = authentication.getName();
@@ -108,8 +108,8 @@ public class UserServiceImpl implements UserService {
 
         if (request.getUsername() != null && !request.getUsername().isBlank()) {
             if (!request.getUsername().equals(user.getUsername())) {
-                if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-                    throw new RuntimeException("Tên người dùng (username) này đã có người sử dụng. Vui lòng chọn tên khác!");
+                if(userRepository.existsByUsername(request.getUsername())){
+                    throw new AppException(ErrorCode.USER_EXISTED);
                 }
             }
             user.setUsername(request.getUsername());
@@ -152,18 +152,19 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void changePassword(com.example.backend.dto.request.user.ChangePasswordRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getName() == null) {
-            throw new RuntimeException("Unauthenticated");
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        if ("anonymousUser".equals(email)) {
+            throw new AppException(ErrorCode.MISSING_TOKEN);
         }
         String userId = authentication.getName();
         Users user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
-            throw new RuntimeException("Mật khẩu cũ không chính xác");
+            throw new AppException(ErrorCode.INVALID_PASSWORD);
         }
         if (!request.getNewPassword().equals(request.getConfirmPassword())) {
-            throw new RuntimeException("Xác nhận mật khẩu không khớp");
+            throw new AppException(ErrorCode.PASSWORD_MISMATCH);
         }
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));

@@ -5,6 +5,8 @@ import com.example.backend.dto.response.comment.CommentResponse;
 import com.example.backend.entity.Comment;
 import com.example.backend.entity.Posts;
 import com.example.backend.entity.Users;
+import com.example.backend.exception.AppException;
+import com.example.backend.exception.ErrorCode;
 import com.example.backend.mapper.CommentMapper;
 import com.example.backend.repository.comment.CommentRepository;
 import com.example.backend.repository.post.PostsRepository;
@@ -86,7 +88,7 @@ public class CommentServiceImpl implements CommentService {
                 .anyMatch(role -> role.getName().equalsIgnoreCase("ADMIN") || role.getId().equalsIgnoreCase("ADMIN"));
 
         if (!comment.getUser().getId().equals(userId) && !isAdmin) {
-            throw new RuntimeException("Not authorized to delete this comment");
+            throw new AppException(ErrorCode.UNAUTHORIZED_COMMENT_ACTION);
         }
         
         commentRepository.delete(comment);
@@ -99,7 +101,7 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new RuntimeException("Comment not found"));
 
         if (!comment.getUser().getId().equals(userId)) {
-            throw new RuntimeException("Not authorized to update this comment");
+            throw new AppException(ErrorCode.UNAUTHORIZED_COMMENT_ACTION);
         }
 
         String cleanContent = badWordFilterService.censorText(newContent);

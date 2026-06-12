@@ -4,6 +4,8 @@ import com.example.backend.dto.response.admin.*;
 import com.example.backend.entity.*;
 import com.example.backend.enums.PostStatus;
 import com.example.backend.enums.ReportStatus;
+import com.example.backend.exception.AppException;
+import com.example.backend.exception.ErrorCode;
 import com.example.backend.repository.post.PostsRepository;
 import com.example.backend.repository.post.report.ReportRepository;
 import com.example.backend.repository.user.UserRepository;
@@ -91,48 +93,73 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public void resolveReport(String reportId) {
         Report report = reportRepository.findById(reportId)
-                .orElseThrow(() -> new RuntimeException("Báo cáo không tồn tại"));
+                .orElseThrow(() -> new AppException(ErrorCode.REPORT_NOT_FOUND));
 
         if (report.getStatus() != ReportStatus.PENDING) {
-            throw new RuntimeException("Báo cáo này đã được xử lý");
+            throw new AppException(ErrorCode.REPORT_ALREADY_RESOLVED);
         }
-
-        report.setStatus(ReportStatus.RESOLVED);
-        reportRepository.save(report);
 
         Posts post = report.getPost();
         if (post != null) {
+            // Lấy tất cả báo cáo đang PENDING của bài viết này để xử lý chung 1 lần
+            List<Report> pendingReports = reportRepository.findReportsByPostIdWithDetails(post.getId())
+                                            .stream()
+                                            .filter(r -> r.getStatus() == ReportStatus.PENDING)
+                                            .toList();
+            for (Report r : pendingReports) {
+                r.setStatus(ReportStatus.RESOLVED);
+                reportRepository.save(r);
+            }
+
             post.setStatus(PostStatus.HIDDEN);
+            post.setDeleted(1); // Soft delete bài viết
             postsRepository.save(post);
 
             Users postOwner = post.getUser();
             if (postOwner != null) {
-                reputationService.subtractPoints(postOwner, 20, "Bài viết bị Admin xác nhận vi phạm (Report ID: " + reportId + ")");
+                reputationService.subtractPoints(postOwner, 20, "Bài viết bị Admin xác nhận vi phạm");
             }
+            log.info("Resolved {} reports for post {}. Post hidden. User penalized.", pendingReports.size(), post.getId());
+        } else {
+            report.setStatus(ReportStatus.RESOLVED);
+            reportRepository.save(report);
+            log.info("Report {} resolved.", reportId);
         }
-        log.info("Report {} resolved. Post hidden. User penalized.", reportId);
     }
 
     @Override
     @Transactional
     public void dismissReport(String reportId) {
         Report report = reportRepository.findById(reportId)
-                .orElseThrow(() -> new RuntimeException("Báo cáo không tồn tại"));
+                .orElseThrow(() -> new AppException(ErrorCode.REPORT_NOT_FOUND));
 
         if (report.getStatus() != ReportStatus.PENDING) {
-            throw new RuntimeException("Báo cáo này đã được xử lý");
+            throw new AppException(ErrorCode.REPORT_ALREADY_RESOLVED);
         }
 
-        report.setStatus(ReportStatus.DISMISSED);
-        reportRepository.save(report);
-        log.info("Report {} dismissed.", reportId);
+        Posts post = report.getPost();
+        if (post != null) {
+            List<Report> pendingReports = reportRepository.findReportsByPostIdWithDetails(post.getId())
+                                            .stream()
+                                            .filter(r -> r.getStatus() == ReportStatus.PENDING)
+                                            .toList();
+            for (Report r : pendingReports) {
+                r.setStatus(ReportStatus.DISMISSED);
+                reportRepository.save(r);
+            }
+            log.info("Dismissed {} reports for post {}.", pendingReports.size(), post.getId());
+        } else {
+            report.setStatus(ReportStatus.DISMISSED);
+            reportRepository.save(report);
+            log.info("Report {} dismissed.", reportId);
+        }
     }
 
     @Override
     @Transactional
     public void banUser(String userId) {
         Users user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         
         // Vì class Users có cấu hình @SQLDelete, gọi delete() sẽ tự động update deleted = 1
         userRepository.delete(user);
@@ -151,12 +178,12 @@ public class AdminServiceImpl implements AdminService {
     public void updateUserRole(String userId, boolean isAdmin) {
         String currentUserId = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
         if (userId.equals(currentUserId) && !isAdmin) {
-            throw new RuntimeException("Bạn không thể tự gỡ quyền ADMIN của chính mình");
+            throw new AppException(ErrorCode.CANNOT_REVOKE_OWN_ADMIN);
         }
         Users user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        Role adminRole = roleRepository.findById("ADMIN").orElseThrow(() -> new RuntimeException("Role ADMIN không tồn tại"));
+        Role adminRole = roleRepository.findById("ADMIN").orElseThrow(() -> new AppException(ErrorCode.USER_ROLE_NOT_FOUND));
         if (isAdmin) {
             if (!user.getRoles().contains(adminRole)) {
                 user.getRoles().add(adminRole);

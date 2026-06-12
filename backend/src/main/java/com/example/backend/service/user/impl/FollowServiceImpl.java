@@ -4,6 +4,8 @@ import com.example.backend.dto.response.user.FollowStatusResponse;
 import com.example.backend.entity.UserFollow;
 import com.example.backend.entity.Users;
 import com.example.backend.event.NewFollowerEvent;
+import com.example.backend.exception.AppException;
+import com.example.backend.exception.ErrorCode;
 import com.example.backend.repository.user.UserFollowRepository;
 import com.example.backend.repository.user.UserRepository;
 import com.example.backend.service.user.FollowService;
@@ -27,13 +29,13 @@ public class FollowServiceImpl implements FollowService {
     @Transactional
     public FollowStatusResponse toggleFollow(String followerId, String followingId) {
         if (followerId.equals(followingId)) {
-            throw new RuntimeException("Bạn không thể tự theo dõi chính mình");
+            throw new AppException(ErrorCode.CANNOT_FOLLOW_YOURSELF);
         }
 
         Users follower = userRepository.findById(followerId)
-                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         Users following = userRepository.findById(followingId)
-                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         // Tìm kể cả record đã soft-delete
         Optional<UserFollow> existing = userFollowRepository.findByFollowerIdAndFollowingId(followerId, followingId);

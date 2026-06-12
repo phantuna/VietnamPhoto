@@ -19,6 +19,8 @@ services:
       - CLOUD_API_SECRET=${CLOUD_API_SECRET}
       - VIETMAP_API_KEY=${VIETMAP_API_KEY}
       - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

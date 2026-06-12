@@ -1,6 +1,8 @@
 package com.example.backend.service.banned;
 
 import com.example.backend.entity.BannedWord;
+import com.example.backend.exception.AppException;
+import com.example.backend.exception.ErrorCode;
 import com.example.backend.repository.tag.BannedWordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -62,7 +64,7 @@ public class BannedWordService {
 
     private String normalizeWordForStore(String input) {
         if (input == null || input.trim().isEmpty()) {
-            throw new RuntimeException("Từ cấm không được để trống");
+            throw new AppException(ErrorCode.VALIDATION_FAILED);
         }
 
         return input.toLowerCase()
@@ -76,8 +78,8 @@ public class BannedWordService {
         }
 
         String cleanType = type.trim().toUpperCase();
-        if (!cleanType.equals("EXACT") && !cleanType.equals("CONTAINS")) {
-            throw new RuntimeException("Type chỉ được là EXACT hoặc CONTAINS");
+        if (!type.equalsIgnoreCase("EXACT") && !type.equalsIgnoreCase("CONTAINS")) {
+            throw new AppException(ErrorCode.VALIDATION_FAILED);
         }
 
         return cleanType;

@@ -47,7 +47,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         Role adminRole = roleRepository.findById("ADMIN").orElseGet(() -> {
             Role role = Role.builder()
                     .id("ADMIN")
-                    .name("Admin")
+                    .name("ADMIN")
                     .description("Hệ thống quản trị tối cao")
                     .build();
             return roleRepository.save(role);
@@ -56,7 +56,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         Role userRole = roleRepository.findById("USER").orElseGet(() -> {
             Role role = Role.builder()
                     .id("USER")
-                    .name("User")
+                    .name("USER")
                     .description("Thành viên tiêu chuẩn")
                     .build();
             return roleRepository.save(role);
