@@ -1,6 +1,12 @@
 package com.example.backend.config.security;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -20,10 +26,10 @@ public class CorsConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/**", "/auth/**", "/users/**"); // Áp dụng giới hạn cho API và Auth
     }
 
-    @org.springframework.context.annotation.Bean
-    public org.springframework.boot.web.servlet.FilterRegistrationBean<org.springframework.web.filter.CorsFilter> customCorsFilter() {
-        org.springframework.web.cors.UrlBasedCorsConfigurationSource source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
-        org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();
+    @Bean
+    public FilterRegistrationBean<CorsFilter> customCorsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:3000");
         config.addAllowedOrigin("https://app.vnscout.io.vn");
@@ -32,8 +38,8 @@ public class CorsConfig implements WebMvcConfigurer {
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
         
-        org.springframework.boot.web.servlet.FilterRegistrationBean<org.springframework.web.filter.CorsFilter> bean = new org.springframework.boot.web.servlet.FilterRegistrationBean<>(new org.springframework.web.filter.CorsFilter(source));
-        bean.setOrder(org.springframework.core.Ordered.HIGHEST_PRECEDENCE);
+        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
+        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return bean;
     }
 }

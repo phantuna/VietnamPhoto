@@ -81,7 +81,7 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
     @Transactional(readOnly = true)
     public PhotoUploadResponse getPhotoById(String photoId) {
         Photos photo = photosRepository.findById(photoId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy ảnh"));
+                .orElseThrow(() -> new AppException(ErrorCode.PHOTO_NOT_FOUND));
 
         return photoMapper.toResponse(photo);
     }
@@ -90,7 +90,7 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
     @Transactional
     public void deletePhoto(String photoId, String userId) {
         Photos photo = photosRepository.findById(photoId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy ảnh"));
+                .orElseThrow(() -> new AppException(ErrorCode.PHOTO_NOT_FOUND));
 
 //        validatePhotoOwnership(photo, userId);
 

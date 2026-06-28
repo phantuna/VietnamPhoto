@@ -151,9 +151,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void changePassword(com.example.backend.dto.request.user.ChangePasswordRequest request) {
+        // getName() trả về userId (JWT sub claim = userId, không phải email)
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        if ("anonymousUser".equals(email)) {
+        if (authentication == null || "anonymousUser".equals(authentication.getName())) {
             throw new AppException(ErrorCode.MISSING_TOKEN);
         }
         String userId = authentication.getName();

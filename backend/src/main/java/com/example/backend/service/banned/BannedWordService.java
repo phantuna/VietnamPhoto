@@ -55,7 +55,7 @@ public class BannedWordService {
     @Transactional
     public void deleteWord(String id) {
         BannedWord bannedWord = bannedWordRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy từ cấm"));
+                .orElseThrow(() -> new AppException(ErrorCode.BANNED_WORD_NOT_FOUND));
 
         bannedWordRepository.delete(bannedWord);
         bannedWordCacheService.removeFromCache(bannedWord);

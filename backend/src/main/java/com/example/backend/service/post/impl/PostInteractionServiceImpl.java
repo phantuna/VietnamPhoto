@@ -7,6 +7,8 @@ import com.example.backend.entity.Posts;
 import com.example.backend.entity.Report;
 import com.example.backend.entity.Users;
 import com.example.backend.enums.ReportStatus;
+import com.example.backend.exception.AppException;
+import com.example.backend.exception.ErrorCode;
 import com.example.backend.repository.post.PostRatingRepository;
 import com.example.backend.repository.post.PostsRepository;
 import com.example.backend.repository.post.report.ReportRepository;
@@ -31,10 +33,10 @@ public class PostInteractionServiceImpl implements PostInteractionService {
     @Transactional
     public void ratePost(String postId, String userId, RatePostRequest request) {
         Posts post = postsRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Bài viết không tồn tại"));
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
 
         Users user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         PostRating rating = postRatingRepository.findByPostIdAndUserId(postId, userId)
                 .orElse(new PostRating());
@@ -65,10 +67,10 @@ public class PostInteractionServiceImpl implements PostInteractionService {
     @Transactional
     public void reportPost(String postId, String userId, ReportPostRequest request) {
         Posts post = postsRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Bài viết không tồn tại"));
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
 
         Users reporter = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         Report report = new Report();
         report.setPost(post);
@@ -81,10 +83,15 @@ public class PostInteractionServiceImpl implements PostInteractionService {
     }
 
     private void autoFlagPost(Posts post) {
-        // Kiểm tra xem bài viết đã bị auto-flag trước đó chưa (để tránh spam report)
-        // Vì đơn giản, chúng ta có thể tạo report nếu chưa có pending report tự động nào.
-        // Nhưng tạm thời cứ tạo 1 report mới với reporter = null
-        
+        // Guard: tránh tạo nhiều auto-report trùng cho cùng 1 bài viết
+        boolean alreadyFlagged = reportRepository.existsByPostAndReporterIsNullAndStatus(
+                post, ReportStatus.PENDING
+        );
+        if (alreadyFlagged) {
+            log.info("Post {} đã được auto-flag trước đó (PENDING), bỏ qua.", post.getId());
+            return;
+        }
+
         Report report = new Report();
         report.setPost(post);
         report.setReporter(null); // Hệ thống tự động

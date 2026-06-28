@@ -2,16 +2,15 @@ package com.example.backend.service;
 
 import com.example.backend.dto.request.user.AuthenticationRequest;
 import com.example.backend.dto.response.user.AuthenticationResponse;
+import com.example.backend.entity.RefreshToken;
 import com.example.backend.entity.Users;
 import com.example.backend.exception.AppException;
 import com.example.backend.exception.ErrorCode;
 import com.example.backend.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Random;
@@ -80,27 +79,29 @@ public class AuthenticationService {
                 .build();
     }
     public AuthenticationResponse refreshToken(String requestRefreshToken) {
-        return refreshTokenService.findByToken(requestRefreshToken)
-                .map(refreshTokenService::verifyExpiration)
-                .map(com.example.backend.entity.RefreshToken::getUser)
-                .map(user -> {
-                    java.util.List<String> permissions = new java.util.ArrayList<>();
-                    if (user.getRoles() != null) {
-                        user.getRoles().forEach(role -> {
-                            permissions.add("ROLE_" + role.getId().toUpperCase());
-                        });
-                    }
-                    if (permissions.isEmpty()) {
-                        permissions.add("ROLE_USER");
-                    }
-                    String token = jwtService.generateToken(user.getUsername(), user.getId(), permissions);
-                    
-                    return AuthenticationResponse.builder()
-                            .authenticated(true)
-                            .token(token)
-                            .refreshToken(requestRefreshToken)
-                            .build();
-                }).orElseThrow(() -> new AppException(ErrorCode.INVALID_TOKEN));
+        // Dùng imperative style thay vì Optional chain lồng để tránh exception bị nuốt trong map()
+        RefreshToken rt = refreshTokenService.findByToken(requestRefreshToken)
+                .orElseThrow(() -> new AppException(ErrorCode.INVALID_TOKEN));
+
+        refreshTokenService.verifyExpiration(rt); // Throw INVALID_TOKEN nếu hết hạn
+
+        Users user = rt.getUser();
+        java.util.List<String> permissions = new java.util.ArrayList<>();
+        if (user.getRoles() != null) {
+            user.getRoles().forEach(role -> {
+                permissions.add("ROLE_" + role.getId().toUpperCase());
+            });
+        }
+        if (permissions.isEmpty()) {
+            permissions.add("ROLE_USER");
+        }
+        String token = jwtService.generateToken(user.getUsername(), user.getId(), permissions);
+
+        return AuthenticationResponse.builder()
+                .authenticated(true)
+                .token(token)
+                .refreshToken(requestRefreshToken)
+                .build();
     }
 
     public void forgotPassword(String email) {

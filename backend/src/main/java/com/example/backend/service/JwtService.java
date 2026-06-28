@@ -56,7 +56,7 @@ public class JwtService {
             return signedJWT.serialize();
 
         } catch (Exception e) {
-            throw new RuntimeException(ErrorCode.JWT_NOT_CREATED.getMessage(), e);
+            throw new AppException(ErrorCode.JWT_NOT_CREATED);
         }
     }
 
@@ -71,6 +71,8 @@ public class JwtService {
             }
 
             return signedJWT;
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException(ErrorCode.INVALID_TOKEN);
         }

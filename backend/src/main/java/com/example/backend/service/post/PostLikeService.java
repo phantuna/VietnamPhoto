@@ -5,6 +5,8 @@ import com.example.backend.dto.response.notification.NotificationResponse;
 import com.example.backend.entity.Likes;
 import com.example.backend.entity.Posts;
 import com.example.backend.entity.Users;
+import com.example.backend.exception.AppException;
+import com.example.backend.exception.ErrorCode;
 import com.example.backend.repository.post.LikeRepository;
 import com.example.backend.repository.post.PostsRepository;
 import com.example.backend.repository.user.UserRepository;
@@ -25,7 +27,7 @@ public class PostLikeService {
     @Transactional
     public LikeToggleResponse toggleLike(String userId, String postId) {
         Posts post = postsRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy bài viết"));
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
 
         long currentLikes = post.getLikeCount() != null ? post.getLikeCount() : 0L;
 
@@ -43,7 +45,7 @@ public class PostLikeService {
                 })
                 .orElseGet(() -> {
                     Users user = userRepository.findById(userId)
-                            .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+                            .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
                     Likes like = new Likes();
                     like.setUser(user);

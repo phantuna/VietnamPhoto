@@ -97,7 +97,7 @@ public class TagServiceImpl implements TagService {
     @Transactional
     public TagResponse updateTag(String tagId, String newName) {
         Tags tag = tagsRepository.findById(tagId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy tag"));
+                .orElseThrow(() -> new AppException(ErrorCode.TAG_NOT_FOUND));
 
         String cleanName = normalizeTagName(newName);
 
@@ -117,7 +117,7 @@ public class TagServiceImpl implements TagService {
     @Transactional
     public void deleteTag(String tagId) {
         Tags tag = tagsRepository.findById(tagId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy tag"));
+                .orElseThrow(() -> new AppException(ErrorCode.TAG_NOT_FOUND));
 
         tagsRepository.delete(tag);
     }

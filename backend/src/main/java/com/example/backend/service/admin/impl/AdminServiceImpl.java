@@ -112,7 +112,8 @@ public class AdminServiceImpl implements AdminService {
             }
 
             post.setStatus(PostStatus.HIDDEN);
-            post.setDeleted(1); // Soft delete bài viết
+            post.setDeleted(1); // Soft-delete bài viết
+            post.setDeletedAt(java.time.LocalDateTime.now()); // Đặt thủ công vì @SQLDelete chỉ chạy khi gọi delete()
             postsRepository.save(post);
 
             Users postOwner = post.getUser();

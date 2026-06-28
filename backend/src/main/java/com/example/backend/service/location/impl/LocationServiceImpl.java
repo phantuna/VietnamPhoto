@@ -34,9 +34,10 @@ public class LocationServiceImpl implements LocationService {
     private final LocationsRepository locationsRepository;
     private final LocationMapper locationMapper;
 
-    // Tăng bán kính kiểm tra để tránh rác (Spot: 3km, Service: 500m)
-    private static final double MIN_DISTANCE_SPOT    = 300.0; // SPOT: 3km
-    private static final double MIN_DISTANCE_SERVICE = 500.0;  // SERVICE: 500m
+    // Bán kính kiểm tra trùng lặp
+    private static final double HARD_MIN_DISTANCE    = 20.0;   // Dưới 20m cấm tuyệt đối (tránh spam tọa độ)
+    private static final double CONDITIONAL_SPOT_DIST = 300.0;  // SPOT: Bán kính kiểm tra trùng tên 300m
+    private static final double CONDITIONAL_SERV_DIST = 500.0;  // SERVICE: Bán kính kiểm tra trùng tên 500m
 
     @Override
     @Transactional
@@ -47,11 +48,11 @@ public class LocationServiceImpl implements LocationService {
                 ? request.getLocationType()
                 : LocationType.SPOT;
 
-        double minDist = locationType == LocationType.SERVICE
-                ? MIN_DISTANCE_SERVICE
-                : MIN_DISTANCE_SPOT;
+        double conditionalDist = locationType == LocationType.SERVICE
+                ? CONDITIONAL_SERV_DIST
+                : CONDITIONAL_SPOT_DIST;
 
-        // 1. Kiểm tra khoảng cách tránh trùng lặp (chỉ so sánh với các điểm check-in/dịch vụ thực tế, level >= 2)
+        // 1. Kiểm tra khoảng cách kết hợp kiểm tra trùng tên để tránh spam địa điểm lớn
         List<Locations> existingLocations = locationsRepository.findAll();
         for (Locations existing : existingLocations) {
             boolean isCheckinPoint = existing.getLevel() != null && existing.getLevel() >= 2;
@@ -61,8 +62,17 @@ public class LocationServiceImpl implements LocationService {
                         request.getLatitude().doubleValue(), request.getLongitude().doubleValue(),
                         existing.getLatitude().doubleValue(), existing.getLongitude().doubleValue()
                 );
-                if (dist < minDist) {
+
+                // TH1: Quá sát nhau (< 20m) -> cấm tuyệt đối để tránh spam pin trùng
+                if (dist < HARD_MIN_DISTANCE) {
                     throw new AppException(ErrorCode.LOCATION_TOO_CLOSE);
+                }
+
+                // TH2: Nằm trong bán kính cảnh báo (< 300m/500m) và có tên tương tự nhau -> cấm để tránh tạo trùng lặp cùng địa điểm
+                if (dist < conditionalDist) {
+                    if (isNameSimilar(request.getName(), existing.getName())) {
+                        throw new AppException(ErrorCode.LOCATION_TOO_CLOSE);
+                    }
                 }
             }
         }
@@ -130,7 +140,7 @@ public class LocationServiceImpl implements LocationService {
 
         Locations location = locationsRepository.findById(id)
                 .filter(l -> l.getDeleted() == null || l.getDeleted() == 0)
-                .orElseThrow(() -> new RuntimeException("Location not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.LOCATION_NOT_FOUND));
 
         return locationMapper.toResponse(location);
     }
@@ -172,7 +182,7 @@ public class LocationServiceImpl implements LocationService {
     ) {
 
         Locations location = locationsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Location not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.LOCATION_NOT_FOUND));
 
         VietMapLocationResponse resolved = null;
         if (latitude != null && longitude != null) {
@@ -193,8 +203,25 @@ public class LocationServiceImpl implements LocationService {
     public void deleteLocation(String id) {
 
         Locations location = locationsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Location not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.LOCATION_NOT_FOUND));
 
         locationsRepository.delete(location);
+    }
+
+    private boolean isNameSimilar(String name1, String name2) {
+        if (name1 == null || name2 == null) {
+            return false;
+        }
+        String n1 = normalizeString(name1);
+        String n2 = normalizeString(name2);
+        return n1.contains(n2) || n2.contains(n1);
+    }
+
+    private String normalizeString(String input) {
+        return java.text.Normalizer.normalize(input, java.text.Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")
+                .toLowerCase()
+                .replaceAll("[^a-z0-9]", "")
+                .trim();
     }
 }

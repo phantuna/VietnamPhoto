@@ -13,6 +13,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import com.example.backend.exception.AppException;
+import com.example.backend.exception.ErrorCode;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -80,7 +82,7 @@ public class ChatServiceImpl implements ChatService {
                 .orElseGet(() -> createNewConversation(senderId, receiverId));
 
         Users sender = userRepository.findById(senderId)
-                .orElseThrow(() -> new RuntimeException("User not found: " + senderId));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         ChatMessage msg = ChatMessage.builder()
                 .conversation(conv)
@@ -114,9 +116,9 @@ public class ChatServiceImpl implements ChatService {
         String larger  = idA.compareTo(idB) <= 0 ? idB : idA;
 
         Users user1 = userRepository.findById(smaller)
-                .orElseThrow(() -> new RuntimeException("User not found: " + smaller));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         Users user2 = userRepository.findById(larger)
-                .orElseThrow(() -> new RuntimeException("User not found: " + larger));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         Conversation conv = Conversation.builder()
                 .user1(user1)

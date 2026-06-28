@@ -20,7 +20,7 @@ public class CommentMapper {
         List<CommentResponse> replies = null;
         if (comment.getReplies() != null && !comment.getReplies().isEmpty()) {
             replies = comment.getReplies().stream()
-                    .sorted(Comparator.comparing(Comment::getCreatedDate).thenComparing(Comment::getId))
+                    .sorted(Comparator.comparing(Comment::getCreatedAt).thenComparing(Comment::getId))
                     .map(this::toResponseWithoutReplies)
                     .collect(Collectors.toList());
         }
@@ -28,7 +28,7 @@ public class CommentMapper {
         return CommentResponse.builder()
                 .id(comment.getId())
                 .content(comment.getContent())
-                .createdDate(comment.getCreatedDate())
+                .createdDate(comment.getCreatedAt())
                 .author(mapAuthor(comment))
                 .replies(replies)
                 .build();
@@ -41,7 +41,7 @@ public class CommentMapper {
         return CommentResponse.builder()
                 .id(comment.getId())
                 .content(comment.getContent())
-                .createdDate(comment.getCreatedDate())
+                .createdDate(comment.getCreatedAt())
                 .author(mapAuthor(comment))
                 .build();
     }

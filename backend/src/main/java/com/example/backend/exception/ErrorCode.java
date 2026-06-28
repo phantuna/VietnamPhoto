@@ -37,6 +37,7 @@ public enum ErrorCode {
     LOCATION_TOO_CLOSE(4003, "Địa điểm này quá gần với một địa điểm đã tồn tại"),
     TAG_EXISTED(4004, "Hashtag này đã tồn tại"),
     INVALID_TAG(4005, "Hashtag không hợp lệ hoặc chứa nội dung không phù hợp"),
+    TAG_NOT_FOUND(4006, "Không tìm thấy hashtag"),
 
     // --- LỖI BÌNH LUẬN & TƯƠNG TÁC (50xx) ---
     COMMENT_NOT_FOUND(5001, "Không tìm thấy bình luận"),
@@ -50,6 +51,7 @@ public enum ErrorCode {
     CONTAIN_BANNED_WORDS(6003, "Nội dung của bạn chứa từ ngữ vi phạm tiêu chuẩn cộng đồng"),
     REPORT_ALREADY_RESOLVED(6004, "Báo cáo này đã được xử lý"),
     CANNOT_REVOKE_OWN_ADMIN(6005, "Bạn không thể tự gỡ quyền ADMIN của chính mình"),
+    BANNED_WORD_NOT_FOUND(6006, "Không tìm thấy từ cấm trong hệ thống"),
 
     // --- LỖI HỆ THỐNG & VALIDATE (90xx) ---
     VALIDATION_FAILED(9000, "Dữ liệu đầu vào không hợp lệ"),

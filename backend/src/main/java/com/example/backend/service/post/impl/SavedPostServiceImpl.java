@@ -37,7 +37,7 @@ public class SavedPostServiceImpl implements SavedPostService {
         Users user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         Posts post = postsRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
 
         Optional<SavedPost> existing = savedPostRepository.findByUserIdAndPostId(userId, postId);
 

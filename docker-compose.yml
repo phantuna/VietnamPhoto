@@ -21,6 +21,7 @@ services:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - MAIL_USERNAME=${MAIL_USERNAME}
       - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - MODERATION_TOXIC_COMMENT_URL=http://host.docker.internal:8000/check-toxic
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

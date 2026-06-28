@@ -5,6 +5,8 @@ import com.example.backend.entity.Notification;
 import com.example.backend.entity.Posts;
 import com.example.backend.entity.Users;
 import com.example.backend.enums.NotificationType;
+import com.example.backend.exception.AppException;
+import com.example.backend.exception.ErrorCode;
 import com.example.backend.mapper.NotificationMapper;
 import com.example.backend.repository.notification.NotificationRepository;
 import com.example.backend.repository.user.UserRepository;
@@ -91,7 +93,7 @@ public class NotificationService {
             Pageable pageable
     ) {
         Users user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         return notificationRepository
                 .findNotificationsWithDetailsByReceiverId(userId, 0, pageable)
@@ -103,7 +105,7 @@ public class NotificationService {
 
     public Long getUnreadCount(String userId) {
         Users user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         Long count = user.getUnreadNotificationCount();
         return count != null ? count : 0L;

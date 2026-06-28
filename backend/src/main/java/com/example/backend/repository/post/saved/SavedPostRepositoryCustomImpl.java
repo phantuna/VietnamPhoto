@@ -22,19 +22,14 @@ public class SavedPostRepositoryCustomImpl implements SavedPostRepositoryCustom 
         QPosts post = QPosts.posts;
         QUsers postUser = new QUsers("postUser");
         QLocations location = QLocations.locations;
-        QPhotos photo = QPhotos.photos;
-        QTags tag = QTags.tags;
 
-        // Note: fetchJoin on multiple collections (photos, tags) can cause MultipleBagFetchException or duplicate rows.
-        // It's usually better to fetch one collection, or use distinct.
-        // For simplicity and matching PostsRepositoryCustomImpl, we fetch join the collections.
+        // Note: Do NOT fetchJoin multiple collections like photos and tags at once.
+        // Doing so causes MultipleBagFetchException in Hibernate. We let Hibernate lazy load them in the transaction.
         
         JPAQuery<SavedPost> query = queryFactory.selectFrom(savedPost).distinct()
                 .leftJoin(savedPost.post, post).fetchJoin()
                 .leftJoin(post.user, postUser).fetchJoin()
                 .leftJoin(post.location, location).fetchJoin()
-                .leftJoin(post.photos, photo).fetchJoin()
-                .leftJoin(post.tags, tag).fetchJoin()
                 .where(savedPost.user.id.eq(userId)
                         .and(savedPost.deleted.eq(0)));
         
