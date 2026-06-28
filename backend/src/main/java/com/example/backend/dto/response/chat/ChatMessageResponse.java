@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/**
- * Dữ liệu 1 tin nhắn trả về client (qua REST hoặc WebSocket).
- */
+
 @Data
 @Builder
 @NoArgsConstructor

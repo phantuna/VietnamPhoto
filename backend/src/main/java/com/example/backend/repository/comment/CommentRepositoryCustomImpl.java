@@ -22,8 +22,7 @@ public class CommentRepositoryCustomImpl implements CommentRepositoryCustom {
         QComment comment = QComment.comment;
         QUsers user = new QUsers("user");
 
-        // Fetch parent comments with their authors eagerly
-        // Note: we don't fetch join the replies here to avoid HHH000104 pagination in memory issue
+
         JPAQuery<Comment> query = queryFactory.selectFrom(comment)
                 .leftJoin(comment.user, user).fetchJoin()
                 .where(comment.post.id.eq(postId)

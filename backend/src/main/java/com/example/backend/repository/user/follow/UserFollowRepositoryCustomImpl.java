@@ -1,4 +1,4 @@
-package com.example.backend.repository.user;
+package com.example.backend.repository.user.follow;
 
 import com.example.backend.entity.QUserFollow;
 import com.example.backend.entity.QUsers;

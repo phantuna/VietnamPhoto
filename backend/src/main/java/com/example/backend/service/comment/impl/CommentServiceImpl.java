@@ -47,25 +47,20 @@ public class CommentServiceImpl implements CommentService {
             parentComment = commentRepository.findById(request.getParentId())
                     .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
             
-            // Logic đảm bảo trả lời 1 cấp:
-            // Nếu người dùng phản hồi một reply, thì parent của comment mới
-            // sẽ được chuyển thành parent của reply đó (tức là comment gốc).
+
             if (parentComment.getParentComment() != null) {
                 parentComment = parentComment.getParentComment();
             }
         }
 
-        // Gọi AI Moderation Service kiểm duyệt bình luận độc hại
         ToxicModerationResponse moderation = toxicCommentModerationService.checkToxic(request.getContent());
 
         String cleanContent;
         if ("REJECTED".equalsIgnoreCase(moderation.getAction())) {
             throw new AppException(ErrorCode.CONTAIN_BANNED_WORDS);
         } else if ("PENDING".equalsIgnoreCase(moderation.getAction())) {
-            // OFFENSIVE speech: Lọc các từ thô tục bằng BadWordFilterService
             cleanContent = badWordFilterService.censorText(request.getContent());
         } else {
-            // CLEAN: Giữ nguyên bình luận gốc
             cleanContent = request.getContent();
         }
 
@@ -99,8 +94,7 @@ public class CommentServiceImpl implements CommentService {
         Users currentUser = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        // Dùng role.getId() vì id là định danh role trong hệ thống (ví dụ: "ADMIN", "USER")
-        // Không dùng role.getName() vì field này có thể null trong DB
+
         boolean isAdmin = currentUser.getRoles().stream()
                 .anyMatch(role -> "ADMIN".equalsIgnoreCase(role.getId()));
 
@@ -121,17 +115,14 @@ public class CommentServiceImpl implements CommentService {
             throw new AppException(ErrorCode.UNAUTHORIZED_COMMENT_ACTION);
         }
 
-        // Gọi AI Moderation Service kiểm duyệt bình luận độc hại khi cập nhật
         ToxicModerationResponse moderation = toxicCommentModerationService.checkToxic(newContent);
 
         String cleanContent;
         if ("REJECTED".equalsIgnoreCase(moderation.getAction())) {
             throw new AppException(ErrorCode.CONTAIN_BANNED_WORDS);
         } else if ("PENDING".equalsIgnoreCase(moderation.getAction())) {
-            // OFFENSIVE speech: Lọc các từ thô tục bằng BadWordFilterService
             cleanContent = badWordFilterService.censorText(newContent);
         } else {
-            // CLEAN: Giữ nguyên bình luận gốc
             cleanContent = newContent;
         }
 

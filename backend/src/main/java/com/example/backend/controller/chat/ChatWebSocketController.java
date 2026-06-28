@@ -12,12 +12,6 @@ import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
 
-/**
- * STOMP WebSocket controller cho real-time messaging.
- *
- * FE gửi tin nhắn tới: /app/chat.send
- * FE nhận tin nhắn từ: /user/queue/messages  (subscribe phía FE)
- */
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -26,10 +20,7 @@ public class ChatWebSocketController {
     private final SimpMessagingTemplate messagingTemplate;
     private final ChatService chatService;
 
-    /**
-     * Xử lý khi FE gửi tin nhắn qua STOMP.
-     * Principal.getName() = userId (được set bởi WebSocketAuthInterceptor).
-     */
+
     @MessageMapping("/chat.send")
     public void sendMessage(@Payload SendMessageRequest request, Principal principal) {
         if (principal == null) {
@@ -42,18 +33,15 @@ public class ChatWebSocketController {
 
         log.debug("WS message: {} → {} : {}", senderId, receiverId, request.getContent());
 
-        // Lưu vào DB
         ChatMessageResponse savedMessage = chatService.saveMessage(
                 senderId, receiverId, request.getContent()
         );
 
-        // Gửi đến NGƯỜI NHẬN qua /topic/messages/{receiverId}
         messagingTemplate.convertAndSend(
                 "/topic/messages/" + receiverId,
                 savedMessage
         );
 
-        // Gửi lại NGƯỜI GỬI để confirm (hiển thị tin vừa gửi ngay)
         messagingTemplate.convertAndSend(
                 "/topic/messages/" + senderId,
                 savedMessage

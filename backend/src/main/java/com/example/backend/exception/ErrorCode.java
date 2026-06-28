@@ -2,7 +2,6 @@ package com.example.backend.exception;
 
 public enum ErrorCode {
 
-    // --- LỖI XÁC THỰC & PHÂN QUYỀN (10xx) ---
     JWT_NOT_CREATED(1000, "Không thể tạo token xác thực"),
     INVALID_SIGNATURE(1001, "Chữ ký token không hợp lệ"),
     INVALID_TOKEN(1002, "Token không hợp lệ hoặc đã hết hạn"),
@@ -11,7 +10,6 @@ public enum ErrorCode {
     EXPIRED_TOKEN(1005, "Mã xác nhận (OTP) hoặc Token đã hết hạn"),
     INVALID_OTP(1006, "Mã OTP không chính xác"),
 
-    // --- LỖI NGƯỜI DÙNG (20xx) ---
     USER_NOT_FOUND(2001, "Tài khoản hoặc email không tồn tại"),
     USER_EXISTED(2002, "Tài khoản đã tồn tại trong hệ thống"),
     EMAIL_EXISTED(2003, "Email này đã được sử dụng"),
@@ -21,7 +19,6 @@ public enum ErrorCode {
     USER_ROLE_NOT_FOUND(2006, "Không tìm thấy quyền của người dùng"),
     CANNOT_FOLLOW_YOURSELF(2007, "Bạn không thể tự theo dõi chính mình"),
 
-    // --- LỖI BÀI VIẾT & ẢNH (30xx) ---
     POST_NOT_FOUND(3001, "Không tìm thấy bài viết"),
     PHOTO_NOT_FOUND(3002, "Không tìm thấy hình ảnh"),
     PHOTO_LOCATION_MISMATCH(3003, "Vị trí hình ảnh không khớp với bài viết"),
@@ -31,7 +28,6 @@ public enum ErrorCode {
     INVALID_IMAGE(3007, "Định dạng ảnh không hợp lệ"),
     IMAGE_BLOCKED(3008, "Ảnh chứa nội dung không phù hợp hoặc vi phạm tiêu chuẩn cộng đồng"),
 
-    // --- LỖI ĐỊA ĐIỂM & HASHTAG (40xx) ---
     LOCATION_NOT_FOUND(4001, "Không tìm thấy địa điểm"),
     LOCATION_ALREADY_EXISTS(4002, "Địa điểm này đã tồn tại"),
     LOCATION_TOO_CLOSE(4003, "Địa điểm này quá gần với một địa điểm đã tồn tại"),
@@ -39,13 +35,11 @@ public enum ErrorCode {
     INVALID_TAG(4005, "Hashtag không hợp lệ hoặc chứa nội dung không phù hợp"),
     TAG_NOT_FOUND(4006, "Không tìm thấy hashtag"),
 
-    // --- LỖI BÌNH LUẬN & TƯƠNG TÁC (50xx) ---
     COMMENT_NOT_FOUND(5001, "Không tìm thấy bình luận"),
     UNAUTHORIZED_COMMENT_ACTION(5002, "Bạn không có quyền xóa bình luận này"),
     ALREADY_LIKED(5003, "Bạn đã thích bài viết này rồi"),
     NOT_LIKED_YET(5004, "Bạn chưa thích bài viết này"),
 
-    // --- LỖI KIỂM DUYỆT & ADMIN (60xx) ---
     BANNED_WORD_EXISTED(6001, "Từ cấm này đã tồn tại trong hệ thống"),
     REPORT_NOT_FOUND(6002, "Không tìm thấy báo cáo vi phạm"),
     CONTAIN_BANNED_WORDS(6003, "Nội dung của bạn chứa từ ngữ vi phạm tiêu chuẩn cộng đồng"),
@@ -53,7 +47,6 @@ public enum ErrorCode {
     CANNOT_REVOKE_OWN_ADMIN(6005, "Bạn không thể tự gỡ quyền ADMIN của chính mình"),
     BANNED_WORD_NOT_FOUND(6006, "Không tìm thấy từ cấm trong hệ thống"),
 
-    // --- LỖI HỆ THỐNG & VALIDATE (90xx) ---
     VALIDATION_FAILED(9000, "Dữ liệu đầu vào không hợp lệ"),
     INVALID_REQUEST_DATA(9001, "Định dạng yêu cầu không đúng"),
     INTERNAL_SERVER_ERROR(9999, "Lỗi hệ thống nội bộ, vui lòng thử lại sau");

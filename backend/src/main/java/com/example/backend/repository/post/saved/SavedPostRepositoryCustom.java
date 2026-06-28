@@ -1,4 +1,4 @@
-package com.example.backend.repository.post;
+package com.example.backend.repository.post.saved;
 
 import com.example.backend.entity.SavedPost;
 

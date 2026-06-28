@@ -15,13 +15,11 @@ import java.math.BigDecimal;
 public class LocationsRequest {
     private String id;
     private String name;
-    private String parentId; // ID của Phường/Xã (Level 1)
+    private String parentId;
     private BigDecimal latitude;
     private BigDecimal longitude;
     private String description;
 
-    // Thêm các trường cho Mini Hub
     private String category;
-    private LocationType locationType; // SPOT hoặc SERVICE (FE gửi lên)
-    // creatorId không nhận từ FE — sẽ được gán từ JWT ở tầng Service
+    private LocationType locationType;
 }

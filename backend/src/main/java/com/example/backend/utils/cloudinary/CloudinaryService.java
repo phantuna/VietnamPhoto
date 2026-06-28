@@ -30,7 +30,6 @@ public class CloudinaryService {
         }
     }
 
-    // THÊM HÀM NÀY ĐỂ XỬ LÝ HEIC
     public Map<?, ?> uploadHeicAndConvert(byte[] imageBytes, String publicId) {
         try {
             return cloudinary.uploader().upload(
@@ -65,7 +64,7 @@ public class CloudinaryService {
             int dot = afterUpload.lastIndexOf('.');
             if (dot > 0) afterUpload = afterUpload.substring(0, dot);
 
-            return afterUpload; // photos/xxx
+            return afterUpload;
         } catch (Exception e) {
             throw new RuntimeException("Cannot extract public_id from url: " + imageUrl, e);
         }

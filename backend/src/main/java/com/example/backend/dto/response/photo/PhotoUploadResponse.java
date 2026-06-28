@@ -15,13 +15,9 @@ public class PhotoUploadResponse {
     private Boolean locationVerified;
     private Double locationDistanceMeters;
 
-    /** "SAFE" | "WARNING" | "UNSAFE" — kết quả từ Gemini */
     private String moderationStatus;
-
-    /** Lý do kiểm duyệt (tiếng Việt, hiển thị cho user khi WARNING) */
     private String moderationMessage;
 
-    /** 0.0 = safe, 0.5 = warning, 1.0 = unsafe */
     private Double moderationScore;
 
     private ExifDataDto exifData;

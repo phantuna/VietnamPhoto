@@ -43,7 +43,6 @@ public class VietMapController {
         Map<String, String[]> parameterMap = request.getParameterMap();
         for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
             String key = entry.getKey();
-            // Bỏ qua path và apikey từ Frontend gửi lên, để dùng mapApiKey riêng của Backend
             if (!key.equals("path") && !key.equals("apikey")) {
                 for (String value : entry.getValue()) {
                     builder.queryParam(key, value);
@@ -51,7 +50,6 @@ public class VietMapController {
             }
         }
 
-        // Bắt buộc chèn mapApiKey vào request để tải Tile/Style
         String apiKeyToUse = vietMapConfig.getMapApiKey() != null ? vietMapConfig.getMapApiKey() : vietMapConfig.getApiKey();
         builder.queryParam("apikey", apiKeyToUse);
 

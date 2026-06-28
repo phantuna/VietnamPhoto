@@ -34,10 +34,9 @@ public class LocationServiceImpl implements LocationService {
     private final LocationsRepository locationsRepository;
     private final LocationMapper locationMapper;
 
-    // Bán kính kiểm tra trùng lặp
-    private static final double HARD_MIN_DISTANCE    = 20.0;   // Dưới 20m cấm tuyệt đối (tránh spam tọa độ)
-    private static final double CONDITIONAL_SPOT_DIST = 300.0;  // SPOT: Bán kính kiểm tra trùng tên 300m
-    private static final double CONDITIONAL_SERV_DIST = 500.0;  // SERVICE: Bán kính kiểm tra trùng tên 500m
+    private static final double HARD_MIN_DISTANCE    = 20.0;
+    private static final double CONDITIONAL_SPOT_DIST = 300.0;
+    private static final double CONDITIONAL_SERV_DIST = 500.0;
 
     @Override
     @Transactional
@@ -52,7 +51,6 @@ public class LocationServiceImpl implements LocationService {
                 ? CONDITIONAL_SERV_DIST
                 : CONDITIONAL_SPOT_DIST;
 
-        // 1. Kiểm tra khoảng cách kết hợp kiểm tra trùng tên để tránh spam địa điểm lớn
         List<Locations> existingLocations = locationsRepository.findAll();
         for (Locations existing : existingLocations) {
             boolean isCheckinPoint = existing.getLevel() != null && existing.getLevel() >= 2;
@@ -63,12 +61,10 @@ public class LocationServiceImpl implements LocationService {
                         existing.getLatitude().doubleValue(), existing.getLongitude().doubleValue()
                 );
 
-                // TH1: Quá sát nhau (< 20m) -> cấm tuyệt đối để tránh spam pin trùng
                 if (dist < HARD_MIN_DISTANCE) {
                     throw new AppException(ErrorCode.LOCATION_TOO_CLOSE);
                 }
 
-                // TH2: Nằm trong bán kính cảnh báo (< 300m/500m) và có tên tương tự nhau -> cấm để tránh tạo trùng lặp cùng địa điểm
                 if (dist < conditionalDist) {
                     if (isNameSimilar(request.getName(), existing.getName())) {
                         throw new AppException(ErrorCode.LOCATION_TOO_CLOSE);
@@ -159,7 +155,6 @@ public class LocationServiceImpl implements LocationService {
 
         return locationsPage.map(loc -> {
             LocationsResponse res = locationMapper.toResponse(loc);
-            // Tối ưu hóa tải trọng JSON cho danh sách lớn (ví dụ Bản đồ gọi size = 10000)
             if (size >= 1000) {
                 res.setParent(null);
                 res.setDescription(null);

@@ -61,7 +61,6 @@ public class NotificationEventListener {
         var post = postsRepository.findById(event.getPost().getId()).orElse(null);
         if (author == null || post == null) return;
 
-        // Notify tất cả followers của tác giả
         for (Users follower : followService.getFollowers(author.getId())) {
             NotificationResponse notification = notificationService.createNewPostNotification(follower, author, post);
             if (notification != null) {

@@ -31,10 +31,8 @@ public class LocationMapper {
                 .creatorId(location.getCreatorId())
                 .build();
 
-        // 🌟 MAP THÔNG TIN THẰNG CHA BẰNG ĐỆ QUY
         if (location.getParent() != null) {
             response.setParent(this.toResponse(location.getParent()));
-            // Lấy tên tỉnh/thành từ cấp cao nhất (level 0)
             Locations root = location.getParent();
             while (root.getParent() != null) {
                 root = root.getParent();

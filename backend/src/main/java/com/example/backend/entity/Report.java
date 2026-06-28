@@ -19,7 +19,6 @@ public class Report extends Base {
     @JoinColumn(name = "post_id", nullable = false)
     private Posts post;
 
-    // The user who reported. Null if auto-flagged by system.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reporter_id")
     private Users reporter;

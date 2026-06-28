@@ -37,7 +37,7 @@ public class BannedWordService {
 
         bannedWordRepository.findByWord(cleanWord)
                 .ifPresent(existing -> {
-                    throw new com.example.backend.exception.AppException(com.example.backend.exception.ErrorCode.BANNED_WORD_EXISTED);
+                    throw new AppException(ErrorCode.BANNED_WORD_EXISTED);
                 });
 
         BannedWord bannedWord = new BannedWord();

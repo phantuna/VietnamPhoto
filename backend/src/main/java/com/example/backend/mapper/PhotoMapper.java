@@ -18,7 +18,6 @@ public class PhotoMapper {
             return null;
         }
 
-        // 1. Chuyển đổi Metadata sang ExifDataDto
         ExifDataDto exifDto = null;
         if (photo.getMetadata() != null) {
             PhotoMetadata meta = photo.getMetadata();
@@ -39,7 +38,6 @@ public class PhotoMapper {
             exifDto.setWard(meta.getWard());
         }
 
-        // 2. Build Response
         return PhotoUploadResponse.builder()
                 .photoId(photo.getId() != null ? photo.getId().toString() : null)
                 .imageUrl(photo.getImageUrl())

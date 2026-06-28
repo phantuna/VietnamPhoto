@@ -1,4 +1,4 @@
-package com.example.backend.repository.post;
+package com.example.backend.repository.post.saved;
 
 import com.example.backend.entity.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -23,9 +23,6 @@ public class SavedPostRepositoryCustomImpl implements SavedPostRepositoryCustom 
         QUsers postUser = new QUsers("postUser");
         QLocations location = QLocations.locations;
 
-        // Note: Do NOT fetchJoin multiple collections like photos and tags at once.
-        // Doing so causes MultipleBagFetchException in Hibernate. We let Hibernate lazy load them in the transaction.
-        
         JPAQuery<SavedPost> query = queryFactory.selectFrom(savedPost).distinct()
                 .leftJoin(savedPost.post, post).fetchJoin()
                 .leftJoin(post.user, postUser).fetchJoin()

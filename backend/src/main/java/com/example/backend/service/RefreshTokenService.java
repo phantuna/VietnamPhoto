@@ -17,7 +17,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class RefreshTokenService {
-    @Value("${jwt.refreshExpirationMs:604800000}") // Default: 7 days
+    @Value("${jwt.refreshExpirationMs:604800000}")
     private Long refreshTokenDurationMs;
 
     private final RefreshTokenRepository refreshTokenRepository;
@@ -41,7 +41,7 @@ public class RefreshTokenService {
     public RefreshToken verifyExpiration(RefreshToken token) {
         if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
             refreshTokenRepository.delete(token);
-            throw new AppException(ErrorCode.INVALID_TOKEN); // or a specific EXPIRED_REFRESH_TOKEN error
+            throw new AppException(ErrorCode.INVALID_TOKEN);
         }
         return token;
     }

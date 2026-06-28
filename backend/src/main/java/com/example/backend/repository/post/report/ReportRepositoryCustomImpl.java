@@ -38,8 +38,6 @@ public class ReportRepositoryCustomImpl implements ReportRepositoryCustom {
         List<Report> content = query
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                // Basic sorting support could be added here if needed, but for now we rely on the service
-                // If service passes Sort, we might need to apply it. I'll just apply order by createdDate desc manually as it's the default.
                 .orderBy(report.createdDate.desc())
                 .fetch();
 

@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
+import com.example.backend.repository.user.follow.UserFollowRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +24,6 @@ import com.example.backend.entity.Users;
 import com.example.backend.event.NewFollowerEvent;
 import com.example.backend.exception.AppException;
 import com.example.backend.exception.ErrorCode;
-import com.example.backend.repository.user.UserFollowRepository;
 import com.example.backend.repository.user.UserRepository;
 
 @ExtendWith(MockitoExtension.class)

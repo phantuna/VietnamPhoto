@@ -20,20 +20,17 @@ public class Locations extends Base {
     @Column(nullable = false)
     private String name;
 
-    // 🔑 CÁC TRƯỜNG MỚI ĐỂ KHỚP VỚI DỮ LIỆU TỪ JSON
     @Column(unique = true, nullable = false)
-    private String code; // Ví dụ: "11" (Hà Nội), "267" (Minh Châu)
+    private String code;
 
-    private String type; // Ví dụ: "thanh-pho", "tinh", "xa", "phuong"
-
-    private String slug; // Ví dụ: "ha-noi", "minh-chau"
+    private String type;
+    private String slug;
 
     @Column(name = "name_with_type")
-    private String nameWithType; // Ví dụ: "Thành phố Hà Nội"
+    private String nameWithType;
 
-    // 🌳 Nhóm Phân cấp (Hierarchy)
     @Column(nullable = false)
-    private Integer level; // 0: Tỉnh/Thành phố, 1: Xã/Địa điểm cụ thể
+    private Integer level;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")

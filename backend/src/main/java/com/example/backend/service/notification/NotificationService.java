@@ -128,7 +128,6 @@ public class NotificationService {
 
     @Transactional
     public NotificationResponse createNewFollowerNotification(Users follower, Users following) {
-        // Không tự thông báo chính mình
         if (follower.getId().equals(following.getId())) return null;
 
         Notification notification = Notification.builder()
@@ -148,7 +147,6 @@ public class NotificationService {
 
     @Transactional
     public NotificationResponse createNewPostNotification(Users follower, Users author, Posts post) {
-        // Không tự thông báo chính mình
         if (follower.getId().equals(author.getId())) return null;
 
         Notification notification = Notification.builder()

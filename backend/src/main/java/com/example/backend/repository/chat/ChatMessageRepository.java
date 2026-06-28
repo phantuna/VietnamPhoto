@@ -14,9 +14,6 @@ import java.util.Optional;
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, String>, ChatMessageRepositoryCustom {
 
 
-    /**
-     * Đánh dấu đã đọc toàn bộ tin của người kia trong conversation này.
-     */
     @Modifying
     @Query("""
             UPDATE ChatMessage m
@@ -27,9 +24,6 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, String
             """)
     int markMessagesAsRead(@Param("convId") String convId, @Param("userId") String userId);
 
-    /**
-     * Đếm số tin chưa đọc của user trong conversation (tin từ người kia gửi).
-     */
     @Query("""
             SELECT COUNT(m) FROM ChatMessage m
             WHERE m.conversation.id = :convId
@@ -38,9 +32,7 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, String
             """)
     long countUnread(@Param("convId") String convId, @Param("userId") String userId);
 
-    /**
-     * Lấy tin nhắn mới nhất trong conversation (dùng cho preview ở inbox).
-     */
+
     @Query("""
             SELECT m FROM ChatMessage m
             WHERE m.conversation.id = :convId

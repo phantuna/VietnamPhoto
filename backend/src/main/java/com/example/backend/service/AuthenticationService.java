@@ -22,8 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    // Store OTPs in memory instead of DB to avoid Flyway schema changes.
-    // Key: email, Value: OTP record
     private final ConcurrentHashMap<String, OtpRecord> otpCache = new ConcurrentHashMap<>();
 
     private static class OtpRecord {
@@ -66,10 +64,7 @@ public class AuthenticationService {
         }
 
         String token = jwtService.generateToken(user.getUsername(), user.getId(), permissions);
-        
-        // Delete old refresh tokens for this user (optional: keep if you want multi-device support, but replacing is simpler for now)
-        // refreshTokenService.deleteByUserId(user.getId());
-        
+
         String refreshToken = refreshTokenService.createRefreshToken(user.getId()).getToken();
 
         return AuthenticationResponse.builder()
@@ -79,11 +74,10 @@ public class AuthenticationService {
                 .build();
     }
     public AuthenticationResponse refreshToken(String requestRefreshToken) {
-        // Dùng imperative style thay vì Optional chain lồng để tránh exception bị nuốt trong map()
         RefreshToken rt = refreshTokenService.findByToken(requestRefreshToken)
                 .orElseThrow(() -> new AppException(ErrorCode.INVALID_TOKEN));
 
-        refreshTokenService.verifyExpiration(rt); // Throw INVALID_TOKEN nếu hết hạn
+        refreshTokenService.verifyExpiration(rt);
 
         Users user = rt.getUser();
         java.util.List<String> permissions = new java.util.ArrayList<>();
@@ -112,7 +106,6 @@ public class AuthenticationService {
             throw new AppException(ErrorCode.USER_BANNED);
         }
 
-        // Generate 6-digit OTP
         String otp = String.format("%06d", new Random().nextInt(999999));
         
         // Save to memory cache (Valid for 5 minutes)
@@ -126,7 +119,6 @@ public class AuthenticationService {
                 + "Mã OTP để khôi phục mật khẩu của bạn là: " + otp + "\n"
                 + "Mã này sẽ hết hạn sau 5 phút. Vui lòng không chia sẻ mã này cho bất kỳ ai.\n\n"
                 + "Trân trọng,\nĐội ngũ Vietnam Photo Scout");
-        // Gửi mail bất đồng bộ (Không chặn luồng chính, giúp API trả về ngay lập tức)
         java.util.concurrent.CompletableFuture.runAsync(() -> {
             try {
                 mailSender.send(message);
@@ -151,11 +143,9 @@ public class AuthenticationService {
             throw new AppException(ErrorCode.EXPIRED_TOKEN);
         }
 
-        // Đổi mật khẩu
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
 
-        // Xóa OTP khỏi cache sau khi đổi thành công
         otpCache.remove(email);
     }
 }

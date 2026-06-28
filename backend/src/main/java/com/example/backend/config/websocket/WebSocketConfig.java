@@ -7,14 +7,6 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-/**
- * Cấu hình WebSocket + STOMP broker cho real-time chat.
- *
- * Flow:
- *   FE connect  → /ws  (với SockJS fallback)
- *   FE subscribe → /user/queue/messages  (nhận tin nhắn đến)
- *   FE send      → /app/chat.send         (gửi tin nhắn)
- */
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
@@ -27,23 +19,19 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        // In-memory broker: hỗ trợ /user (private) và /topic (broadcast)
         registry.enableSimpleBroker("/user", "/topic");
-        // Prefix để map đến @MessageMapping trong controller
         registry.setApplicationDestinationPrefixes("/app");
-        // Prefix để route message đến user cụ thể qua convertAndSendToUser()
         registry.setUserDestinationPrefix("/user");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").setAllowedOriginPatterns("*");        // Standard WS
-        registry.addEndpoint("/ws-sockjs").setAllowedOriginPatterns("*").withSockJS(); // SockJS fallback
+        registry.addEndpoint("/ws").setAllowedOriginPatterns("*");
+        registry.addEndpoint("/ws-sockjs").setAllowedOriginPatterns("*").withSockJS();
     }
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
-        // Đăng ký interceptor xác thực JWT cho WebSocket
         registration.interceptors(webSocketAuthInterceptor);
     }
 }

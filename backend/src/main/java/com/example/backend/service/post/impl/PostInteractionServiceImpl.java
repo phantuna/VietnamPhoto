@@ -47,17 +47,14 @@ public class PostInteractionServiceImpl implements PostInteractionService {
         
         postRatingRepository.save(rating);
 
-        // Cập nhật điểm trung bình và tổng lượt vote
         Float avgRating = postRatingRepository.getAverageRatingByPostId(postId);
         Integer totalRatings = postRatingRepository.countRatingsByPostId(postId);
         
-        // Chuyển Float double precision về Float nếu cần, nhưng COALESCE đã xử lý null
         post.setAverageRating(avgRating != null ? avgRating : 0f);
         post.setTotalRatings(totalRatings);
         
         postsRepository.save(post);
 
-        // Auto-flag system: Vote > 10 và trung bình < 2.0 -> Tự động báo cáo Admin
         if (post.getTotalRatings() >= 10 && post.getAverageRating() < 2.0f) {
             autoFlagPost(post);
         }
@@ -83,7 +80,6 @@ public class PostInteractionServiceImpl implements PostInteractionService {
     }
 
     private void autoFlagPost(Posts post) {
-        // Guard: tránh tạo nhiều auto-report trùng cho cùng 1 bài viết
         boolean alreadyFlagged = reportRepository.existsByPostAndReporterIsNullAndStatus(
                 post, ReportStatus.PENDING
         );
@@ -94,7 +90,7 @@ public class PostInteractionServiceImpl implements PostInteractionService {
 
         Report report = new Report();
         report.setPost(post);
-        report.setReporter(null); // Hệ thống tự động
+        report.setReporter(null);
         report.setReason("Hệ thống tự động: Điểm đánh giá trung bình cộng đồng quá thấp (" + post.getAverageRating() + " sao).");
         report.setStatus(ReportStatus.PENDING);
 

@@ -91,9 +91,6 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
     public void deletePhoto(String photoId, String userId) {
         Photos photo = photosRepository.findById(photoId)
                 .orElseThrow(() -> new AppException(ErrorCode.PHOTO_NOT_FOUND));
-
-//        validatePhotoOwnership(photo, userId);
-
         deleteFromCloudinaryQuietly(photo.getImageUrl());
         photosRepository.delete(photo);
     }
@@ -103,13 +100,13 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
         try {
             validateSingleFile(file);
 
-            ModerationResult moderation = moderateImage(file);   // UNSAFE → throws here
+            ModerationResult moderation = moderateImage(file);
             ExifDataDto exifData = exifExtractorService.extract(file);
             VietMapLocationResponse resolvedAddress = resolveAddress(exifData);
 
             PhotoMetadata metadata = buildMetadata(exifData, resolvedAddress);
             UploadedImageInfo uploadedImage = uploadImage(file, user);
-            Photos savedPhoto = savePhoto(metadata, uploadedImage, moderation); // ← truyền moderation
+            Photos savedPhoto = savePhoto(metadata, uploadedImage, moderation);
 
             log.info("Uploaded photo file={} thread={} moderation={}",
                     file.getOriginalFilename(),
@@ -181,7 +178,6 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
         metadata.setGpsLongitude(exifData.getGpsLongitude());
         metadata.setDateTaken(exifData.getDateTaken());
 
-        // Nếu sau này cần lưu địa chỉ từ reverse geocode thì mở lại đoạn này
         if (resolvedAddress != null) {
             metadata.setAddress(resolvedAddress.getDisplay());
             metadata.setProvince(resolvedAddress.getProvince());
@@ -246,7 +242,6 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
         photo.setFileSize(uploadedImage.getFileSize());
         photo.setIsLocationVerified(false);
 
-        // Lưu kết quả kiểm duyệt Gemini vào DB
         if (moderation != null) {
             if (moderation.isWarning()) {
                 photo.setModerationStatus("WARNING");
@@ -280,17 +275,13 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
         validateSingleFile(file);
         Users user = getUserOrThrow(userId);
 
-        // 1. Kiểm duyệt hình ảnh an toàn
         ModerationResult moderation = moderateImage(file);
 
-        // 2. Resize ảnh avatar nhỏ gọn (300px max-width, 0.85f quality)
         ProcessedImageResult processed = imageProcessingService.process(file, 300, 0.85f);
 
-        // 3. Tải lên Cloudinary
         String publicId = "user_" + user.getId() + "/avatar_" + UUID.randomUUID().toString().substring(0, 8);
         String imageUrl = cloudinaryService.uploadImage(processed.getBytes(), publicId);
 
-        // 4. Cập nhật trực tiếp avatarUrl cho user trong DB
         user.setAvatarUrl(imageUrl);
         userRepository.save(user);
 

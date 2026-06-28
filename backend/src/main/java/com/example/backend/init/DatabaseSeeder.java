@@ -34,10 +34,8 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Khởi tạo vai trò và tài khoản Admin mặc định
         seedRolesAndAdmin();
 
-        // Chỉ chạy khi bảng rỗng
         if (locationsRepository.count() == 0) {
             seedData();
         }
@@ -78,57 +76,48 @@ public class DatabaseSeeder implements CommandLineRunner {
     }
 
     private void seedData() throws Exception {
-        // 1️⃣ ĐỌC DỮ LIỆU TỪ 2 FILE JSON
         InputStream provIs = new ClassPathResource("province.json").getInputStream();
         Map<String, LocationJsonDto> provinceJsonMap = objectMapper.readValue(provIs, new TypeReference<>() {}); //
 
         InputStream wardIs = new ClassPathResource("ward.json").getInputStream();
         Map<String, LocationJsonDto> wardJsonMap = objectMapper.readValue(wardIs, new TypeReference<>() {}); //
 
-        // 2️⃣ TẠO VÀ LƯU DANH SÁCH TỈNH (LEVEL 0)
         List<Locations> provinces = new ArrayList<>();
         for (LocationJsonDto dto : provinceJsonMap.values()) {
             Locations province = new Locations();
             province.setName(dto.getName());
-            province.setCode(dto.getCode()); //
-            province.setType(dto.getType()); //
-            province.setSlug(dto.getSlug()); //
-            province.setNameWithType(dto.getNameWithType()); //
-            province.setLevel(0); // Cấp Tỉnh
+            province.setCode(dto.getCode());
+            province.setType(dto.getType());
+            province.setSlug(dto.getSlug());
+            province.setNameWithType(dto.getNameWithType());
+            province.setLevel(0);
             provinces.add(province);
         }
 
-        // Lưu HÀNG LOẠT 63 tỉnh (chỉ tốn 1 câu lệnh SQL)
         List<Locations> savedProvinces = locationsRepository.saveAll(provinces);
         System.out.println("✅ Đã lưu xong dữ liệu Tỉnh/Thành phố!");
 
-        // 3️⃣ TẠO "TỪ ĐIỂN" TRA CỨU TỈNH TRÊN RAM (HashMap)
-        // Dùng mã code làm Key để tìm đối tượng Tỉnh cực nhanh
         Map<String, Locations> provinceDictionary = new HashMap<>();
         for (Locations p : savedProvinces) {
             provinceDictionary.put(p.getCode(), p);
         }
 
-        // 4️⃣ TẠO VÀ LƯU DANH SÁCH XÃ (LEVEL 1)
         List<Locations> wards = new ArrayList<>();
         for (LocationJsonDto dto : wardJsonMap.values()) {
             Locations ward = new Locations();
             ward.setName(dto.getName());
-            ward.setCode(dto.getCode()); //
-            ward.setType(dto.getType()); //
-            ward.setSlug(dto.getSlug()); //
-            ward.setNameWithType(dto.getNameWithType()); //
-            ward.setLevel(1); // Cấp Xã
+            ward.setCode(dto.getCode());
+            ward.setType(dto.getType());
+            ward.setSlug(dto.getSlug());
+            ward.setNameWithType(dto.getNameWithType());
+            ward.setLevel(1);
 
-            // Tra cứu Tỉnh từ "từ điển" trên RAM bằng parent_code
             Locations parentProvince = provinceDictionary.get(dto.getParentCode());
             if (parentProvince != null) {
                 ward.setParent(parentProvince);
                 wards.add(ward);
             }
         }
-
-        // Lưu HÀNG LOẠT hơn 10.000 xã vào Database
         locationsRepository.saveAll(wards);
         System.out.println("✅ Đã lưu xong toàn bộ dữ liệu Phường/Xã!");
     }

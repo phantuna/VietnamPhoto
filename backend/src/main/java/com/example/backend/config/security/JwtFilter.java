@@ -49,7 +49,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 String username = jwt.getJWTClaimsSet().getSubject();
 
-                // 🌟 1. LẤY USER_ID TỪ TOKEN RA
+
                 String userId = jwt.getJWTClaimsSet().getStringClaim("userId");
 
                 List<String> permissions = jwt.getJWTClaimsSet().getStringListClaim("permissions");
@@ -57,10 +57,9 @@ public class JwtFilter extends OncePerRequestFilter {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList()) : null;
 
-                // 🌟 2. ĐỔI PRINCIPAL THÀNH USER_ID (Thay vì username)
                 UsernamePasswordAuthenticationToken auth =
                         new UsernamePasswordAuthenticationToken(
-                                userId, // Truyền thẳng userId vào đây!
+                                userId,
                                 null,
                                 authorities
                         );

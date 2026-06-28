@@ -15,10 +15,6 @@ public class FollowController {
 
     private final FollowService followService;
 
-    /**
-     * Toggle follow/unfollow
-     * POST /api/v1/follow/{followingId}?followerId={followerId}
-     */
     @PostMapping("/{followingId}")
     public ResponseEntity<FollowStatusResponse> toggleFollow(
             @PathVariable String followingId,
@@ -27,10 +23,6 @@ public class FollowController {
         return ResponseEntity.ok(followService.toggleFollow(followerId, followingId));
     }
 
-    /**
-     * Kiểm tra trạng thái follow + lấy số lượng
-     * GET /api/v1/follow/status?followerId=...&followingId=...
-     */
     @GetMapping("/status")
     public ResponseEntity<FollowStatusResponse> checkFollowStatus(
             @RequestParam String followerId,
@@ -39,10 +31,6 @@ public class FollowController {
         return ResponseEntity.ok(followService.getFollowStatus(followerId, followingId));
     }
 
-    /**
-     * Lấy số lượng followers/following của 1 user
-     * GET /api/v1/follow/counts/{userId}
-     */
     @GetMapping("/counts/{userId}")
     public ResponseEntity<FollowStatusResponse> getCounts(@PathVariable String userId) {
         return ResponseEntity.ok(FollowStatusResponse.builder()
@@ -51,19 +39,11 @@ public class FollowController {
                 .build());
     }
 
-    /**
-     * Lấy danh sách userId đã follow nhau 2 chiều với mình
-     * GET /api/v1/follow/mutual?userId=...
-     */
     @GetMapping("/mutual")
     public ResponseEntity<List<String>> getMutualFollowUserIds(@RequestParam String userId) {
         return ResponseEntity.ok(followService.getMutualFollowUserIds(userId));
     }
 
-    /**
-     * Lấy danh sách userId mà userId này đang follow
-     * GET /api/v1/follow/following-ids/{userId}
-     */
     @GetMapping("/following-ids/{userId}")
     public ResponseEntity<List<String>> getFollowingUserIds(@PathVariable String userId) {
         return ResponseEntity.ok(followService.getFollowingUserIds(userId));

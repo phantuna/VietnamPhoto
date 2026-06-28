@@ -8,7 +8,7 @@ import com.example.backend.exception.AppException;
 import com.example.backend.exception.ErrorCode;
 import com.example.backend.mapper.PostMapper;
 import com.example.backend.repository.post.PostsRepository;
-import com.example.backend.repository.post.SavedPostRepository;
+import com.example.backend.repository.post.saved.SavedPostRepository;
 import com.example.backend.repository.user.UserRepository;
 import com.example.backend.repository.post.LikeRepository;
 import com.example.backend.service.post.SavedPostService;
@@ -46,11 +46,11 @@ public class SavedPostServiceImpl implements SavedPostService {
             if (savedPost.getDeleted() == 0) {
                 savedPost.setDeleted(1);
                 savedPostRepository.save(savedPost);
-                return false; // Unsaved
+                return false;
             } else {
                 savedPost.setDeleted(0);
                 savedPostRepository.save(savedPost);
-                return true; // Re-saved
+                return true;
             }
         } else {
             SavedPost newSaved = new SavedPost();
@@ -58,7 +58,7 @@ public class SavedPostServiceImpl implements SavedPostService {
             newSaved.setPost(post);
             newSaved.setDeleted(0);
             savedPostRepository.save(newSaved);
-            return true; // Saved
+            return true;
         }
     }
 

@@ -13,12 +13,10 @@ import lombok.NoArgsConstructor;
         uniqueConstraints = @UniqueConstraint(columnNames = {"follower_id", "following_id"}))
 public class UserFollow extends Base {
 
-    /** Người đang theo dõi (actor) */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "follower_id", nullable = false)
     private Users follower;
 
-    /** Người được theo dõi (target) */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "following_id", nullable = false)
     private Users following;

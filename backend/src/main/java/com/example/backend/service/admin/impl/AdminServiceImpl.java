@@ -101,7 +101,6 @@ public class AdminServiceImpl implements AdminService {
 
         Posts post = report.getPost();
         if (post != null) {
-            // Lấy tất cả báo cáo đang PENDING của bài viết này để xử lý chung 1 lần
             List<Report> pendingReports = reportRepository.findReportsByPostIdWithDetails(post.getId())
                                             .stream()
                                             .filter(r -> r.getStatus() == ReportStatus.PENDING)
@@ -112,8 +111,8 @@ public class AdminServiceImpl implements AdminService {
             }
 
             post.setStatus(PostStatus.HIDDEN);
-            post.setDeleted(1); // Soft-delete bài viết
-            post.setDeletedAt(java.time.LocalDateTime.now()); // Đặt thủ công vì @SQLDelete chỉ chạy khi gọi delete()
+            post.setDeleted(1);
+            post.setDeletedAt(java.time.LocalDateTime.now());
             postsRepository.save(post);
 
             Users postOwner = post.getUser();
@@ -162,7 +161,6 @@ public class AdminServiceImpl implements AdminService {
         Users user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         
-        // Vì class Users có cấu hình @SQLDelete, gọi delete() sẽ tự động update deleted = 1
         userRepository.delete(user);
         log.info("Admin đã khóa tài khoản user {}", userId);
     }

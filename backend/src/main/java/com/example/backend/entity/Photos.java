@@ -23,19 +23,12 @@ public class Photos extends Base{
     @Column(name = "location_verified")
     private Boolean isLocationVerified = false;
 
-    /**
-     * Kết quả kiểm duyệt từ Gemini Vision API.
-     * Giá trị: "SAFE" | "WARNING" | "UNSAFE"
-     * null = chưa được kiểm duyệt (ảnh cũ trước khi tích hợp Gemini)
-     */
     @Column(name = "moderation_status", length = 10)
     private String moderationStatus;
 
-    /** Lý do Gemini trả về (bằng tiếng Việt) */
     @Column(name = "moderation_reason", columnDefinition = "TEXT")
     private String moderationReason;
 
-    /** Score: 0.0 = safe, 0.5 = warning, 1.0 = unsafe */
     @Column(name = "moderation_score")
     private Double moderationScore;
 

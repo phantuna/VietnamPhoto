@@ -1,4 +1,4 @@
-package com.example.backend.repository.user;
+package com.example.backend.repository.user.follow;
 
 import com.example.backend.entity.UserFollow;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,21 +11,13 @@ import java.util.Optional;
 public interface UserFollowRepository extends JpaRepository<UserFollow, String>, UserFollowRepositoryCustom {
 
 
-    /**
-     * Tìm follow record còn active (deleted=0)
-     */
     @Query("SELECT uf FROM UserFollow uf WHERE uf.follower.id = :followerId AND uf.following.id = :followingId AND uf.deleted = 0")
     Optional<UserFollow> findActiveFollow(@Param("followerId") String followerId, @Param("followingId") String followingId);
 
-    /**
-     * Tìm follow record kể cả đã soft-delete (để reactivate thay vì tạo mới)
-     */
+
     @Query("SELECT uf FROM UserFollow uf WHERE uf.follower.id = :followerId AND uf.following.id = :followingId")
     Optional<UserFollow> findByFollowerIdAndFollowingId(@Param("followerId") String followerId, @Param("followingId") String followingId);
 
-    /**
-     * Kiểm tra đang follow (chỉ active)
-     */
     @Query("SELECT COUNT(uf) > 0 FROM UserFollow uf WHERE uf.follower.id = :followerId AND uf.following.id = :followingId AND uf.deleted = 0")
     boolean existsByFollowerIdAndFollowingId(@Param("followerId") String followerId, @Param("followingId") String followingId);
 
@@ -37,9 +29,7 @@ public interface UserFollowRepository extends JpaRepository<UserFollow, String>,
     @Query("SELECT uf.following.id FROM UserFollow uf WHERE uf.follower.id = :userId AND uf.deleted = 0")
     List<String> findFollowingUserIds(@Param("userId") String userId);
 
-    /**
-     * Danh sách userId đã follow nhau 2 chiều với userId của mình
-     */
+
     @Query("""
         SELECT uf1.following.id FROM UserFollow uf1
         WHERE uf1.follower.id = :userId AND uf1.deleted = 0

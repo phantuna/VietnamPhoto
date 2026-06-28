@@ -12,6 +12,5 @@ public interface TagsRepository extends JpaRepository<Tags, String> {
 
     List<Tags> findTop10ByNameStartingWithIgnoreCaseOrderByNameAsc(String prefix);
 
-    // Tìm các tag có chứa từ khóa (dự phòng)
     List<Tags> findTop10ByNameContainingIgnoreCaseOrderByNameAsc(String keyword);
 }

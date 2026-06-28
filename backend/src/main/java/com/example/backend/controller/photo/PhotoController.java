@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/photos") // Đồng bộ version API với Posts
+@RequestMapping("/api/photos")
 @RequiredArgsConstructor
 public class PhotoController {
 

@@ -8,7 +8,7 @@ import com.example.backend.mapper.PostMapper;
 import com.example.backend.repository.post.PostsRepository;
 import com.example.backend.repository.location.LocationsRepository;
 import com.example.backend.repository.photo.PhotosRepository;
-import com.example.backend.repository.post.SavedPostRepository;
+import com.example.backend.repository.post.saved.SavedPostRepository;
 import com.example.backend.repository.user.UserRepository;
 import com.example.backend.service.photo.PhotoVerificationService;
 import com.example.backend.service.post.PostLikeService;
@@ -57,13 +57,12 @@ public class PostServiceImpl implements PostService {
         Users user = usersRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        // --- PROGRESSIVE TRUST (Rate Limiting by Level) ---
         int userLevel = user.getLevel() != null ? user.getLevel() : 1;
         int maxPostsPerDay;
         if (userLevel == 1) maxPostsPerDay = 2;
         else if (userLevel == 2) maxPostsPerDay = 5;
         else if (userLevel == 3) maxPostsPerDay = 10;
-        else maxPostsPerDay = 9999; // Level 4+ Không giới hạn
+        else maxPostsPerDay = 9999;
 
         java.time.LocalDate today = java.time.LocalDate.now();
         long postsToday = postsRepository.countByUserIdAndCreatedDate(userId, today);
@@ -120,11 +119,9 @@ public class PostServiceImpl implements PostService {
                 double distanceMeters = photoVerificationService.calculateDistanceMeters(metadata, location);
                 boolean isVerified;
 
-                // Nếu người dùng chọn Tỉnh/Thành phố (Level 0), chỉ cần khớp Tỉnh
                 if (location.getLevel() != null && location.getLevel() == 0) {
                     isVerified = photoVerificationService.isProvinceMatch(metadata, location);
                 } else {
-                    // Nếu chọn địa điểm cụ thể, cần cả khoảng cách (<5km) và khớp Tỉnh
                     boolean distanceOk = distanceMeters >= 0 && distanceMeters <= MAX_ALLOWED_DISTANCE_METERS;
                     boolean provinceOk = photoVerificationService.isProvinceMatch(metadata, location);
                     isVerified = distanceOk && provinceOk;
@@ -149,7 +146,6 @@ public class PostServiceImpl implements PostService {
 
         post.setPhotos(new ArrayList<>(uploadedPhotos));
 
-        // --- GAMIFICATION LOGIC ---
         boolean hasWarning = false;
         boolean hasLocationVerified = false;
 
@@ -162,36 +158,28 @@ public class PostServiceImpl implements PostService {
             }
         }
 
-        // Upload ảnh thành công
         reputationService.addPoints(user, 2, "Upload ảnh thành công");
 
-        // Điểm kiểm duyệt ảnh (Gemini)
         if (hasWarning) {
             reputationService.subtractPoints(user, 10, "Đăng ảnh có nhãn WARNING");
         } else {
             reputationService.addPoints(user, 1, "Đăng ảnh an toàn (SAFE)");
         }
 
-        // --- B10: GAMIFICATION ĐIỂM THEO LOẠI ĐỊA ĐIỂM (SPOT vs SERVICE) ---
         com.example.backend.enums.LocationType locType = location.getLocationType();
         if (locType == null) locType = com.example.backend.enums.LocationType.SPOT;
 
         if (locType == com.example.backend.enums.LocationType.SPOT) {
-            // SPOT: Thưởng điểm nếu ảnh có tọa độ GPS nằm gần vị trí SPOT
             if (hasLocationVerified) {
                 reputationService.addPoints(user, 2, "Check-in SPOT vị trí chính xác");
             }
         } else {
-            // SERVICE: Xét tư cách người đăng
             if (userId.equals(location.getCreatorId())) {
-                // Chủ quán tự đăng bài PR -> 0đ
             } else {
-                // Người khác đến dùng dịch vụ và chụp ảnh -> +1đ (không bắt buộc GPS khắt khe)
                 reputationService.addPoints(user, 1, "Review địa điểm SERVICE");
             }
         }
 
-        // Điểm tip và caption
         if (request.getShootingTip() != null && !request.getShootingTip().isBlank() &&
             request.getCaption() != null && !request.getCaption().isBlank()) {
             reputationService.addPoints(user, 1, "Có caption và shooting tip");
@@ -199,7 +187,6 @@ public class PostServiceImpl implements PostService {
 
         Posts savedPost = postsRepository.save(post);
 
-        // Đồng bộ tăng số lượng bài đăng và check-in cho địa điểm này và tất cả cấp cha (hệ thống phân cấp)
         Locations currentLoc = location;
         while (currentLoc != null) {
             if (currentLoc.getPostCount() == null) currentLoc.setPostCount(0L);
@@ -210,7 +197,6 @@ public class PostServiceImpl implements PostService {
             currentLoc = currentLoc.getParent();
         }
 
-        // Fire event to notify followers
         eventPublisher.publishEvent(new com.example.backend.event.PostCreatedEvent(this, user, savedPost));
 
         return postMapper.toResponse(savedPost, false, false);

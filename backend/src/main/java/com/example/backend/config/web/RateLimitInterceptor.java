@@ -20,7 +20,6 @@ public class RateLimitInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // Skip rate limiting for OPTIONS preflight requests
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             return true;
         }
@@ -32,24 +31,20 @@ public class RateLimitInterceptor implements HandlerInterceptor {
         boolean isGuest = true;
 
         if (token != null && token.startsWith("Bearer ")) {
-            // User is logged in, use token as key (or user ID if you parse it)
             key = token;
             isGuest = false;
         } else {
-            // Guest user, use IP as key
             key = clientIp;
         }
 
         Bucket bucket = resolveBucket(key, isGuest);
 
         if (bucket.tryConsume(1)) {
-            return true; // Allowed
+            return true;
         } else {
-            // Rate limit exceeded
             response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
             response.setContentType("application/json;charset=UTF-8");
             
-            // Explicitly add CORS headers because interceptor short-circuits the chain
             String origin = request.getHeader("Origin");
             if (origin != null && (origin.equals("http://localhost:3000") || origin.equals("https://app.vnscout.io.vn") || origin.equals("https://vnscout.io.vn"))) {
                 response.setHeader("Access-Control-Allow-Origin", origin);
@@ -57,7 +52,7 @@ public class RateLimitInterceptor implements HandlerInterceptor {
             }
             
             response.getWriter().write("{\"error\": \"Bạn đang thao tác quá nhanh, vui lòng thử lại sau giây lát.\"}");
-            return false; // Blocked
+            return false;
         }
     }
 
@@ -66,8 +61,6 @@ public class RateLimitInterceptor implements HandlerInterceptor {
     }
 
     private Bucket newBucket(boolean isGuest) {
-        // Logged-in user: 120 requests per minute
-        // Guest user: 60 requests per minute (increased from 10 to avoid false positives on reload)
         int limit = isGuest ? 60 : 120;
         Bandwidth limitBandwidth = Bandwidth.classic(limit, Refill.greedy(limit, Duration.ofMinutes(1)));
         return Bucket.builder().addLimit(limitBandwidth).build();

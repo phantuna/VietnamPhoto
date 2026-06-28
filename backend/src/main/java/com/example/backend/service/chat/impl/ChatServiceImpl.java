@@ -28,9 +28,6 @@ public class ChatServiceImpl implements ChatService {
     private final ChatMessageRepository chatMessageRepository;
     private final UserRepository userRepository;
 
-    // ─────────────────────────────────────────────────────
-    //  Lấy hoặc tạo conversation
-    // ─────────────────────────────────────────────────────
     @Override
     @Transactional
     public ConversationResponse getOrCreateConversation(String currentUserId, String otherUserId) {
@@ -45,9 +42,6 @@ public class ChatServiceImpl implements ChatService {
         return buildConversationResponse(conv, other, unread, lastMsg);
     }
 
-    // ─────────────────────────────────────────────────────
-    //  Inbox
-    // ─────────────────────────────────────────────────────
     @Override
     public List<ConversationResponse> getMyConversations(String userId) {
         return conversationRepository.findAllConversationsWithDetailsByUserId(userId).stream()
@@ -60,9 +54,6 @@ public class ChatServiceImpl implements ChatService {
                 .collect(Collectors.toList());
     }
 
-    // ─────────────────────────────────────────────────────
-    //  Lịch sử tin nhắn
-    // ─────────────────────────────────────────────────────
     @Override
     public Page<ChatMessageResponse> getMessages(String conversationId, String currentUserId, Pageable pageable) {
         return chatMessageRepository
@@ -70,13 +61,9 @@ public class ChatServiceImpl implements ChatService {
                 .map(this::toMessageResponse);
     }
 
-    // ─────────────────────────────────────────────────────
-    //  Lưu và gửi tin nhắn
-    // ─────────────────────────────────────────────────────
     @Override
     @Transactional
     public ChatMessageResponse saveMessage(String senderId, String receiverId, String content) {
-        // Lấy hoặc tạo conversation
         Conversation conv = conversationRepository
                 .findConversationBetweenUsersWithDetails(senderId, receiverId)
                 .orElseGet(() -> createNewConversation(senderId, receiverId));
@@ -95,22 +82,12 @@ public class ChatServiceImpl implements ChatService {
         return toMessageResponse(saved);
     }
 
-    // ─────────────────────────────────────────────────────
-    //  Đánh dấu đã đọc
-    // ─────────────────────────────────────────────────────
     @Override
     @Transactional
     public void markAsRead(String conversationId, String currentUserId) {
         chatMessageRepository.markMessagesAsRead(conversationId, currentUserId);
     }
 
-    // ─────────────────────────────────────────────────────
-    //  Helper methods
-    // ─────────────────────────────────────────────────────
-
-    /**
-     * Tạo mới conversation, đảm bảo user1.id <= user2.id.
-     */
     private Conversation createNewConversation(String idA, String idB) {
         String smaller = idA.compareTo(idB) <= 0 ? idA : idB;
         String larger  = idA.compareTo(idB) <= 0 ? idB : idA;
@@ -127,7 +104,6 @@ public class ChatServiceImpl implements ChatService {
         return conversationRepository.save(conv);
     }
 
-    /** Lấy user còn lại trong conversation (không phải current user). */
     private Users getOtherUser(Conversation conv, String currentUserId) {
         return conv.getUser1().getId().equals(currentUserId)
                 ? conv.getUser2()

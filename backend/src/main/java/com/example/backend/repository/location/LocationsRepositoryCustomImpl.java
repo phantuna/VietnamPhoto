@@ -28,7 +28,6 @@ public class LocationsRepositoryCustomImpl implements LocationsRepositoryCustom 
         List<Locations> content = query
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                // Dùng mặc định orderBy theo ngày tạo giảm dần nếu pageable không có sort
                 .orderBy(locations.createdDate.desc())
                 .fetch();
 

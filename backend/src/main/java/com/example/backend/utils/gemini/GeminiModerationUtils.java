@@ -17,20 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Kiểm duyệt ảnh sử dụng Gemini 2.5 Flash Vision API (REST trực tiếp).
- *
- * Flow:
- *   1. Chuyển đổi ảnh sang base64
- *   2. Gửi POST request đến Gemini API kèm ảnh + prompt
- *   3. Parse JSON response → phân loại SAFE / WARNING / UNSAFE
- *   4. Trả về ModerationResult:
- *      - blocked=true  → Upload bị từ chối (ảnh không lưu Cloudinary)
- *      - warning=true  → Upload được nhưng kèm cảnh báo
- *      - safe          → Upload bình thường
- */
+
 @Slf4j
-@Primary   // Override ImageModerationServiceImpl stub mặc định
+@Primary
 @Service
 public class GeminiModerationUtils implements ImageModerationService {
 
@@ -65,12 +54,10 @@ public class GeminiModerationUtils implements ImageModerationService {
     @Override
     public ModerationResult moderate(MultipartFile file) {
         try {
-            // 1. Encode ảnh thành base64
             byte[] imageBytes  = file.getBytes();
             String base64Image = Base64.getEncoder().encodeToString(imageBytes);
             String mimeType    = resolveMimeType(file);
 
-            // 2. Build request body theo Gemini REST API format
             Map<String, Object> inlineData = new HashMap<>();
             inlineData.put("mime_type", mimeType);
             inlineData.put("data", base64Image);
@@ -87,7 +74,6 @@ public class GeminiModerationUtils implements ImageModerationService {
             Map<String, Object> requestBody = new HashMap<>();
             requestBody.put("contents", List.of(content));
 
-            // 3. Gửi HTTP request
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<Map<String, Object>> httpRequest = new HttpEntity<>(requestBody, headers);
@@ -97,11 +83,10 @@ public class GeminiModerationUtils implements ImageModerationService {
 
             log.debug("[Gemini Moderation] HTTP status={}", response.getStatusCode());
 
-            // 4. Parse response
             return parseGeminiResponse(response.getBody());
 
         } catch (Exception e) {
-            // Fail-open: lỗi kết nối Gemini → không block upload, chỉ cảnh báo
+
             log.error("[Gemini Moderation] Lỗi khi kiểm duyệt ảnh '{}': {}",
                     file.getOriginalFilename(), e.getMessage(), e);
             return ModerationResult.builder()

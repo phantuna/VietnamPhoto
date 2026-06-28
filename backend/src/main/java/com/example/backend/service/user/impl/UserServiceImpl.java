@@ -49,7 +49,6 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setBirthday(request.getBirthday());
 
-        // Assign standard USER role automatically
         Role userRole = roleRepository.findById("USER").orElse(null);
         if (userRole != null) {
             user.setRoles(List.of(userRole));
@@ -151,7 +150,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void changePassword(com.example.backend.dto.request.user.ChangePasswordRequest request) {
-        // getName() trả về userId (JWT sub claim = userId, không phải email)
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || "anonymousUser".equals(authentication.getName())) {
             throw new AppException(ErrorCode.MISSING_TOKEN);

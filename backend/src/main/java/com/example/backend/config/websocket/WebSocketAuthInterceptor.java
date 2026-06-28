@@ -17,15 +17,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-/**
- * Interceptor xác thực JWT cho WebSocket/STOMP.
- *
- * Vì JwtFilter (OncePerRequestFilter) không chạy cho WebSocket,
- * ta phải tự xử lý auth tại đây, trong bước CONNECT của STOMP.
- *
- * FE cần gửi header: { Authorization: "Bearer <token>" } khi connect.
- */
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -40,7 +31,6 @@ public class WebSocketAuthInterceptor implements ChannelInterceptor {
 
         if (accessor == null) return message;
 
-        // Chỉ xử lý lúc CONNECT (1 lần duy nhất khi thiết lập kết nối)
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
             String authHeader = accessor.getFirstNativeHeader("Authorization");
 
@@ -57,7 +47,6 @@ public class WebSocketAuthInterceptor implements ChannelInterceptor {
                                 .collect(Collectors.toList())
                             : List.of();
 
-                    // Set userId làm principal name (giống JwtFilter hiện tại)
                     UsernamePasswordAuthenticationToken auth =
                             new UsernamePasswordAuthenticationToken(userId, null, authorities);
 
@@ -68,7 +57,6 @@ public class WebSocketAuthInterceptor implements ChannelInterceptor {
 
                 } catch (Exception e) {
                     log.warn("WebSocket JWT invalid: {}", e.getMessage());
-                    // Không throw exception → disconnect sẽ xảy ra tự nhiên
                 }
             }
         }

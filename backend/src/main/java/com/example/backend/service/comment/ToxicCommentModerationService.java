@@ -24,17 +24,12 @@ public class ToxicCommentModerationService {
     private String moderationUrl;
 
     public ToxicCommentModerationService() {
-        // Cấu hình Timeout bằng SimpleClientHttpRequestFactory để không phụ thuộc vào Spring Boot RestTemplateBuilder
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
         factory.setConnectTimeout(2000); // 2 giây
         factory.setReadTimeout(2000);    // 2 giây
         this.restTemplate = new RestTemplate(factory);
     }
 
-    /**
-     * Gửi yêu cầu kiểm duyệt văn bản sang FastAPI PhoBERT service.
-     * Áp dụng cơ chế Fail-Open: Nếu xảy ra lỗi kết nối, trả về trạng thái APPROVED để hệ thống chạy tiếp.
-     */
     public ToxicModerationResponse checkToxic(String text) {
         if (text == null || text.trim().isEmpty()) {
             return ToxicModerationResponse.builder()
@@ -72,7 +67,6 @@ public class ToxicCommentModerationService {
             log.error("[Toxic Moderation] Error calling moderation service (Fail-open mode active): {}", e.getMessage());
         }
 
-        // Fallback về trạng thái APPROVED
         return ToxicModerationResponse.builder()
                 .text(text)
                 .label("CLEAN")

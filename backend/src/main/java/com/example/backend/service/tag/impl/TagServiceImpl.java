@@ -40,7 +40,6 @@ public class TagServiceImpl implements TagService {
 
         String cleanKeyword = keyword.trim().toLowerCase().replace("#", "");
 
-        // Tìm kiếm gợi ý
         List<Tags> results = tagsRepository.findTop10ByNameStartingWithIgnoreCaseOrderByNameAsc(cleanKeyword);
         if (results.size() < 5) {
             List<Tags> containsResults = tagsRepository.findTop10ByNameContainingIgnoreCaseOrderByNameAsc(cleanKeyword);

@@ -30,7 +30,6 @@ public class JwtService {
     @Value("${jwt.signerKey}")
     public  String SIGNER_KEY ;
 
-    // Tạo JWT
     public String generateToken(String username, String userId) {
         return generateToken(username, userId, List.of());
     }
@@ -60,7 +59,6 @@ public class JwtService {
         }
     }
 
-    // Verify + parse token
     public SignedJWT parseToken(String token) {
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);
