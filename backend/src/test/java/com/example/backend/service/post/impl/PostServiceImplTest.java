@@ -38,7 +38,7 @@ import com.example.backend.mapper.PostMapper;
 import com.example.backend.repository.location.LocationsRepository;
 import com.example.backend.repository.photo.PhotosRepository;
 import com.example.backend.repository.post.PostsRepository;
-import com.example.backend.repository.post.SavedPostRepository;
+import com.example.backend.repository.post.saved.SavedPostRepository;
 import com.example.backend.repository.user.UserRepository;
 import com.example.backend.service.photo.PhotoVerificationService;
 import com.example.backend.service.post.PostLikeService;

@@ -46,7 +46,7 @@ public class RateLimitInterceptor implements HandlerInterceptor {
             response.setContentType("application/json;charset=UTF-8");
             
             String origin = request.getHeader("Origin");
-            if (origin != null && (origin.equals("http://localhost:3000") || origin.equals("https://app.vnscout.io.vn") || origin.equals("https://vnscout.io.vn"))) {
+            if (origin != null) {
                 response.setHeader("Access-Control-Allow-Origin", origin);
                 response.setHeader("Access-Control-Allow-Credentials", "true");
             }

@@ -1,4 +1,4 @@
-package com.example.backend.init;
+package com.example.backend.config.init;
 
 import com.example.backend.dto.response.location.LocationJsonDto;
 import com.example.backend.entity.Locations;

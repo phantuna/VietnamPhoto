@@ -1,6 +1,7 @@
 package com.example.backend.controller.vietmap;
 
 import com.example.backend.config.app.VietMapConfig;
+import com.example.backend.dto.response.ApiResponse;
 import com.example.backend.dto.response.location.VietMapLocationResponse;
 import com.example.backend.service.location.VietMapLocationService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,9 +30,11 @@ public class VietMapController {
     private final VietMapConfig vietMapConfig;
 
     @GetMapping("/reverse")
-    public VietMapLocationResponse reverse(@RequestParam BigDecimal lat,
+    public ApiResponse<VietMapLocationResponse> reverse(@RequestParam BigDecimal lat,
                                            @RequestParam BigDecimal lng) {
-        return vietMapLocationService.reverse(lat, lng);
+        ApiResponse<VietMapLocationResponse> response = new ApiResponse<>();
+        response.setResult(vietMapLocationService.reverse(lat, lng));
+        return response;
     }
 
     @GetMapping("/proxy")

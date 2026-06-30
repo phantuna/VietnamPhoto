@@ -22,7 +22,7 @@ import com.example.backend.entity.Users;
 import com.example.backend.exception.AppException;
 import com.example.backend.exception.ErrorCode;
 import com.example.backend.repository.post.PostsRepository;
-import com.example.backend.repository.post.SavedPostRepository;
+import com.example.backend.repository.post.saved.SavedPostRepository;
 import com.example.backend.repository.user.UserRepository;
 
 @ExtendWith(MockitoExtension.class)

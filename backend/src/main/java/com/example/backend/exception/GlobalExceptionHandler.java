@@ -10,19 +10,32 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import org.springframework.security.access.AccessDeniedException;
 import java.util.List;
 import java.util.Locale;
 
-@RestControllerAdvice
+import lombok.extern.slf4j.Slf4j;
 
+@RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
-    //    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ApiResponse<?>> handleException(Exception e) {
-//        ApiResponse<Object> response = new ApiResponse<>();
-//        response.setCode(999);
-//        response.setMessage(e.getMessage());
-//        return ResponseEntity.internalServerError().body(response);
-//    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<?>> handleException(Exception e) {
+        log.error("Unhandled Exception: ", e);
+        ApiResponse<Object> response = new ApiResponse<>();
+        response.setCode(ErrorCode.INTERNAL_SERVER_ERROR.getCode());
+        response.setMessage(ErrorCode.INTERNAL_SERVER_ERROR.getMessage());
+        return ResponseEntity.internalServerError().body(response);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiResponse<?>> handleAccessDeniedException(AccessDeniedException e) {
+        log.warn("Access Denied: {}", e.getMessage());
+        ApiResponse<Object> response = new ApiResponse<>();
+        response.setCode(ErrorCode.UNAUTHENTICATED.getCode());
+        response.setMessage("Bạn không có quyền truy cập chức năng này.");
+        return ResponseEntity.status(403).body(response);
+    }
     @Autowired
     private MessageSource messageSource;
 

@@ -3,7 +3,7 @@ package com.example.backend.controller.user;
 import com.example.backend.dto.response.user.FollowStatusResponse;
 import com.example.backend.service.user.FollowService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import com.example.backend.dto.response.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,36 +16,46 @@ public class FollowController {
     private final FollowService followService;
 
     @PostMapping("/{followingId}")
-    public ResponseEntity<FollowStatusResponse> toggleFollow(
+    public ApiResponse<FollowStatusResponse> toggleFollow(
             @PathVariable String followingId,
             @RequestParam String followerId
     ) {
-        return ResponseEntity.ok(followService.toggleFollow(followerId, followingId));
+        ApiResponse<FollowStatusResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(followService.toggleFollow(followerId, followingId));
+        return apiResponse;
     }
 
     @GetMapping("/status")
-    public ResponseEntity<FollowStatusResponse> checkFollowStatus(
+    public ApiResponse<FollowStatusResponse> checkFollowStatus(
             @RequestParam String followerId,
             @RequestParam String followingId
     ) {
-        return ResponseEntity.ok(followService.getFollowStatus(followerId, followingId));
+        ApiResponse<FollowStatusResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(followService.getFollowStatus(followerId, followingId));
+        return apiResponse;
     }
 
     @GetMapping("/counts/{userId}")
-    public ResponseEntity<FollowStatusResponse> getCounts(@PathVariable String userId) {
-        return ResponseEntity.ok(FollowStatusResponse.builder()
+    public ApiResponse<FollowStatusResponse> getCounts(@PathVariable String userId) {
+        ApiResponse<FollowStatusResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(FollowStatusResponse.builder()
                 .followersCount(followService.countFollowers(userId))
                 .followingCount(followService.countFollowing(userId))
                 .build());
+        return apiResponse;
     }
 
     @GetMapping("/mutual")
-    public ResponseEntity<List<String>> getMutualFollowUserIds(@RequestParam String userId) {
-        return ResponseEntity.ok(followService.getMutualFollowUserIds(userId));
+    public ApiResponse<List<String>> getMutualFollowUserIds(@RequestParam String userId) {
+        ApiResponse<List<String>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(followService.getMutualFollowUserIds(userId));
+        return apiResponse;
     }
 
     @GetMapping("/following-ids/{userId}")
-    public ResponseEntity<List<String>> getFollowingUserIds(@PathVariable String userId) {
-        return ResponseEntity.ok(followService.getFollowingUserIds(userId));
+    public ApiResponse<List<String>> getFollowingUserIds(@PathVariable String userId) {
+        ApiResponse<List<String>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(followService.getFollowingUserIds(userId));
+        return apiResponse;
     }
 }

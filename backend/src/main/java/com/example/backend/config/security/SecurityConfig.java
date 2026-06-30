@@ -22,11 +22,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .cors(cors -> {})   // QUAN TRỌNG
+                .cors(cors -> {})   
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/login/**", "/users/**").permitAll()
-                        .requestMatchers("/ws/**").permitAll()   // WebSocket handshake endpoint
+                        .requestMatchers("/ws/**").permitAll()   
                         .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().permitAll()
                 )

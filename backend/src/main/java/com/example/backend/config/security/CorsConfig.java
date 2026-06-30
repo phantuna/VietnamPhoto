@@ -32,6 +32,7 @@ public class CorsConfig implements WebMvcConfigurer {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin("http://192.168.1.5:3000");
         config.addAllowedOrigin("https://app.vnscout.io.vn");
         config.addAllowedOrigin("https://vnscout.io.vn");
         config.addAllowedHeader("*");

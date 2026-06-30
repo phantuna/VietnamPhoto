@@ -9,6 +9,7 @@ public enum ErrorCode {
     INVALID_PERMISSIONS(1004, "Bạn không có quyền thực hiện hành động này"),
     EXPIRED_TOKEN(1005, "Mã xác nhận (OTP) hoặc Token đã hết hạn"),
     INVALID_OTP(1006, "Mã OTP không chính xác"),
+    UNAUTHENTICATED(1007,"Không co quyền truy cập"),
 
     USER_NOT_FOUND(2001, "Tài khoản hoặc email không tồn tại"),
     USER_EXISTED(2002, "Tài khoản đã tồn tại trong hệ thống"),
@@ -49,6 +50,8 @@ public enum ErrorCode {
 
     VALIDATION_FAILED(9000, "Dữ liệu đầu vào không hợp lệ"),
     INVALID_REQUEST_DATA(9001, "Định dạng yêu cầu không đúng"),
+    UNCATEGORIZED_EXCEPTION(9997, "Lỗi hệ thống không xác định, vui lòng liên hệ admin"),
+    EXTERNAL_SERVICE_ERROR(9998, "Lỗi từ dịch vụ bên ngoài, vui lòng thử lại sau"),
     INTERNAL_SERVER_ERROR(9999, "Lỗi hệ thống nội bộ, vui lòng thử lại sau");
 
 

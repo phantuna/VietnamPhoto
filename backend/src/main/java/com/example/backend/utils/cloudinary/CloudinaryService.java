@@ -5,6 +5,9 @@ import com.cloudinary.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import com.example.backend.exception.AppException;
+import com.example.backend.exception.ErrorCode;
+
 import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
@@ -26,7 +29,7 @@ public class CloudinaryService {
             );
             return uploadResult.get("secure_url").toString();
         } catch (IOException e) {
-            throw new RuntimeException("Upload to Cloudinary failed", e);
+            throw new AppException(ErrorCode.EXTERNAL_SERVICE_ERROR);
         }
     }
 
@@ -43,7 +46,7 @@ public class CloudinaryService {
                     )
             );
         } catch (IOException e) {
-            throw new RuntimeException("Upload and convert HEIC to Cloudinary failed", e);
+            throw new AppException(ErrorCode.EXTERNAL_SERVICE_ERROR);
         }
     }
 
@@ -53,7 +56,7 @@ public class CloudinaryService {
 
             String marker = "/upload/";
             int idx = path.indexOf(marker);
-            if (idx < 0) throw new IllegalArgumentException("Invalid Cloudinary URL");
+            if (idx < 0) throw new AppException(ErrorCode.VALIDATION_FAILED);
 
             String afterUpload = path.substring(idx + marker.length());
             if (afterUpload.startsWith("v")) {
@@ -66,7 +69,7 @@ public class CloudinaryService {
 
             return afterUpload;
         } catch (Exception e) {
-            throw new RuntimeException("Cannot extract public_id from url: " + imageUrl, e);
+            throw new AppException(ErrorCode.VALIDATION_FAILED);
         }
     }
 
@@ -77,7 +80,7 @@ public class CloudinaryService {
                     ObjectUtils.asMap("resource_type", "image")
             );
         } catch (IOException e) {
-            throw new RuntimeException("Delete from Cloudinary failed", e);
+            throw new AppException(ErrorCode.EXTERNAL_SERVICE_ERROR);
         }
     }
     public void deleteImageByUrl(String imageUrl) {

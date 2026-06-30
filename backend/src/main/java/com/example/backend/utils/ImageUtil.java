@@ -11,6 +11,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
+import com.example.backend.exception.AppException;
+import com.example.backend.exception.ErrorCode;
 
 public final class ImageUtil {
 
@@ -21,11 +23,11 @@ public final class ImageUtil {
         try {
             BufferedImage image = ImageIO.read(file.getInputStream());
             if (image == null) {
-                throw new RuntimeException("Invalid image file");
+                throw new AppException(ErrorCode.INVALID_IMAGE);
             }
             return image;
         } catch (IOException e) {
-            throw new RuntimeException("Cannot read image", e);
+            throw new AppException(ErrorCode.PHOTO_UPLOAD_FAILED);
         }
     }
 
@@ -73,7 +75,7 @@ public final class ImageUtil {
     public static byte[] compressJpeg(BufferedImage image, float quality) {
         Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
         if (!writers.hasNext()) {
-            throw new RuntimeException("No JPEG writer available");
+            throw new AppException(ErrorCode.PHOTO_UPLOAD_FAILED);
         }
 
         ImageWriter writer = writers.next();
@@ -95,7 +97,7 @@ public final class ImageUtil {
 
             return baos.toByteArray();
         } catch (IOException e) {
-            throw new RuntimeException("JPEG compression failed", e);
+            throw new AppException(ErrorCode.PHOTO_UPLOAD_FAILED);
         } finally {
             writer.dispose();
         }

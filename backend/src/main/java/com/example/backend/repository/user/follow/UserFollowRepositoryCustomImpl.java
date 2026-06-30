@@ -27,17 +27,4 @@ public class UserFollowRepositoryCustomImpl implements UserFollowRepositoryCusto
                 .fetch();
     }
 
-    @Override
-    public List<UserFollow> findFollowingByUserIdWithDetails(String userId) {
-        QUserFollow userFollow = QUserFollow.userFollow;
-        QUsers follower = new QUsers("follower");
-        QUsers following = new QUsers("following");
-
-        return queryFactory.selectFrom(userFollow)
-                .join(userFollow.follower, follower).fetchJoin()
-                .join(userFollow.following, following).fetchJoin()
-                .where(userFollow.follower.id.eq(userId)
-                        .and(userFollow.deleted.eq(0)))
-                .fetch();
-    }
 }

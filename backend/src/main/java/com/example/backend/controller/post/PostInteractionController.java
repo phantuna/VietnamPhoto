@@ -5,7 +5,7 @@ import com.example.backend.dto.request.post.ReportPostRequest;
 import com.example.backend.service.post.PostInteractionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import com.example.backend.dto.response.ApiResponse;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,22 +17,26 @@ public class PostInteractionController {
     private final PostInteractionService postInteractionService;
 
     @PostMapping("/{id}/rate")
-    public ResponseEntity<?> ratePost(
+    public ApiResponse<String> ratePost(
             @PathVariable("id") String postId,
             @AuthenticationPrincipal String userId,
             @Valid @RequestBody RatePostRequest request) {
         
         postInteractionService.ratePost(postId, userId, request);
-        return ResponseEntity.ok().body("Đánh giá sao thành công");
+        ApiResponse<String> response = new ApiResponse<>();
+        response.setResult("Đánh giá sao thành công");
+        return response;
     }
 
     @PostMapping("/{id}/report")
-    public ResponseEntity<?> reportPost(
+    public ApiResponse<String> reportPost(
             @PathVariable("id") String postId,
             @AuthenticationPrincipal String userId,
             @Valid @RequestBody ReportPostRequest request) {
         
         postInteractionService.reportPost(postId, userId, request);
-        return ResponseEntity.ok().body("Báo cáo bài viết thành công. Quản trị viên sẽ xem xét.");
+        ApiResponse<String> response = new ApiResponse<>();
+        response.setResult("Báo cáo bài viết thành công. Quản trị viên sẽ xem xét.");
+        return response;
     }
 }

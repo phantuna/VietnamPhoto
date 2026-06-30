@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import com.example.backend.exception.AppException;
+import com.example.backend.exception.ErrorCode;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -45,9 +47,9 @@ public class VietMapServiceImpl implements VietMapService {
             }
             return response.get(0);
         } catch (org.springframework.web.client.HttpClientErrorException.Unauthorized e) {
-            throw new RuntimeException("VietMap API key không hợp lệ hoặc chưa được cấp quyền Reverse API", e);
+            throw new AppException(ErrorCode.EXTERNAL_SERVICE_ERROR);
         } catch (Exception e) {
-            throw new RuntimeException("Gọi VietMap Reverse thất bại", e);
+            throw new AppException(ErrorCode.EXTERNAL_SERVICE_ERROR);
         }
     }
 
