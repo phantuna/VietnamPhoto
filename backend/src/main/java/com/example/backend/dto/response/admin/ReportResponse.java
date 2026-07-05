@@ -19,7 +19,7 @@ public class ReportResponse {
     private String postAuthorId;
     private String postAuthorUsername;
     private String reporterId;
-    private String reporterUsername; // null if auto-flagged
+    private String reporterUsername;
     private String reason;
     private ReportStatus status;
     private LocalDateTime createdAt;

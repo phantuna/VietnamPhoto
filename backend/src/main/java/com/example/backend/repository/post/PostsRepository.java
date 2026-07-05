@@ -15,9 +15,11 @@ import java.util.UUID;
 import java.time.LocalDateTime;
 
 public interface PostsRepository extends JpaRepository<Posts, String>,PostsRepositoryCustom {
-    long countByUserIdAndCreatedDate(String userId, java.time.LocalDate date);
+    @Query("SELECT COUNT(p) FROM Posts p WHERE p.user.id = :userId AND FUNCTION('DATE', p.createdDate) = :date")
+    long countByUserIdAndCreatedDate(@Param("userId") String userId, @Param("date") java.time.LocalDate date);
     
-    long countByCreatedDate(java.time.LocalDate date);
+    @Query("SELECT COUNT(p) FROM Posts p WHERE FUNCTION('DATE', p.createdDate) = :date")
+    long countByCreatedDate(@Param("date") java.time.LocalDate date);
     
     @Query(value = "SELECT p FROM Posts p LEFT JOIN FETCH p.user LEFT JOIN FETCH p.location WHERE p.location.id = :locationId AND p.deleted = 0 AND (p.status IS NULL OR p.status = com.example.backend.enums.PostStatus.ACTIVE)", 
            countQuery = "SELECT count(p) FROM Posts p WHERE p.location.id = :locationId AND p.deleted = 0 AND (p.status IS NULL OR p.status = com.example.backend.enums.PostStatus.ACTIVE)")

@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.List;
 
 @Data
@@ -24,7 +26,8 @@ public class PostResponse {
     private Long commentCount;
     private Boolean liked;
     private Boolean isSaved;
-    private LocalDate createdDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdDate;
     
     private Double manualLatitude;
     private Double manualLongitude;

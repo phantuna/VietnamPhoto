@@ -6,8 +6,10 @@ import com.example.backend.enums.PostStatus;
 import com.example.backend.enums.ReportStatus;
 import com.example.backend.exception.AppException;
 import com.example.backend.exception.ErrorCode;
+import com.example.backend.repository.location.LocationsRepository;
 import com.example.backend.repository.post.PostsRepository;
 import com.example.backend.repository.post.report.ReportRepository;
+import com.example.backend.repository.user.RoleRepository;
 import com.example.backend.repository.user.UserRepository;
 import com.example.backend.service.admin.AdminService;
 import com.example.backend.service.user.ReputationService;
@@ -17,9 +19,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.cache.annotation.CacheEvict;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +37,8 @@ public class AdminServiceImpl implements AdminService {
     private final PostsRepository postsRepository;
     private final ReportRepository reportRepository;
     private final ReputationService reputationService;
-    private final com.example.backend.repository.location.LocationsRepository locationsRepository;
-    private final com.example.backend.repository.user.RoleRepository roleRepository;
+    private final LocationsRepository locationsRepository;
+    private final RoleRepository roleRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -175,7 +179,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public void updateUserRole(String userId, boolean isAdmin) {
-        String currentUserId = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
+        String currentUserId = SecurityContextHolder.getContext().getAuthentication().getName();
         if (userId.equals(currentUserId) && !isAdmin) {
             throw new AppException(ErrorCode.CANNOT_REVOKE_OWN_ADMIN);
         }
@@ -207,7 +211,7 @@ public class AdminServiceImpl implements AdminService {
                 .reputationScore(u.getReputationScore())
                 .level(u.getLevel())
                 .deleted(u.getDeleted())
-                .roles(u.getRoles() != null ? u.getRoles().stream().map(Role::getId).toList() : new java.util.ArrayList<>())
+                .roles(u.getRoles() != null ? u.getRoles().stream().map(Role::getId).toList() : new ArrayList<>())
                 .build());
     }
 
@@ -317,7 +321,7 @@ public class AdminServiceImpl implements AdminService {
                 .reporterUsername(reporterUsername)
                 .reason(report.getReason())
                 .status(report.getStatus())
-                .createdAt(report.getCreatedDate() != null ? report.getCreatedDate().atStartOfDay() : null)
+                .createdAt(report.getCreatedDate())
                 .build();
     }
 }

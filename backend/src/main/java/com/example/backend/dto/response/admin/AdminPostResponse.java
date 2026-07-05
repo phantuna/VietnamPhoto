@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.List;
 
 @Data
@@ -14,7 +16,8 @@ import java.util.List;
 public class AdminPostResponse {
     private String id;
     private String caption;
-    private LocalDate createdDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdDate;
     private UserInfo user;
     private LocationInfo location;
     private Float averageRating;

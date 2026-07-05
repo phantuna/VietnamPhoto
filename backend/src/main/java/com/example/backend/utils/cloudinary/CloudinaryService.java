@@ -41,8 +41,8 @@ public class CloudinaryService {
                             "public_id", publicId,
                             "folder", "photos",
                             "resource_type", "image",
-                            "format", "jpg", // Ép Cloudinary convert sang JPG
-                            "transformation", "c_limit,w_1600/q_82" // Resize và nén giống hệt code Java của bạn
+                            "format", "jpg", 
+                            "transformation", "c_limit,w_1600/q_82" 
                     )
             );
         } catch (IOException e) {

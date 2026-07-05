@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.Executor;
 
 @Slf4j
@@ -58,7 +59,6 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
     @Override
     public List<PhotoUploadResponse> uploadPhotos(List<MultipartFile> files, String userId) {
         validateFiles(files);
-
         Users user = getUserOrThrow(userId);
 
         List<CompletableFuture<PhotoUploadResponse>> futures = files.stream()
@@ -72,55 +72,15 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
             return futures.stream()
                     .map(CompletableFuture::join)
                     .toList();
+        } catch (CompletionException e) {
+            if (e.getCause() instanceof AppException) {
+                throw (AppException) e.getCause();
+            }
+            throw new AppException(ErrorCode.PHOTO_UPLOAD_FAILED);
         } catch (Exception e) {
             throw new AppException(ErrorCode.PHOTO_UPLOAD_FAILED);
         }
     }
-
-    @Override
-    @Transactional(readOnly = true)
-    public PhotoUploadResponse getPhotoById(String photoId) {
-        Photos photo = photosRepository.findById(photoId)
-                .orElseThrow(() -> new AppException(ErrorCode.PHOTO_NOT_FOUND));
-
-        return photoMapper.toResponse(photo);
-    }
-
-    @Override
-    @Transactional
-    public void deletePhoto(String photoId, String userId) {
-        Photos photo = photosRepository.findById(photoId)
-                .orElseThrow(() -> new AppException(ErrorCode.PHOTO_NOT_FOUND));
-        deleteFromCloudinaryQuietly(photo.getImageUrl());
-        photosRepository.delete(photo);
-    }
-
-    @Transactional
-    protected PhotoUploadResponse uploadSingleInternal(MultipartFile file, Users user) {
-        try {
-            validateSingleFile(file);
-
-            ModerationResult moderation = moderateImage(file);
-            ExifDataDto exifData = exifExtractorService.extract(file);
-            VietMapLocationResponse resolvedAddress = resolveAddress(exifData);
-
-            PhotoMetadata metadata = buildMetadata(exifData, resolvedAddress);
-            UploadedImageInfo uploadedImage = uploadImage(file, user);
-            Photos savedPhoto = savePhoto(metadata, uploadedImage, moderation);
-
-            log.info("Uploaded photo file={} thread={} moderation={}",
-                    file.getOriginalFilename(),
-                    Thread.currentThread().getName(),
-                    moderation.isWarning() ? "WARNING" : "SAFE");
-
-            String moderationMsg = moderation.isWarning() ? moderation.getReason() : null;
-            return photoMapper.toResponse(savedPhoto, moderationMsg);
-        } catch (Exception e) {
-            log.error("Lỗi khi upload ảnh {}: {}", file.getOriginalFilename(), e.getMessage(), e);
-            throw new AppException(ErrorCode.PHOTO_UPLOAD_FAILED);
-        }
-    }
-
 
     private void validateFiles(List<MultipartFile> files) {
         if (files == null || files.isEmpty()) {
@@ -132,17 +92,47 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
         }
     }
 
-    private void validateSingleFile(MultipartFile file) {
-        if (file == null || file.isEmpty()) {
-            throw new AppException(ErrorCode.INVALID_IMAGE);
-        }
-    }
-
     private Users getUserOrThrow(String userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
 
+
+    @Transactional
+    protected PhotoUploadResponse uploadSingleInternal(MultipartFile file, Users user) {
+        try {
+            validateSingleFile(file);
+
+            ModerationResult moderation = moderateImage(file);
+            ExifDataDto exifData = exifExtractorService.extract(file);
+            VietMapLocationResponse resolvedAddress = resolveAddress(exifData);
+
+            PhotoMetadata metadata = photoMapper.toPhotoMetadata(exifData, resolvedAddress);
+            
+            UploadedImageInfo uploadedImage = uploadImage(file, user);
+            Photos savedPhoto = savePhoto(metadata, uploadedImage, moderation);
+
+            log.info("Uploaded photo file={} thread={} moderation={}",
+                    file.getOriginalFilename(),
+                    Thread.currentThread().getName(),
+                    moderation.isWarning() ? "WARNING" : "SAFE");
+
+            String moderationMsg = moderation.isWarning() ? moderation.getReason() : null;
+            return photoMapper.toResponse(savedPhoto, moderationMsg);
+        } catch (AppException e) {
+            log.error("Lỗi validate hoặc xử lý ảnh {}: {}", file.getOriginalFilename(), e.getErrorCode().getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("Lỗi không xác định khi upload ảnh {}: {}", file.getOriginalFilename(), e.getMessage(), e);
+            throw new AppException(ErrorCode.PHOTO_UPLOAD_FAILED);
+        }
+    }
+
+    private void validateSingleFile(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            throw new AppException(ErrorCode.INVALID_IMAGE);
+        }
+    }
 
     private ModerationResult moderateImage(MultipartFile file) {
         ModerationResult moderation = imageModerationService.moderate(file);
@@ -163,29 +153,6 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
                 exifData.getGpsLatitude(),
                 exifData.getGpsLongitude()
         );
-    }
-
-    private PhotoMetadata buildMetadata(ExifDataDto exifData, VietMapLocationResponse resolvedAddress) {
-        PhotoMetadata metadata = new PhotoMetadata();
-        metadata.setCameraMake(exifData.getCameraMake());
-        metadata.setCameraModel(exifData.getCameraModel());
-        metadata.setLensModel(exifData.getLensModel());
-        metadata.setIso(exifData.getIso());
-        metadata.setAperture(exifData.getAperture());
-        metadata.setShutterSpeed(exifData.getShutterSpeed());
-        metadata.setFocalLength(exifData.getFocalLength());
-        metadata.setGpsLatitude(exifData.getGpsLatitude());
-        metadata.setGpsLongitude(exifData.getGpsLongitude());
-        metadata.setDateTaken(exifData.getDateTaken());
-
-        if (resolvedAddress != null) {
-            metadata.setAddress(resolvedAddress.getDisplay());
-            metadata.setProvince(resolvedAddress.getProvince());
-            metadata.setDistrict(resolvedAddress.getDistrict());
-            metadata.setWard(resolvedAddress.getWard());
-        }
-
-        return metadata;
     }
 
     private UploadedImageInfo uploadImage(MultipartFile file, Users user) {
@@ -229,12 +196,7 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
         );
     }
 
-    private Photos savePhoto(PhotoMetadata metadata, UploadedImageInfo uploadedImage) {
-        return savePhoto(metadata, uploadedImage, null);
-    }
-
-    private Photos savePhoto(PhotoMetadata metadata, UploadedImageInfo uploadedImage,
-                             ModerationResult moderation) {
+    private Photos savePhoto(PhotoMetadata metadata, UploadedImageInfo uploadedImage, ModerationResult moderation) {
         Photos photo = new Photos();
         photo.setImageUrl(uploadedImage.getImageUrl());
         photo.setWidth(uploadedImage.getWidth());
@@ -258,16 +220,10 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
         return photosRepository.save(photo);
     }
 
-
-
-    private void deleteFromCloudinaryQuietly(String imageUrl) {
-        try {
-            String publicId = CloudinaryService.extractPublicId(imageUrl);
-            cloudinaryService.deleteImageByPublicId(publicId);
-        } catch (Exception e) {
-            log.error("Lỗi khi xóa ảnh trên Cloudinary: {}", imageUrl, e);
-        }
+    private Photos savePhoto(PhotoMetadata metadata, UploadedImageInfo uploadedImage) {
+        return savePhoto(metadata, uploadedImage, null);
     }
+
 
     @Override
     @Transactional
@@ -287,5 +243,33 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
 
         log.info("Uploaded avatar for user={} url={}", user.getUsername(), imageUrl);
         return imageUrl;
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public PhotoUploadResponse getPhotoById(String photoId) {
+        Photos photo = photosRepository.findById(photoId)
+                .orElseThrow(() -> new AppException(ErrorCode.PHOTO_NOT_FOUND));
+
+        return photoMapper.toResponse(photo);
+    }
+
+    @Override
+    @Transactional
+    public void deletePhoto(String photoId, String userId) {
+        Photos photo = photosRepository.findById(photoId)
+                .orElseThrow(() -> new AppException(ErrorCode.PHOTO_NOT_FOUND));
+        deleteFromCloudinaryQuietly(photo.getImageUrl());
+        photosRepository.delete(photo);
+    }
+
+    private void deleteFromCloudinaryQuietly(String imageUrl) {
+        try {
+            String publicId = CloudinaryService.extractPublicId(imageUrl);
+            cloudinaryService.deleteImageByPublicId(publicId);
+        } catch (Exception e) {
+            log.error("Lỗi khi xóa ảnh trên Cloudinary: {}", imageUrl, e);
+        }
     }
 }

@@ -98,13 +98,6 @@ public class GeminiModerationUtils implements ImageModerationService {
         }
     }
 
-    // ─── Private helpers ──────────────────────────────────────────────────────
-
-    /**
-     * Parse phản hồi JSON từ Gemini REST API.
-     * Response structure:
-     * { "candidates": [{ "content": { "parts": [{ "text": "{\"label\":\"SAFE\",...}" }] } }] }
-     */
     private ModerationResult parseGeminiResponse(String responseBody) {
         try {
             JsonNode root    = objectMapper.readTree(responseBody);
@@ -112,7 +105,6 @@ public class GeminiModerationUtils implements ImageModerationService {
 
             log.debug("[Gemini Moderation] raw text: {}", rawText);
 
-            // Xóa markdown code block nếu Gemini bọc JSON trong ```json ... ```
             String json = rawText
                     .replaceAll("(?s)```json\\s*", "")
                     .replaceAll("(?s)```\\s*", "")
@@ -137,7 +129,6 @@ public class GeminiModerationUtils implements ImageModerationService {
 
         } catch (Exception e) {
             log.warn("[Gemini Moderation] Không parse được response: {}", responseBody);
-            // Fail-safe: không block nếu parse lỗi
             return ModerationResult.builder()
                     .blocked(false)
                     .warning(true)

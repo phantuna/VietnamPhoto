@@ -1,9 +1,12 @@
 package com.example.backend.controller.user;
 
+import com.example.backend.dto.request.user.ChangePasswordRequest;
 import com.example.backend.dto.request.user.UserRequest;
+import com.example.backend.dto.response.ApiResponse;
 import com.example.backend.dto.response.user.UserResponse;
 import com.example.backend.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +22,7 @@ public class UserController {
         return userService.createUser(dto);
     }
     @GetMapping("/getall")
-    public org.springframework.data.domain.Page<UserResponse> getAllUsers(
+    public Page<UserResponse> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
@@ -51,9 +54,9 @@ public class UserController {
     }
 
     @PutMapping("/change-password")
-    public com.example.backend.dto.response.ApiResponse<String> changePassword(@RequestBody com.example.backend.dto.request.user.ChangePasswordRequest request) {
+    public ApiResponse<String> changePassword(@RequestBody ChangePasswordRequest request) {
         userService.changePassword(request);
-        com.example.backend.dto.response.ApiResponse<String> response = new com.example.backend.dto.response.ApiResponse<>();
+        ApiResponse<String> response = new ApiResponse<>();
         response.setResult("Đổi mật khẩu thành công");
         return response;
     }

@@ -9,7 +9,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/photos")
@@ -27,12 +29,12 @@ public class PhotoController {
     }
 
     @PostMapping(value = "/upload-avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public java.util.Map<String, String> uploadAvatar(
+    public Map<String, String> uploadAvatar(
             @RequestParam("file") MultipartFile file,
             @AuthenticationPrincipal String userId
     ) {
         String avatarUrl = photoUploadService.uploadAvatar(file, userId);
-        java.util.Map<String, String> response = new java.util.HashMap<>();
+        Map<String, String> response = new HashMap<>();
         response.put("avatarUrl", avatarUrl);
         return response;
     }

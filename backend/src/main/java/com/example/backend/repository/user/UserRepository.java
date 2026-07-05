@@ -23,7 +23,8 @@ public interface UserRepository extends JpaRepository<Users, String>,UserReposit
      boolean existsByUsername(String username);
      boolean existsByEmail(String email);
      
-     long countByCreatedDate(java.time.LocalDate date);
+     @Query("SELECT COUNT(u) FROM Users u WHERE FUNCTION('DATE', u.createdDate) = :date")
+     long countByCreatedDate(@Param("date") java.time.LocalDate date);
 
      @Query(value = "SELECT * FROM users ORDER BY created_date DESC", 
             countQuery = "SELECT count(*) FROM users", 

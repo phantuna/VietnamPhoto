@@ -35,14 +35,13 @@ public class LocationServiceImpl implements LocationService {
     private final LocationMapper locationMapper;
 
     private static final double HARD_MIN_DISTANCE    = 20.0;
-    private static final double CONDITIONAL_SPOT_DIST = 300.0;
+    private static final double CONDITIONAL_SPOT_DIST = 3000.0;
     private static final double CONDITIONAL_SERV_DIST = 500.0;
 
     @Override
     @Transactional
     @CacheEvict(value = "locations", allEntries = true)
     public LocationsResponse createLocation(LocationsRequest request, String creatorId) {
-        // 0. Xác định loại địa điểm (mặc định SPOT nếu FE không gửi)
         LocationType locationType = request.getLocationType() != null
                 ? request.getLocationType()
                 : LocationType.SPOT;

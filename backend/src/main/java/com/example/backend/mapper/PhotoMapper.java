@@ -48,4 +48,27 @@ public class PhotoMapper {
                 .exifData(exifDto)
                 .build();
     }
+
+    public PhotoMetadata toPhotoMetadata(ExifDataDto exifData, com.example.backend.dto.response.location.VietMapLocationResponse resolvedAddress) {
+        PhotoMetadata metadata = new PhotoMetadata();
+        metadata.setCameraMake(exifData.getCameraMake());
+        metadata.setCameraModel(exifData.getCameraModel());
+        metadata.setLensModel(exifData.getLensModel());
+        metadata.setIso(exifData.getIso());
+        metadata.setAperture(exifData.getAperture());
+        metadata.setShutterSpeed(exifData.getShutterSpeed());
+        metadata.setFocalLength(exifData.getFocalLength());
+        metadata.setGpsLatitude(exifData.getGpsLatitude());
+        metadata.setGpsLongitude(exifData.getGpsLongitude());
+        metadata.setDateTaken(exifData.getDateTaken());
+
+        if (resolvedAddress != null) {
+            metadata.setAddress(resolvedAddress.getDisplay());
+            metadata.setProvince(resolvedAddress.getProvince());
+            metadata.setDistrict(resolvedAddress.getDistrict());
+            metadata.setWard(resolvedAddress.getWard());
+        }
+
+        return metadata;
+    }
 }

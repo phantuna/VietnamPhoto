@@ -146,7 +146,6 @@ public class PostServiceImplTest {
     void createPost_PostLimitExceeded_ThrowsAppException() {
         user.setLevel(1);
         when(usersRepository.findById("user-111")).thenReturn(Optional.of(user));
-        // Đã đăng 2 bài ngày hôm nay, giới hạn level 1 là 2 bài
         when(postsRepository.countByUserIdAndCreatedDate(anyString(), any())).thenReturn(2L);
 
         assertThatThrownBy(() -> postService.createPost("user-111", createRequest))

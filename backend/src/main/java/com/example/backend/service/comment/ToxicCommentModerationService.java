@@ -25,8 +25,8 @@ public class ToxicCommentModerationService {
 
     public ToxicCommentModerationService() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(2000); // 2 giây
-        factory.setReadTimeout(2000);    // 2 giây
+        factory.setConnectTimeout(2000); 
+        factory.setReadTimeout(2000);    
         this.restTemplate = new RestTemplate(factory);
     }
 

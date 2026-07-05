@@ -44,6 +44,8 @@ public class Posts extends Base {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Photos> photos = new ArrayList<>();
 
+
+
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private PostStatus status = PostStatus.ACTIVE;

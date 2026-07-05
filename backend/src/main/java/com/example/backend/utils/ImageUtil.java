@@ -26,8 +26,8 @@ public final class ImageUtil {
                 throw new AppException(ErrorCode.INVALID_IMAGE);
             }
             return image;
-        } catch (IOException e) {
-            throw new AppException(ErrorCode.PHOTO_UPLOAD_FAILED);
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.INVALID_IMAGE);
         }
     }
 

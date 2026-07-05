@@ -26,7 +26,7 @@ public enum ErrorCode {
     UNAUTHORIZED_POST_ACTION(3004, "Bạn chỉ có thể chỉnh sửa/xóa bài viết của chính mình"),
     POST_LIMIT_EXCEEDED(3005, "Bạn đã đạt giới hạn an toàn hệ thống (bài/ngày)"),
     PHOTO_UPLOAD_FAILED(3006, "Lỗi khi tải ảnh lên hệ thống"),
-    INVALID_IMAGE(3007, "Định dạng ảnh không hợp lệ"),
+    INVALID_IMAGE(3007, "Định dạng ảnh không được hỗ trợ. Hệ thống chỉ nhận ảnh chuẩn JPG, JPEG, PNG, HEIC."),
     IMAGE_BLOCKED(3008, "Ảnh chứa nội dung không phù hợp hoặc vi phạm tiêu chuẩn cộng đồng"),
 
     LOCATION_NOT_FOUND(4001, "Không tìm thấy địa điểm"),

@@ -58,10 +58,8 @@ public class CommentServiceImpl implements CommentService {
         String cleanContent;
         if ("REJECTED".equalsIgnoreCase(moderation.getAction())) {
             throw new AppException(ErrorCode.CONTAIN_BANNED_WORDS);
-        } else if ("PENDING".equalsIgnoreCase(moderation.getAction())) {
-            cleanContent = badWordFilterService.censorText(request.getContent());
         } else {
-            cleanContent = request.getContent();
+            cleanContent = badWordFilterService.censorText(request.getContent());
         }
 
         Comment comment = Comment.builder()
@@ -120,10 +118,8 @@ public class CommentServiceImpl implements CommentService {
         String cleanContent;
         if ("REJECTED".equalsIgnoreCase(moderation.getAction())) {
             throw new AppException(ErrorCode.CONTAIN_BANNED_WORDS);
-        } else if ("PENDING".equalsIgnoreCase(moderation.getAction())) {
-            cleanContent = badWordFilterService.censorText(newContent);
         } else {
-            cleanContent = newContent;
+            cleanContent = badWordFilterService.censorText(newContent);
         }
 
         comment.setContent(cleanContent);

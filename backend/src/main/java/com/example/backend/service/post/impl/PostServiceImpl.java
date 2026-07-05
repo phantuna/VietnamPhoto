@@ -25,10 +25,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import com.example.backend.exception.AppException;
 import com.example.backend.exception.ErrorCode;
+import com.example.backend.service.comment.ToxicCommentModerationService;
+import com.example.backend.dto.response.comment.ToxicModerationResponse;
 
 @Slf4j
 @Service
@@ -47,6 +50,7 @@ public class PostServiceImpl implements PostService {
     private final ReputationService reputationService;
     private final ApplicationEventPublisher eventPublisher;
     private final com.example.backend.service.banned.BadWordFilterService badWordFilterService;
+    private final ToxicCommentModerationService toxicCommentModerationService;
 
     private static final double MAX_ALLOWED_DISTANCE_METERS = 5000.0;
 
@@ -62,9 +66,9 @@ public class PostServiceImpl implements PostService {
         if (userLevel == 1) maxPostsPerDay = 2;
         else if (userLevel == 2) maxPostsPerDay = 5;
         else if (userLevel == 3) maxPostsPerDay = 10;
-        else maxPostsPerDay = 9999;
+        else maxPostsPerDay = 20;
 
-        java.time.LocalDate today = java.time.LocalDate.now();
+        LocalDate today = LocalDate.now();
         long postsToday = postsRepository.countByUserIdAndCreatedDate(userId, today);
         
         if (postsToday >= maxPostsPerDay) {
@@ -74,7 +78,15 @@ public class PostServiceImpl implements PostService {
         Locations location = locationsRepository.findById(request.getLocationId())
                 .orElseThrow(() -> new AppException(ErrorCode.LOCATION_NOT_FOUND));
 
-        String cleanCaption = badWordFilterService.censorText(request.getCaption());
+        String cleanCaption = request.getCaption();
+        if (cleanCaption != null && !cleanCaption.isBlank()) {
+            ToxicModerationResponse moderation = toxicCommentModerationService.checkToxic(cleanCaption);
+            if ("REJECTED".equalsIgnoreCase(moderation.getAction())) {
+                throw new AppException(ErrorCode.CONTAIN_BANNED_WORDS);
+            } else {
+                cleanCaption = badWordFilterService.censorText(cleanCaption);
+            }
+        }
 
         Posts post = new Posts();
         post.setCaption(cleanCaption);
@@ -202,7 +214,6 @@ public class PostServiceImpl implements PostService {
         return postMapper.toResponse(savedPost, false, false);
     }
 
-    // 🌟 THÊM HÀM NÀY: Dùng nội bộ để lấy Entity gốc thao tác với Database
     private Posts getPostEntityById(String postId) {
         return postsRepository.findByIdWithDetails(postId)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
@@ -255,7 +266,18 @@ public class PostServiceImpl implements PostService {
             throw new AppException(ErrorCode.UNAUTHORIZED_POST_ACTION);
         }
 
-        if (request.getCaption() != null) post.setCaption(request.getCaption());
+        if (request.getCaption() != null) {
+            String newCaption = request.getCaption();
+            if (!newCaption.isBlank()) {
+                ToxicModerationResponse moderation = toxicCommentModerationService.checkToxic(newCaption);
+                if ("REJECTED".equalsIgnoreCase(moderation.getAction())) {
+                    throw new AppException(ErrorCode.CONTAIN_BANNED_WORDS);
+                } else {
+                    newCaption = badWordFilterService.censorText(newCaption);
+                }
+            }
+            post.setCaption(newCaption);
+        }
         if (request.getShootingTip() != null) post.setShootingTip(request.getShootingTip());
 
         if (request.getTags() != null) {
@@ -295,6 +317,8 @@ public class PostServiceImpl implements PostService {
             }
         }
 
-        postsRepository.delete(post);
+        post.setDeleted(1);
+        post.setDeletedAt(java.time.LocalDateTime.now());
+        postsRepository.save(post);
     }
 }

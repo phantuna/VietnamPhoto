@@ -4,6 +4,7 @@ import com.example.backend.dto.request.location.LocationsRequest;
 import com.example.backend.dto.response.location.LocationsResponse;
 import com.example.backend.service.location.LocationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
@@ -30,7 +31,7 @@ public class LocationController {
     }
 
     @GetMapping
-    public org.springframework.data.domain.Page<LocationsResponse> getAll(
+    public Page<LocationsResponse> getAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) Integer level
