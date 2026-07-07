@@ -143,15 +143,34 @@ public class AdminServiceImpl implements AdminService {
 
         Posts post = report.getPost();
         if (post != null) {
-            List<Report> pendingReports = reportRepository.findReportsByPostIdWithDetails(post.getId())
-                                            .stream()
-                                            .filter(r -> r.getStatus() == ReportStatus.PENDING)
-                                            .toList();
-            for (Report r : pendingReports) {
-                r.setStatus(ReportStatus.DISMISSED);
-                reportRepository.save(r);
+            List<Report> allReports = reportRepository.findReportsByPostIdWithDetails(post.getId());
+            boolean hadResolvedReport = false;
+            
+            for (Report r : allReports) {
+                if (r.getStatus() == ReportStatus.RESOLVED) {
+                    hadResolvedReport = true;
+                }
+                if (r.getStatus() != ReportStatus.DISMISSED) {
+                    r.setStatus(ReportStatus.DISMISSED);
+                    reportRepository.save(r);
+                }
             }
-            log.info("Dismissed {} reports for post {}.", pendingReports.size(), post.getId());
+
+            // 10. Cập nhật trạng thái bài viết (deleted = 0)
+            if (post.getDeleted() == 1 || post.getStatus() == PostStatus.HIDDEN) {
+                post.setDeleted(0);
+                post.setStatus(PostStatus.ACTIVE);
+                post.setDeletedAt(null);
+                postsRepository.save(post);
+            }
+
+            // 14. Hoàn trả lại 20 điểm Uy tín cho Chủ bài viết (nếu có trừ)
+            Users postOwner = post.getUser();
+            if (postOwner != null && hadResolvedReport) {
+                reputationService.addPoints(postOwner, 20, "Admin bỏ qua báo cáo và khôi phục bài viết (Hoàn điểm)");
+            }
+
+            log.info("Dismissed all reports for post {}. Post restored.", post.getId());
         } else {
             report.setStatus(ReportStatus.DISMISSED);
             reportRepository.save(report);
@@ -252,12 +271,66 @@ public class AdminServiceImpl implements AdminService {
             return AdminPostResponse.builder()
                     .id(p.getId())
                     .caption(p.getCaption())
+                    .shootingTip(p.getShootingTip())
+                    .tags(p.getTags() != null ? p.getTags().stream().map(t -> t.getName()).toList() : new ArrayList<>())
                     .createdDate(p.getCreatedDate())
-                    .user(user)
-                    .location(loc)
+                    .deleted(p.getDeleted())
+                    .status(p.getStatus() != null ? p.getStatus().name() : "ACTIVE")
                     .averageRating(p.getAverageRating())
                     .totalRatings(p.getTotalRatings())
+                    .user(user)
+                    .location(loc)
+                    .photos(photos)
+                    .build();
+        });
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<AdminPostResponse> getPendingPosts(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").ascending());
+        Page<Posts> posts = postsRepository.findPendingPosts(pageable);
+        return posts.map(p -> {
+            AdminPostResponse.UserInfo user = null;
+            if (p.getUser() != null) {
+                user = AdminPostResponse.UserInfo.builder()
+                        .id(p.getUser().getId())
+                        .username(p.getUser().getUsername())
+                        .email(p.getUser().getEmail())
+                        .build();
+            }
+
+            AdminPostResponse.LocationInfo loc = null;
+            if (p.getLocation() != null) {
+                loc = AdminPostResponse.LocationInfo.builder()
+                        .id(p.getLocation().getId())
+                        .name(p.getLocation().getName())
+                        .nameWithType(p.getLocation().getNameWithType())
+                        .build();
+            }
+
+            List<AdminPostResponse.PhotoInfo> photos = new ArrayList<>();
+            if (p.getPhotos() != null) {
+                for (Photos photo : p.getPhotos()) {
+                    photos.add(AdminPostResponse.PhotoInfo.builder()
+                            .id(photo.getId())
+                            .imageUrl(photo.getImageUrl())
+                            .build());
+                }
+            }
+
+            return AdminPostResponse.builder()
+                    .id(p.getId())
+                    .caption(p.getCaption())
+                    .shootingTip(p.getShootingTip())
+                    .tags(p.getTags() != null ? p.getTags().stream().map(t -> t.getName()).toList() : new ArrayList<>())
+                    .createdDate(p.getCreatedDate())
                     .deleted(p.getDeleted())
+                    .status(p.getStatus() != null ? p.getStatus().name() : "PENDING_REVIEW")
+                    .averageRating(p.getAverageRating())
+                    .totalRatings(p.getTotalRatings())
+                    .user(user)
+                    .location(loc)
                     .photos(photos)
                     .build();
         });
@@ -265,10 +338,62 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
+    public void approvePost(String postId) {
+        Posts post = postsRepository.findById(postId)
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
+        if (post.getStatus() == PostStatus.ACTIVE) {
+            throw new AppException(ErrorCode.INVALID_POST_STATUS);
+        }
+        post.setStatus(PostStatus.ACTIVE);
+        postsRepository.save(post);
+        log.info("Admin approved post {}", postId);
+    }
+
+    @Override
+    @Transactional
+    public void rejectPost(String postId) {
+        Posts post = postsRepository.findById(postId)
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
+        post.setStatus(PostStatus.HIDDEN);
+        post.setDeleted(1); // Also set deleted flag to be safe
+        postsRepository.save(post);
+        log.info("Admin rejected post {}", postId);
+    }
+
+    @Override
+    @Transactional
     @CacheEvict(value = "posts", allEntries = true)
     public void togglePostStatus(String postId, int deleted) {
-        postsRepository.togglePostStatus(postId, deleted);
-        log.info("Admin updated post {} status to deleted={}", postId, deleted);
+        Posts post = postsRepository.findById(postId)
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
+
+        post.setDeleted(deleted);
+        if (deleted == 1) {
+            post.setStatus(PostStatus.HIDDEN);
+            post.setDeletedAt(java.time.LocalDateTime.now());
+        } else {
+            post.setStatus(PostStatus.ACTIVE);
+            post.setDeletedAt(null);
+            
+            boolean hadResolvedReport = false;
+            List<Report> allReports = reportRepository.findReportsByPostIdWithDetails(post.getId());
+            for (Report r : allReports) {
+                if (r.getStatus() == ReportStatus.RESOLVED) {
+                    hadResolvedReport = true;
+                }
+                if (r.getStatus() != ReportStatus.DISMISSED) {
+                    r.setStatus(ReportStatus.DISMISSED);
+                    reportRepository.save(r);
+                }
+            }
+
+            Users postOwner = post.getUser();
+            if (postOwner != null && hadResolvedReport) {
+                reputationService.addPoints(postOwner, 20, "Admin khôi phục hiển thị bài viết (Hoàn điểm)");
+            }
+        }
+        postsRepository.save(post);
+        log.info("Admin updated post {} status to deleted={}, reports dismissed, points updated", postId, deleted);
     }
 
     @Override

@@ -97,9 +97,32 @@ public class AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<Page<AdminPostResponse>> getAllPosts(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "false", required = false) boolean pending) {
         ApiResponse<Page<AdminPostResponse>> response = new ApiResponse<>();
-        response.setResult(adminService.getAllPosts(page, size));
+        if (pending) {
+            response.setResult(adminService.getPendingPosts(page, size));
+        } else {
+            response.setResult(adminService.getAllPosts(page, size));
+        }
+        return response;
+    }
+
+    @PutMapping("/posts/{id}/approve")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ApiResponse<String> approvePost(@PathVariable("id") String postId) {
+        adminService.approvePost(postId);
+        ApiResponse<String> response = new ApiResponse<>();
+        response.setResult("Duyệt bài viết thành công.");
+        return response;
+    }
+
+    @PutMapping("/posts/{id}/reject")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ApiResponse<String> rejectPost(@PathVariable("id") String postId) {
+        adminService.rejectPost(postId);
+        ApiResponse<String> response = new ApiResponse<>();
+        response.setResult("Đã từ chối bài viết.");
         return response;
     }
 

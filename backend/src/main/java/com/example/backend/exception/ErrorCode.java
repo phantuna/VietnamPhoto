@@ -28,6 +28,8 @@ public enum ErrorCode {
     PHOTO_UPLOAD_FAILED(3006, "Lỗi khi tải ảnh lên hệ thống"),
     INVALID_IMAGE(3007, "Định dạng ảnh không được hỗ trợ. Hệ thống chỉ nhận ảnh chuẩn JPG, JPEG, PNG, HEIC."),
     IMAGE_BLOCKED(3008, "Ảnh chứa nội dung không phù hợp hoặc vi phạm tiêu chuẩn cộng đồng"),
+    INVALID_POST_STATUS(3009, "Trạng thái bài viết không hợp lệ để thực hiện thao tác này"),
+
 
     LOCATION_NOT_FOUND(4001, "Không tìm thấy địa điểm"),
     LOCATION_ALREADY_EXISTS(4002, "Địa điểm này đã tồn tại"),

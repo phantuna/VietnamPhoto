@@ -4,6 +4,7 @@ import com.example.backend.dto.request.post.PostCreateRequest;
 import com.example.backend.dto.request.post.PostUpdateRequest;
 import com.example.backend.dto.response.post.PostResponse;
 import com.example.backend.entity.*;
+import com.example.backend.enums.PostStatus;
 import com.example.backend.mapper.PostMapper;
 import com.example.backend.repository.post.PostsRepository;
 import com.example.backend.repository.location.LocationsRepository;
@@ -94,7 +95,13 @@ public class PostServiceImpl implements PostService {
         post.setUser(user);
         post.setLocation(location);
         post.setLikeCount(0L);
-        post.setStatus(com.example.backend.enums.PostStatus.ACTIVE);
+        
+        if (userLevel < 3) {
+            post.setStatus(PostStatus.PENDING_REVIEW);
+        } else {
+            post.setStatus(PostStatus.ACTIVE);
+        }
+        
         post.setManualLatitude(request.getManualLatitude());
         post.setManualLongitude(request.getManualLongitude());
 
@@ -102,7 +109,6 @@ public class PostServiceImpl implements PostService {
         // Extract tags from caption
         allTags.addAll(HashtagUtils.extractHashtags(request.getCaption()));
         
-        // Add explicit tags from request array
         if (request.getTags() != null && !request.getTags().isEmpty()) {
             allTags.addAll(request.getTags());
         }

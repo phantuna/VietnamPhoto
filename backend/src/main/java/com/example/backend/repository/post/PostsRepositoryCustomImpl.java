@@ -2,6 +2,7 @@ package com.example.backend.repository.post;
 
 import com.example.backend.entity.Posts;
 import com.example.backend.entity.QPosts;
+import com.example.backend.enums.PostStatus;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class PostsRepositoryCustomImpl implements PostsRepositoryCustom {
     @Override
     public Page<Posts> findAllPostsWithDetails(Pageable pageable) {
         BooleanExpression condition = posts.deleted.eq(0)
-                .and(posts.status.isNull().or(posts.status.eq(com.example.backend.enums.PostStatus.ACTIVE)))
+                .and(posts.status.isNull().or(posts.status.eq(PostStatus.ACTIVE)))
                 .and(posts.location.isNull().or(posts.location.deleted.isNull()).or(posts.location.deleted.eq(0)));
 
         List<Posts> content = queryFactory
@@ -50,7 +51,7 @@ public class PostsRepositoryCustomImpl implements PostsRepositoryCustom {
     public Optional<Posts> findByIdWithDetails(String id) {
         BooleanExpression condition = posts.id.eq(id)
                 .and(posts.deleted.eq(0))
-                .and(posts.status.isNull().or(posts.status.eq(com.example.backend.enums.PostStatus.ACTIVE)))
+                .and(posts.status.isNull().or(posts.status.eq(PostStatus.ACTIVE)))
                 .and(posts.location.isNull().or(posts.location.deleted.isNull()).or(posts.location.deleted.eq(0)));
 
         Posts post = queryFactory

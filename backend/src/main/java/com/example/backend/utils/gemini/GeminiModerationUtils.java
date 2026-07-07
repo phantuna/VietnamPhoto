@@ -29,14 +29,14 @@ public class GeminiModerationUtils implements ImageModerationService {
             + MODEL + ":generateContent?key=";
 
     private static final String PROMPT = """
-            Bạn là hệ thống kiểm duyệt nội dung ảnh cho nền tảng chia sẻ ảnh phong cảnh Việt Nam.
+            Bạn là hệ thống kiểm duyệt nội dung ảnh cho mạng xã hội chia sẻ ảnh phong cảnh và du lịch Việt Nam.
             Phân loại ảnh này theo một trong ba nhãn sau:
 
-            - SAFE: Ảnh phong cảnh, thiên nhiên, kiến trúc, du lịch, đời sống bình thường.
-            - WARNING: Ảnh có nội dung nhạy cảm nhẹ (bạo lực nhẹ, gợi cảm nhưng không khỏa thân).
-            - UNSAFE: Ảnh vi phạm rõ ràng: khỏa thân, nội dung tình dục, bạo lực nghiêm trọng, kích động thù địch.
+            - SAFE: Ảnh phong cảnh, thiên nhiên, kiến trúc, du lịch, đời sống bình thường ngoài trời.
+            - WARNING: Ảnh có nội dung nhạy cảm nhẹ (gợi cảm, phòng ngủ, không gian riêng tư) hoặc ảnh rác không liên quan đến du lịch.
+            - UNSAFE: Ảnh vi phạm pháp luật và tiêu chuẩn cộng đồng: khỏa thân, tình dục, bạo lực, ma túy. ĐẶC BIỆT NGHIÊM CẤM và ĐÁNH DẤU UNSAFE đối với ảnh có yếu tố phản động, kích động thù địch, chống phá nhà nước Việt Nam, bao gồm hình ảnh có chứa "Cờ vàng ba sọc đỏ" (cờ Việt Nam Cộng Hòa cũ) hoặc các biểu tượng chính trị, cờ phướn, khẩu hiệu biểu tình nhạy cảm.
 
-            Trả lời CHÍNH XÁC theo định dạng JSON sau, không thêm bất kỳ nội dung nào khác:
+            Trả lời CHÍNH XÁC theo định dạng JSON sau, không thêm bất kỳ văn bản nào khác:
             {"label": "SAFE", "reason": "Mô tả ngắn gọn lý do bằng tiếng Việt"}
             """;
 

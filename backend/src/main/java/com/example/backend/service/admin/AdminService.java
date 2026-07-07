@@ -25,6 +25,12 @@ public interface AdminService {
     Page<AdminUserResponse> getAllUsers(int page, int size);
 
     Page<AdminPostResponse> getAllPosts(int page, int size);
+    
+    Page<AdminPostResponse> getPendingPosts(int page, int size);
+    
+    void approvePost(String postId);
+    
+    void rejectPost(String postId);
 
     void togglePostStatus(String postId, int deleted);
 

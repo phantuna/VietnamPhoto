@@ -23,6 +23,9 @@ public class AdminPostResponse {
     private Float averageRating;
     private Integer totalRatings;
     private Integer deleted;
+    private String status;
+    private String shootingTip;
+    private List<String> tags;
     private List<PhotoInfo> photos;
 
     @Data

@@ -52,6 +52,10 @@ public class LocationServiceImpl implements LocationService {
 
         List<Locations> existingLocations = locationsRepository.findAll();
         for (Locations existing : existingLocations) {
+            if (existing.getDeleted() != null && existing.getDeleted() == 1) {
+                continue;
+            }
+            
             boolean isCheckinPoint = existing.getLevel() != null && existing.getLevel() >= 2;
             
             if (isCheckinPoint && existing.getLatitude() != null && existing.getLongitude() != null) {
@@ -86,17 +90,7 @@ public class LocationServiceImpl implements LocationService {
                 VietMapLocationResponse resolved = vietMapLocationService.reverse(request.getLatitude(), request.getLongitude());
                 
                 if (resolved != null) {
-                    if (resolved.getWard() != null) {
-                        locationsRepository.findFirstByNameWithTypeContainingAndLevel(resolved.getWard(), Integer.valueOf(1))
-                                .ifPresent(newLocation::setParent);
-                    }
-                    
-                    if (newLocation.getParent() == null && resolved.getDistrict() != null) {
-                        locationsRepository.findFirstByNameWithTypeContainingAndLevel(resolved.getDistrict(), Integer.valueOf(1))
-                                .ifPresent(newLocation::setParent);
-                    }
-
-                    if (newLocation.getParent() == null && resolved.getProvince() != null) {
+                    if (resolved.getProvince() != null) {
                         locationsRepository.findFirstByNameWithTypeContainingAndLevel(resolved.getProvince(), Integer.valueOf(0))
                                 .ifPresent(newLocation::setParent);
                     }
