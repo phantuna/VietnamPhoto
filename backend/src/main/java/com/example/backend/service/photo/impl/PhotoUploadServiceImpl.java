@@ -103,13 +103,26 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
         try {
             validateSingleFile(file);
 
-            ModerationResult moderation = moderateImage(file);
-            ExifDataDto exifData = exifExtractorService.extract(file);
-            VietMapLocationResponse resolvedAddress = resolveAddress(exifData);
+            CompletableFuture<ModerationResult> moderationFuture = CompletableFuture.supplyAsync(
+                    () -> moderateImage(file), photoUploadExecutor);
+
+            CompletableFuture<ExifDataDto> exifFuture = CompletableFuture.supplyAsync(
+                    () -> exifExtractorService.extract(file), photoUploadExecutor);
+
+            CompletableFuture<UploadedImageInfo> uploadFuture = CompletableFuture.supplyAsync(
+                    () -> uploadImage(file, user), photoUploadExecutor);
+
+            CompletableFuture<VietMapLocationResponse> addressFuture = exifFuture.thenApplyAsync(
+                    this::resolveAddress, photoUploadExecutor);
+
+            CompletableFuture.allOf(moderationFuture, addressFuture, uploadFuture).join();
+
+            ModerationResult moderation = moderationFuture.get();
+            ExifDataDto exifData = exifFuture.get();
+            VietMapLocationResponse resolvedAddress = addressFuture.get();
+            UploadedImageInfo uploadedImage = uploadFuture.get();
 
             PhotoMetadata metadata = photoMapper.toPhotoMetadata(exifData, resolvedAddress);
-            
-            UploadedImageInfo uploadedImage = uploadImage(file, user);
             Photos savedPhoto = savePhoto(metadata, uploadedImage, moderation);
 
             log.info("Uploaded photo file={} thread={} moderation={}",
@@ -122,6 +135,14 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
         } catch (AppException e) {
             log.error("Lỗi validate hoặc xử lý ảnh {}: {}", file.getOriginalFilename(), e.getErrorCode().getMessage());
             throw e;
+        } catch (java.util.concurrent.CompletionException e) {
+            if (e.getCause() instanceof AppException) {
+                AppException appEx = (AppException) e.getCause();
+                log.error("Lỗi validate hoặc xử lý ảnh (Async) {}: {}", file.getOriginalFilename(), appEx.getErrorCode().getMessage());
+                throw appEx;
+            }
+            log.error("Lỗi không xác định (Async) khi upload ảnh {}: {}", file.getOriginalFilename(), e.getMessage(), e);
+            throw new AppException(ErrorCode.PHOTO_UPLOAD_FAILED);
         } catch (Exception e) {
             log.error("Lỗi không xác định khi upload ảnh {}: {}", file.getOriginalFilename(), e.getMessage(), e);
             throw new AppException(ErrorCode.PHOTO_UPLOAD_FAILED);

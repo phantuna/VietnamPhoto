@@ -8,10 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
-/**
- * Đại diện cho 1 cuộc trò chuyện riêng tư (1-1) giữa 2 người dùng.
- * Để tránh trùng lặp, quy ước: user1.id < user2.id (so sánh theo string UUID).
- */
+
 @Entity
 @Table(name = "conversations",
         uniqueConstraints = @UniqueConstraint(columnNames = {"user1_id", "user2_id"}))

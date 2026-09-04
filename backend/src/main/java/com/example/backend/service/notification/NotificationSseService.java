@@ -60,6 +60,25 @@ public final class NotificationSseService {
         }
     }
 
+    public void sendChatUpdate(String userId) {
+        List<SseEmitter> userEmitters = emitters.get(userId);
+        if (userEmitters == null || userEmitters.isEmpty()) {
+            return;
+        }
+
+        for (SseEmitter emitter : userEmitters) {
+            try {
+                synchronized (emitter) {
+                    emitter.send(SseEmitter.event()
+                            .name("chatUpdate")
+                            .data("{\"hasNewMessage\": true}"));
+                }
+            } catch (IOException e) {
+                remove(userId, emitter);
+            }
+        }
+    }
+
     private void remove(String userId, SseEmitter emitter) {
         List<SseEmitter> userEmitters = emitters.get(userId);
 

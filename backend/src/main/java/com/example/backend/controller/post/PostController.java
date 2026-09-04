@@ -59,6 +59,29 @@ public class PostController {
         return postService.getAllPosts(viewerId, page, size);
     }
 
+    @GetMapping("/nearby")
+    public Page<PostResponse> getNearbyPosts(
+            @RequestParam double lat,
+            @RequestParam double lng,
+            @RequestParam(defaultValue = "150") double radius,
+            @RequestParam(required = false) String viewerId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return postService.getNearbyPosts(lat, lng, radius, viewerId, page, size);
+    }
+
+    @GetMapping("/search")
+    public Page<PostResponse> searchPosts(
+            @RequestParam String q,
+            @RequestParam(required = false) String viewerId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        if (q == null || q.trim().length() < 2) return Page.empty();
+        return postService.searchPosts(q, viewerId, page, size);
+    }
+
     @GetMapping("/location/{locationId}")
     public Page<PostResponse> getPostsByLocation(
             @PathVariable String locationId,

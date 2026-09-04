@@ -9,6 +9,7 @@ import com.example.backend.repository.chat.ChatMessageRepository;
 import com.example.backend.repository.chat.ConversationRepository;
 import com.example.backend.repository.user.UserRepository;
 import com.example.backend.service.chat.ChatService;
+import com.example.backend.service.notification.NotificationSseService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,7 @@ public class ChatServiceImpl implements ChatService {
     private final ConversationRepository conversationRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final UserRepository userRepository;
+    private final NotificationSseService notificationSseService;
 
     @Override
     @Transactional
@@ -79,6 +81,9 @@ public class ChatServiceImpl implements ChatService {
                 .build();
 
         ChatMessage saved = chatMessageRepository.save(msg);
+        
+        notificationSseService.sendChatUpdate(receiverId);
+        
         return toMessageResponse(saved);
     }
 

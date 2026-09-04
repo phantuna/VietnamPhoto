@@ -23,6 +23,9 @@ public class Posts extends Base {
 
     private Long likeCount;
     
+    @Column(name = "comment_count")
+    private Long commentCount = 0L;
+    
     private Double manualLatitude;
     
     private Double manualLongitude;

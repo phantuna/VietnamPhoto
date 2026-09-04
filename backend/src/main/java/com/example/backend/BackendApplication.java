@@ -9,8 +9,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+import org.springframework.cache.annotation.EnableCaching;
+
 @SpringBootApplication
 @EnableJpaAuditing
+@EnableCaching
 public class BackendApplication {
     @PostConstruct
     public void init() {

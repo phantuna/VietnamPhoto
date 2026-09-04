@@ -55,7 +55,6 @@ public class LocationServiceImpl implements LocationService {
             if (existing.getDeleted() != null && existing.getDeleted() == 1) {
                 continue;
             }
-            
             boolean isCheckinPoint = existing.getLevel() != null && existing.getLevel() >= 2;
             
             if (isCheckinPoint && existing.getLatitude() != null && existing.getLongitude() != null) {
@@ -63,11 +62,9 @@ public class LocationServiceImpl implements LocationService {
                         request.getLatitude().doubleValue(), request.getLongitude().doubleValue(),
                         existing.getLatitude().doubleValue(), existing.getLongitude().doubleValue()
                 );
-
                 if (dist < HARD_MIN_DISTANCE) {
                     throw new AppException(ErrorCode.LOCATION_TOO_CLOSE);
                 }
-
                 if (dist < conditionalDist) {
                     if (isNameSimilar(request.getName(), existing.getName())) {
                         throw new AppException(ErrorCode.LOCATION_TOO_CLOSE);
@@ -90,11 +87,18 @@ public class LocationServiceImpl implements LocationService {
                 VietMapLocationResponse resolved = vietMapLocationService.reverse(request.getLatitude(), request.getLongitude());
                 
                 if (resolved != null) {
-                    if (resolved.getProvince() != null) {
-                        locationsRepository.findFirstByNameWithTypeContainingAndLevel(resolved.getProvince(), Integer.valueOf(0))
+                    if (resolved.getWard() != null) {
+                        locationsRepository.findFirstByNameWithTypeContainingAndLevel(resolved.getWard(), Integer.valueOf(1))
+                                .ifPresent(newLocation::setParent);
+                    }   
+                    if (newLocation.getParent() == null && resolved.getDistrict() != null) {
+                        locationsRepository.findFirstByNameWithTypeContainingAndLevel(resolved.getDistrict(), Integer.valueOf(1))
                                 .ifPresent(newLocation::setParent);
                     }
-                    
+                    if (newLocation.getParent() == null && resolved.getProvince() != null) {
+                        locationsRepository.findFirstByNameWithTypeContainingAndLevel(resolved.getProvince(), Integer.valueOf(0))
+                                .ifPresent(newLocation::setParent);
+                    }             
                     newLocation.setNameWithType(request.getName());
                 }
             } catch (Exception e) {
@@ -105,7 +109,6 @@ public class LocationServiceImpl implements LocationService {
             locationsRepository.findById(request.getParentId())
                     .ifPresent(newLocation::setParent);
         }
-
         newLocation.setLevel(2); 
         newLocation.setType("check-in"); 
         newLocation.setCode("LOC-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
@@ -113,7 +116,6 @@ public class LocationServiceImpl implements LocationService {
         if (newLocation.getNameWithType() == null) {
             newLocation.setNameWithType(request.getName());
         }
-
         String baseSlug = request.getName().toLowerCase()
                 .replaceAll("[^a-z0-9\\s]", "")
                 .trim()
@@ -130,7 +132,6 @@ public class LocationServiceImpl implements LocationService {
         Locations location = locationsRepository.findById(id)
                 .filter(l -> l.getDeleted() == null || l.getDeleted() == 0)
                 .orElseThrow(() -> new AppException(ErrorCode.LOCATION_NOT_FOUND));
-
         return locationMapper.toResponse(location);
     }
 

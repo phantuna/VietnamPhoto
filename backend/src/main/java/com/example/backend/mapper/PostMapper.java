@@ -4,6 +4,7 @@ import com.example.backend.dto.response.user.UserResponse;
 import com.example.backend.dto.response.location.LocationsResponse;
 import com.example.backend.dto.request.photo.PhotosRequest;
 import com.example.backend.dto.response.post.PostResponse;
+import com.example.backend.entity.Locations;
 import com.example.backend.entity.Photos;
 import com.example.backend.entity.Posts;
 import com.example.backend.repository.comment.CommentRepository;
@@ -26,7 +27,7 @@ public class PostMapper {
                 .caption(post.getCaption())
                 .shootingTip(post.getShootingTip())
                 .likeCount(post.getLikeCount() != null ? post.getLikeCount() : 0L)
-                .commentCount(commentRepository.countByPostId(post.getId()))
+                .commentCount(post.getCommentCount() != null ? post.getCommentCount() : 0L)
                 .liked(liked)
                 .isSaved(saved)
                 .createdDate(post.getCreatedDate())
@@ -53,10 +54,10 @@ public class PostMapper {
                 .build();
     }
 
-    private LocationsResponse mapLocation(com.example.backend.entity.Posts post) {
+    private LocationsResponse mapLocation(Posts post) {
         if (post.getLocation() == null) return null;
 
-        com.example.backend.entity.Locations loc = post.getLocation();
+        Locations loc = post.getLocation();
         return LocationsResponse.builder()
                 .id(loc.getId())
                 .name(loc.getName())
@@ -74,9 +75,9 @@ public class PostMapper {
                 .build();
     }
 
-    private String extractProvinceName(com.example.backend.entity.Locations location) {
+    private String extractProvinceName(Locations location) {
         if (location == null) return null;
-        com.example.backend.entity.Locations current = location;
+        Locations current = location;
         while (current != null) {
             if (current.getLevel() != null && current.getLevel() == 0) {
                 return current.getName();

@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
                 .getFieldErrors()
                 .stream()
                 .map(err -> {
-                    String messageKey = err.getDefaultMessage(); // ví dụ: validation.phone.invalid
+                    String messageKey = err.getDefaultMessage(); 
 
                     String localizedMessage = messageSource.getMessage(
                             messageKey,
@@ -93,7 +93,7 @@ public class GlobalExceptionHandler {
                     locale
             );
         } catch (Exception e) {
-            localizedMessage = errorCode.getMessage(); // fallback
+            localizedMessage = errorCode.getMessage();
         }
 
         ApiResponse apiResponse = new ApiResponse();

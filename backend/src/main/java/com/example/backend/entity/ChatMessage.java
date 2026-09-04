@@ -10,9 +10,7 @@ import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
 
-/**
- * Một tin nhắn trong cuộc trò chuyện.
- */
+
 @Entity
 @Table(name = "chat_messages")
 @Data

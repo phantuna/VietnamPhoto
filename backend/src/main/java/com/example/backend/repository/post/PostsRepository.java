@@ -24,6 +24,10 @@ public interface PostsRepository extends JpaRepository<Posts, String>,PostsRepos
     @Query(value = "SELECT p FROM Posts p LEFT JOIN FETCH p.user LEFT JOIN FETCH p.location WHERE p.location.id = :locationId AND p.deleted = 0 AND (p.status IS NULL OR p.status = com.example.backend.enums.PostStatus.ACTIVE)", 
            countQuery = "SELECT count(p) FROM Posts p WHERE p.location.id = :locationId AND p.deleted = 0 AND (p.status IS NULL OR p.status = com.example.backend.enums.PostStatus.ACTIVE)")
     Page<Posts> findActivePostsByLocationIdWithDetails(@Param("locationId") String locationId, Pageable pageable);
+
+    @Query(value = "SELECT p FROM Posts p LEFT JOIN FETCH p.user LEFT JOIN FETCH p.location WHERE p.location.id IN :locationIds AND p.deleted = 0 AND (p.status IS NULL OR p.status = com.example.backend.enums.PostStatus.ACTIVE)", 
+           countQuery = "SELECT count(p) FROM Posts p WHERE p.location.id IN :locationIds AND p.deleted = 0 AND (p.status IS NULL OR p.status = com.example.backend.enums.PostStatus.ACTIVE)")
+    Page<Posts> findActivePostsByLocationIdsWithDetails(@Param("locationIds") java.util.List<String> locationIds, Pageable pageable);
     @Query(value = "SELECT p FROM Posts p LEFT JOIN FETCH p.user LEFT JOIN FETCH p.location WHERE p.status = com.example.backend.enums.PostStatus.PENDING_REVIEW AND p.deleted = 0",
            countQuery = "SELECT count(p) FROM Posts p WHERE p.status = com.example.backend.enums.PostStatus.PENDING_REVIEW AND p.deleted = 0")
     Page<Posts> findPendingPosts(Pageable pageable);
@@ -33,6 +37,5 @@ public interface PostsRepository extends JpaRepository<Posts, String>,PostsRepos
     @Transactional
     @Query(value = "UPDATE posts SET deleted = :deleted WHERE id = :postId", nativeQuery = true)
     void togglePostStatus(@Param("postId") String postId, @Param("deleted") int deleted);
-
 
 }

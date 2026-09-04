@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,7 +25,7 @@ public interface UserRepository extends JpaRepository<Users, String>,UserReposit
      boolean existsByEmail(String email);
      
      @Query("SELECT COUNT(u) FROM Users u WHERE FUNCTION('DATE', u.createdDate) = :date")
-     long countByCreatedDate(@Param("date") java.time.LocalDate date);
+     long countByCreatedDate(@Param("date") LocalDate date);
 
      @Query(value = "SELECT * FROM users ORDER BY created_date DESC", 
             countQuery = "SELECT count(*) FROM users", 

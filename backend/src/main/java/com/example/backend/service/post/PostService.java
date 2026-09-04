@@ -11,7 +11,9 @@ public interface PostService {
     PostResponse createPost(String userId, PostCreateRequest request);
     PostResponse getPostById(String postId, String userId);
     Page<PostResponse> getAllPosts(String userId, int page, int size) ;
+    Page<PostResponse> getNearbyPosts(double lat, double lng, double radiusKm, String viewerId, int page, int size);
     Page<PostResponse> getPostsByLocation(String locationId, String userId, int page, int size);
+    Page<PostResponse> searchPosts(String query, String viewerId, int page, int size);
     PostResponse updatePost(String postId, String userId, PostUpdateRequest request);
     void deletePost(String postId, String userId);
 }

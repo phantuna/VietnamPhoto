@@ -23,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -114,10 +115,15 @@ public class AdminServiceImpl implements AdminService {
                 reportRepository.save(r);
             }
 
+            boolean wasActive = (post.getStatus() == PostStatus.ACTIVE && (post.getDeleted() == null || post.getDeleted() == 0));
             post.setStatus(PostStatus.HIDDEN);
             post.setDeleted(1);
             post.setDeletedAt(java.time.LocalDateTime.now());
             postsRepository.save(post);
+
+            if (wasActive) {
+                updateLocationStats(post.getLocation(), -1);
+            }
 
             Users postOwner = post.getUser();
             if (postOwner != null) {
@@ -157,11 +163,16 @@ public class AdminServiceImpl implements AdminService {
             }
 
             // 10. Cập nhật trạng thái bài viết (deleted = 0)
+            boolean wasActive = (post.getStatus() == PostStatus.ACTIVE && (post.getDeleted() == null || post.getDeleted() == 0));
             if (post.getDeleted() == 1 || post.getStatus() == PostStatus.HIDDEN) {
                 post.setDeleted(0);
                 post.setStatus(PostStatus.ACTIVE);
                 post.setDeletedAt(null);
                 postsRepository.save(post);
+                
+                if (!wasActive) {
+                    updateLocationStats(post.getLocation(), 1);
+                }
             }
 
             // 14. Hoàn trả lại 20 điểm Uy tín cho Chủ bài viết (nếu có trừ)
@@ -219,6 +230,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "admin_users", key = "#page + '-' + #size")
     public Page<AdminUserResponse> getAllUsers(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Users> users = userRepository.findAllUsersIncludeBanned(pageable);
@@ -236,6 +248,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "admin_posts", key = "#page + '-' + #size")
     public Page<AdminPostResponse> getAllPosts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Posts> posts = postsRepository.findAllPostsIncludeDeleted(pageable);
@@ -346,6 +359,7 @@ public class AdminServiceImpl implements AdminService {
         }
         post.setStatus(PostStatus.ACTIVE);
         postsRepository.save(post);
+        updateLocationStats(post.getLocation(), 1);
         log.info("Admin approved post {}", postId);
     }
 
@@ -354,9 +368,13 @@ public class AdminServiceImpl implements AdminService {
     public void rejectPost(String postId) {
         Posts post = postsRepository.findById(postId)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
+        boolean wasActive = (post.getStatus() == PostStatus.ACTIVE && (post.getDeleted() == null || post.getDeleted() == 0));
         post.setStatus(PostStatus.HIDDEN);
         post.setDeleted(1); // Also set deleted flag to be safe
         postsRepository.save(post);
+        if (wasActive) {
+            updateLocationStats(post.getLocation(), -1);
+        }
         log.info("Admin rejected post {}", postId);
     }
 
@@ -367,6 +385,7 @@ public class AdminServiceImpl implements AdminService {
         Posts post = postsRepository.findById(postId)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
 
+        boolean wasActive = (post.getStatus() == PostStatus.ACTIVE && (post.getDeleted() == null || post.getDeleted() == 0));
         post.setDeleted(deleted);
         if (deleted == 1) {
             post.setStatus(PostStatus.HIDDEN);
@@ -393,6 +412,13 @@ public class AdminServiceImpl implements AdminService {
             }
         }
         postsRepository.save(post);
+        
+        boolean isActiveNow = (post.getStatus() == PostStatus.ACTIVE && (post.getDeleted() == null || post.getDeleted() == 0));
+        if (wasActive && !isActiveNow) {
+            updateLocationStats(post.getLocation(), -1);
+        } else if (!wasActive && isActiveNow) {
+            updateLocationStats(post.getLocation(), 1);
+        }
         log.info("Admin updated post {} status to deleted={}, reports dismissed, points updated", postId, deleted);
     }
 
@@ -405,6 +431,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "admin_locations", key = "#page + '-' + #size")
     public Page<AdminLocationResponse> getAllLocations(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Locations> locations = locationsRepository.findAllLocationsIncludeDeleted(pageable);
@@ -422,7 +449,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    @CacheEvict(value = "locations", allEntries = true)
+    @CacheEvict(value = {"locations", "admin_locations"}, allEntries = true)
     public void toggleLocationStatus(String locationId, int deleted) {
         locationsRepository.toggleLocationStatus(locationId, deleted);
         log.info("Admin updated location {} status to deleted={}", locationId, deleted);
@@ -448,5 +475,18 @@ public class AdminServiceImpl implements AdminService {
                 .status(report.getStatus())
                 .createdAt(report.getCreatedDate())
                 .build();
+    }
+
+    private void updateLocationStats(Locations location, int diff) {
+        if (location == null || diff == 0) return;
+        Locations currentLoc = location;
+        while (currentLoc != null) {
+            long currentPostCount = currentLoc.getPostCount() != null ? currentLoc.getPostCount() : 0L;
+            long currentCheckInCount = currentLoc.getCheckInCount() != null ? currentLoc.getCheckInCount() : 0L;
+            currentLoc.setPostCount(Math.max(0L, currentPostCount + diff));
+            currentLoc.setCheckInCount(Math.max(0L, currentCheckInCount + diff));
+            locationsRepository.save(currentLoc);
+            currentLoc = currentLoc.getParent();
+        }
     }
 }

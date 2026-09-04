@@ -9,4 +9,5 @@ public interface PostsRepositoryCustom {
     Page<Posts> findAllPostsWithDetails(Pageable pageable);
     Optional<Posts> findByIdWithDetails(String id);
     Page<Posts> findAllPostsIncludeDeleted(Pageable pageable);
+    Page<Posts> searchPosts(String query, Pageable pageable);
 }

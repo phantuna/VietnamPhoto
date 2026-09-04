@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
 
 import java.util.List;
 
@@ -53,6 +55,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "tags", allEntries = true)
     public Tags createTagStrict(String tagName) {
         String cleanName = normalizeTagName(tagName);
 
@@ -68,6 +71,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "tags")
     public List<TagResponse> getAllTags() {
         return tagsRepository.findAll().stream()
                 .map(tagMapper::toResponse)
@@ -94,6 +98,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "tags", allEntries = true)
     public TagResponse updateTag(String tagId, String newName) {
         Tags tag = tagsRepository.findById(tagId)
                 .orElseThrow(() -> new AppException(ErrorCode.TAG_NOT_FOUND));
@@ -114,6 +119,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "tags", allEntries = true)
     public void deleteTag(String tagId) {
         Tags tag = tagsRepository.findById(tagId)
                 .orElseThrow(() -> new AppException(ErrorCode.TAG_NOT_FOUND));

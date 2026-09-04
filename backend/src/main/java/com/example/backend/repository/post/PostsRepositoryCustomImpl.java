@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import com.example.backend.entity.QTags;
 
 import static com.example.backend.entity.QPosts.posts;
 import static com.example.backend.entity.QReport.report;
@@ -34,6 +35,7 @@ public class PostsRepositoryCustomImpl implements PostsRepositoryCustom {
                 .leftJoin(posts.user).fetchJoin()
                 .leftJoin(posts.location).fetchJoin()
                 .where(condition)
+                .orderBy(posts.createdDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -81,6 +83,36 @@ public class PostsRepositoryCustomImpl implements PostsRepositoryCustom {
                 .select(posts.countDistinct())
                 .from(posts)
                 .join(report).on(report.post.eq(posts))
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total != null ? total : 0L);
+    }
+
+    @Override
+    public Page<Posts> searchPosts(String query, Pageable pageable) {
+        QTags qTags = QTags.tags;
+        
+        BooleanExpression condition = posts.deleted.eq(0)
+                .and(posts.status.isNull().or(posts.status.eq(PostStatus.ACTIVE)))
+                .and(posts.caption.containsIgnoreCase(query)
+                        .or(qTags.name.containsIgnoreCase(query))
+                        .or(posts.location.name.containsIgnoreCase(query)));
+
+        List<Posts> content = queryFactory
+                .selectFrom(posts).distinct()
+                .leftJoin(posts.user).fetchJoin()
+                .leftJoin(posts.location).fetchJoin()
+                .leftJoin(posts.tags, qTags)
+                .where(condition)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long total = queryFactory
+                .select(posts.countDistinct())
+                .from(posts)
+                .leftJoin(posts.tags, qTags)
+                .where(condition)
                 .fetchOne();
 
         return new PageImpl<>(content, pageable, total != null ? total : 0L);

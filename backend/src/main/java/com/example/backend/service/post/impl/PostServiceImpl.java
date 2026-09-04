@@ -25,9 +25,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.math.BigDecimal;
 
 import com.example.backend.exception.AppException;
 import com.example.backend.exception.ErrorCode;
@@ -57,6 +60,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
+    @CacheEvict(value = {"posts", "admin_posts"}, allEntries = true)
     public PostResponse createPost(String userId, PostCreateRequest request) {
 
         Users user = usersRepository.findById(userId)
@@ -209,8 +213,15 @@ public class PostServiceImpl implements PostService {
         while (currentLoc != null) {
             if (currentLoc.getPostCount() == null) currentLoc.setPostCount(0L);
             if (currentLoc.getCheckInCount() == null) currentLoc.setCheckInCount(0L);
-            currentLoc.setPostCount(currentLoc.getPostCount() + 1);
-            currentLoc.setCheckInCount(currentLoc.getCheckInCount() + 1);
+            
+            if (post.getStatus() == PostStatus.ACTIVE) {
+                currentLoc.setPostCount(currentLoc.getPostCount() + 1);
+                currentLoc.setCheckInCount(currentLoc.getCheckInCount() + 1);
+            }
+            
+            if (currentLoc.getCoverPhoto() == null && !uploadedPhotos.isEmpty()) {
+                currentLoc.setCoverPhoto(uploadedPhotos.get(0).getImageUrl());
+            }
             locationsRepository.save(currentLoc);
             currentLoc = currentLoc.getParent();
         }
@@ -241,9 +252,106 @@ public class PostServiceImpl implements PostService {
                 PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"))
         );
 
+        List<String> postIds = postPage.getContent().stream().map(Posts::getId).toList();
+        
+        Set<String> likedPostIds = userId != null && !postIds.isEmpty() ? 
+            postLikeService.getLikedPostIds(userId, postIds) : Collections.emptySet();
+            
+        Set<String> savedPostIds = userId != null && !postIds.isEmpty() ? 
+            new HashSet<>(savedPostRepository.findSavedPostIdsByUserIdAndPostIdsIn(userId, postIds, 0)) : Collections.emptySet();
+
         return postPage.map(post -> {
-            boolean liked = userId != null && postLikeService.isLiked(userId, post.getId());
-            boolean saved = userId != null && savedPostRepository.existsByUserIdAndPostIdAndDeleted(userId, post.getId(), 0);
+            boolean liked = likedPostIds.contains(post.getId());
+            boolean saved = savedPostIds.contains(post.getId());
+            return postMapper.toResponse(post, liked, saved);
+        });
+    }
+
+    private double haversineKm(double lat1, double lon1, double lat2, double lon2) {
+        double R = 6371; // Earth's radius in km
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2)
+                 + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                 * Math.sin(dLon/2) * Math.sin(dLon/2);
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PostResponse> getNearbyPosts(double lat, double lng, double radiusKm, String viewerId, int page, int size) {
+        // Calculate Bounding Box
+        double latRadians = Math.toRadians(lat);
+        
+        // 1 degree of latitude is roughly 111.045 km
+        double deltaLat = radiusKm / 111.045;
+        double minLat = lat - deltaLat;
+        double maxLat = lat + deltaLat;
+        
+        // 1 degree of longitude is roughly 111.045 * cos(lat) km
+        double deltaLng = radiusKm / (111.045 * Math.cos(latRadians));
+        double minLng = lng - deltaLng;
+        double maxLng = lng + deltaLng;
+
+        List<Locations> roughLocations = locationsRepository.findLocationsWithinBoundingBox(
+           BigDecimal.valueOf(minLat), BigDecimal.valueOf(maxLat),
+        BigDecimal.valueOf(minLng), BigDecimal.valueOf(maxLng)
+        );
+
+        List<String> nearbyLocationIds = new ArrayList<>();
+
+        for (Locations loc : roughLocations) {
+            if (loc.getLatitude() != null && loc.getLongitude() != null) {
+                double distance = haversineKm(lat, lng, loc.getLatitude().doubleValue(), loc.getLongitude().doubleValue());
+                if (distance <= radiusKm) {
+                    nearbyLocationIds.add(loc.getId());
+                }
+            }
+        }
+
+        if (nearbyLocationIds.isEmpty()) {
+            return Page.empty(PageRequest.of(page, size));
+        }
+
+        Page<Posts> postPage = postsRepository.findActivePostsByLocationIdsWithDetails(
+                nearbyLocationIds,
+                PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"))
+        );
+
+        List<String> postIds = postPage.getContent().stream().map(Posts::getId).toList();
+        
+        Set<String> likedPostIds = viewerId != null && !postIds.isEmpty() ? 
+            postLikeService.getLikedPostIds(viewerId, postIds) : Collections.emptySet();
+            
+        Set<String> savedPostIds = viewerId != null && !postIds.isEmpty() ? 
+            new HashSet<>(savedPostRepository.findSavedPostIdsByUserIdAndPostIdsIn(viewerId, postIds, 0)) : Collections.emptySet();
+
+        return postPage.map(post -> {
+            boolean liked = likedPostIds.contains(post.getId());
+            boolean saved = savedPostIds.contains(post.getId());
+            return postMapper.toResponse(post, liked, saved);
+        });
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PostResponse> searchPosts(String query, String viewerId, int page, int size) {
+        Page<Posts> postPage = postsRepository.searchPosts(
+                query.trim(),
+                PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"))
+        );
+
+        List<String> postIds = postPage.getContent().stream().map(Posts::getId).toList();
+        
+        Set<String> likedPostIds = viewerId != null && !postIds.isEmpty() ? 
+            postLikeService.getLikedPostIds(viewerId, postIds) : Collections.emptySet();
+            
+        Set<String> savedPostIds = viewerId != null && !postIds.isEmpty() ? 
+            new HashSet<>(savedPostRepository.findSavedPostIdsByUserIdAndPostIdsIn(viewerId, postIds, 0)) : Collections.emptySet();
+
+        return postPage.map(post -> {
+            boolean liked = likedPostIds.contains(post.getId());
+            boolean saved = savedPostIds.contains(post.getId());
             return postMapper.toResponse(post, liked, saved);
         });
     }
@@ -256,15 +364,24 @@ public class PostServiceImpl implements PostService {
                 PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"))
         );
 
+        List<String> postIds = postPage.getContent().stream().map(Posts::getId).toList();
+        
+        Set<String> likedPostIds = userId != null && !postIds.isEmpty() ? 
+            postLikeService.getLikedPostIds(userId, postIds) : Collections.emptySet();
+            
+        Set<String> savedPostIds = userId != null && !postIds.isEmpty() ? 
+            new HashSet<>(savedPostRepository.findSavedPostIdsByUserIdAndPostIdsIn(userId, postIds, 0)) : Collections.emptySet();
+
         return postPage.map(post -> {
-            boolean liked = userId != null && postLikeService.isLiked(userId, post.getId());
-            boolean saved = userId != null && savedPostRepository.existsByUserIdAndPostIdAndDeleted(userId, post.getId(), 0);
+            boolean liked = likedPostIds.contains(post.getId());
+            boolean saved = savedPostIds.contains(post.getId());
             return postMapper.toResponse(post, liked, saved);
         });
     }
 
     @Override
     @Transactional
+    @CacheEvict(value = {"posts", "admin_posts"}, allEntries = true)
     public PostResponse updatePost(String postId, String userId, PostUpdateRequest request) {
         Posts post = getPostEntityById(postId);
 
@@ -303,6 +420,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
+    @CacheEvict(value = {"posts", "admin_posts"}, allEntries = true)
     public void deletePost(String postId, String userId) {
         Posts post = getPostEntityById(postId);
 
@@ -311,7 +429,7 @@ public class PostServiceImpl implements PostService {
         }
 
         Locations location = post.getLocation();
-        if (location != null) {
+        if (location != null && post.getStatus() == PostStatus.ACTIVE && (post.getDeleted() == null || post.getDeleted() == 0)) {
             Locations currentLoc = location;
             while (currentLoc != null) {
                 long currentPostCount = currentLoc.getPostCount() != null ? currentLoc.getPostCount() : 0L;

@@ -71,6 +71,10 @@ public class CommentServiceImpl implements CommentService {
 
         comment = commentRepository.save(comment);
 
+        long currentCount = post.getCommentCount() != null ? post.getCommentCount() : 0L;
+        post.setCommentCount(currentCount + 1);
+        postsRepository.save(post);
+
         eventPublisher.publishEvent(new PostCommentedEvent(user, post, cleanContent));
 
         return commentMapper.toResponse(comment);
@@ -101,6 +105,13 @@ public class CommentServiceImpl implements CommentService {
         }
         
         commentRepository.delete(comment);
+        
+        Posts post = comment.getPost();
+        if (post != null) {
+            long currentCount = post.getCommentCount() != null ? post.getCommentCount() : 0L;
+            post.setCommentCount(Math.max(0, currentCount - 1));
+            postsRepository.save(post);
+        }
     }
 
     @Override

@@ -14,6 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Collections;
+import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class PostLikeService {
@@ -73,5 +77,11 @@ public class PostLikeService {
     @Transactional(readOnly = true)
     public boolean isLiked(String userId, String postId) {
         return likeRepository.existsByUserIdAndPostId(userId, postId);
+    }
+
+    @Transactional(readOnly = true)
+    public Set<String> getLikedPostIds(String userId, Collection<String> postIds) {
+        if (userId == null || postIds.isEmpty()) return Collections.emptySet();
+        return new HashSet<>(likeRepository.findLikedPostIdsByUserIdAndPostIdsIn(userId, postIds));
     }
 }

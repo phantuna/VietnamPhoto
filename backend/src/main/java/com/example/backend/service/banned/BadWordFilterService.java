@@ -47,28 +47,24 @@ public class BadWordFilterService {
         
         for (int i = 0; i < word.length(); i++) {
             char c = word.charAt(i);
-            String normalizedChar = java.text.Normalizer.normalize(String.valueOf(c), java.text.Normalizer.Form.NFD)
-                                        .replaceAll("\\p{M}", "").toLowerCase();
-            if (normalizedChar.isEmpty()) continue;
-            char baseChar = normalizedChar.charAt(0);
+            char lower = Character.toLowerCase(c);
 
-            switch (baseChar) {
-                case 'a': patternStr.append("[aA@4àáảãạăằắẳẵặâầấẩẫậ]"); break;
-                case 'i': patternStr.append("[iI!1|ìíỉĩị]"); break;
-                case 'e': patternStr.append("[eE3èéẻẽẹêềếểễệ]"); break;
-                case 'o': patternStr.append("[oO0òóỏõọôồốổỗộơờớởỡợ]"); break;
-                case 'u': patternStr.append("[uUvVùúủũụưừứửữự]"); break;
-                case 'y': patternStr.append("[yYỳýỷỹỵ]"); break;
-                case 'd':
-                case 'đ': patternStr.append("(đ|d|dđ)"); break;
-                case 'c': patternStr.append("[cKk]"); break;
-                default:
-                    if ("[]\\^$.|?*+()".indexOf(c) != -1) {
-                        patternStr.append("\\").append(c);
-                    } else {
-                        patternStr.append(c);
-                    }
-                    break;
+            if (lower == 'đ' || lower == 'd') {
+                patternStr.append("[đdĐD]");
+            } else if (lower == 'c' || lower == 'k') {
+                patternStr.append("[cKkC]");
+            } else if (lower == 'i') {
+                patternStr.append("[iI!1]");
+            } else if (lower == 'e') {
+                patternStr.append("[eE3]");
+            } else if (lower == 'o') {
+                patternStr.append("[oO0]");
+            } else if (lower == 'a') {
+                patternStr.append("[aA@4]");
+            } else if ("[]\\^$.|?*+()".indexOf(c) != -1) {
+                patternStr.append("\\").append(c);
+            } else {
+                patternStr.append(c);
             }
             
             if (i < word.length() - 1) {
