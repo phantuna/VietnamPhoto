@@ -1,0 +1,6 @@
+CREATE TABLE banned_words (
+    id VARCHAR(36) PRIMARY KEY,
+    word VARCHAR(255) NOT NULL UNIQUE,
+    type VARCHAR(255) NOT NULL,
+    language VARCHAR(255) NOT NULL
+);
