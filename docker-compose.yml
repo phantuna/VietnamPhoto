@@ -24,7 +24,7 @@ services:
 
   backend:
     build: 
-      context: ./BE_VNSCOUT
+      context: ./backend
       dockerfile: Dockerfile
     container_name: vnscout_backend
     ports:
